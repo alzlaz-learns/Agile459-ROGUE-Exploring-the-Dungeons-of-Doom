@@ -35,8 +35,8 @@ jobs:
 
     # Step 3: Build the project using Maven
     - name: Build with Maven
-      working-directory: demo
       run: mvn -B package --file pom.xml
+      working-directory: ./relative/path/to/project/root
 
     # Step 4: Run unit tests
     - name: Run tests
