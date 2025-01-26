@@ -1,9 +1,8 @@
 package com.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Player {
     private final String name;
     private int level;
@@ -11,11 +10,7 @@ public class Player {
     private int maxHealth;
     private int gold;
     private int experience;
-
-    @Setter
     private int armor;
-    
-    @Setter
     private int strength;
     
     // Constructor
