@@ -12,4 +12,9 @@ public class StatAreaPlayground extends JTextArea{
         this.setForeground(Color.WHITE);
         this.setFont(new Font("Monospaced", Font.PLAIN, 12));
     }
+
+    //tentative representation of a stats.
+    public void updateStats(String message) {
+        this.setText(message);
+    }
 }

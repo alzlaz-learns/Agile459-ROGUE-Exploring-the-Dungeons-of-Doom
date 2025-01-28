@@ -11,8 +11,8 @@ public class GamePanelPlayground extends JPanel{
     private static final int SCREEN_WIDTH = 80;
     private static final int SCREEN_HEIGHT = 24;
 
-    final int screenWidthScaled = tileSize * SCREEN_WIDTH; //16 * 80 = 3840
-    final int screenHeightScaled = tileSize * SCREEN_HEIGHT; //16 * 24 = 1152
+    final int screenWidthScaled = tileSize * SCREEN_WIDTH; //16 * 80 = 1,280
+    final int screenHeightScaled = tileSize * SCREEN_HEIGHT; //16 * 24 = 384
 
     public GamePanelPlayground(){
         this.setPreferredSize(new Dimension(screenWidthScaled, screenHeightScaled));
