@@ -8,7 +8,7 @@ import javax.swing.JTextArea;
 public class StatAreaPlayground extends JTextArea{
     public StatAreaPlayground(){
         this.setEditable(false);
-        this.setBackground(Color.GREEN);
+        this.setBackground(Color.GRAY);
         this.setForeground(Color.WHITE);
         this.setFont(new Font("Monospaced", Font.PLAIN, 12));
     }
