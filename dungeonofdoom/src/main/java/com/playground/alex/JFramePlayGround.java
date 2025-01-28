@@ -62,16 +62,11 @@ public class JFramePlayGround {
         playGround.generateLayout();
 
         // Example Output Layout
-        char[][] exampleDungeon = new char[22][80];
-        for (int i = 0; i < exampleDungeon.length; i++) {
-            for (int j = 0; j < exampleDungeon[i].length; j++) {
-                exampleDungeon[i][j] = '.';
-            }
-        }
-        exampleDungeon[5][10] = '@'; 
+        
+        
         
 
-        playGround.drawDungeon(exampleDungeon);
+        
 
         Scanner sc = new Scanner(System.in);
         while(true){
@@ -81,6 +76,13 @@ public class JFramePlayGround {
                 break;
             }
             playGround.updateMessage(input);
+            char[][] exampleDungeon = new char[22][80];
+            for (int i = 0; i < exampleDungeon.length; i++) {
+                for (int j = 0; j < exampleDungeon[i].length; j++) {
+                    exampleDungeon[i][j] = input.charAt(0);
+                }
+            }
+            playGround.drawDungeon(exampleDungeon);
         }
 
         sc.close();
