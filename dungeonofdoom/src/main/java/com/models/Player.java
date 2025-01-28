@@ -12,7 +12,11 @@ public class Player {
     private int experience;
     private int armor;
     private int strength;
-    
+    //test attributes
+    private char icon;
+    private int x; // X position
+    private int y; // Y position
+
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -23,6 +27,9 @@ public class Player {
         this.experience = 0;
         this.armor = 0;
         this.strength = 3; // Default minimum strength
+        //test attributes
+        this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
+        
     }
     
     // Core Utility Methods
@@ -53,5 +60,12 @@ public class Player {
             gold,
             armor,
             getExperienceStatus());
+    }
+
+
+    //test method
+    public void moveTo(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
