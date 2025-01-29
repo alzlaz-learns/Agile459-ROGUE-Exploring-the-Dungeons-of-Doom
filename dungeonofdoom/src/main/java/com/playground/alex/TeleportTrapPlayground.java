@@ -2,20 +2,17 @@ package com.playground.alex;
 
 import com.models.Player;
 
-public class TrapDoorPlayground implements TrapInterfacePlayground{
-    // Each room may have zero or more traps
-    // Each trap will be triggered whenever a player moves onto it
-    // In some cases traps may be hidden.
-    // The player will either discover the trap by triggering it or by using the “s (search)” command to reveal it.
-    
+public class TeleportTrapPlayground implements TrapInterfacePlayground {
+
+
     private boolean hidden;
     private final TrapTypeEnumPlayground trapType;
     private int x; 
     private int y;
 
-    public TrapDoorPlayground(boolean hidden) {
+    public TeleportTrapPlayground(boolean hidden) {
         this.hidden = hidden;
-        this.trapType = TrapTypeEnumPlayground.TRAP_DOOR;
+        this.trapType = TrapTypeEnumPlayground.TELEPORT_TRAP;
     }
 
     @Override
@@ -36,7 +33,7 @@ public class TrapDoorPlayground implements TrapInterfacePlayground{
 
     @Override
     public void reveal() {
-        this.hidden = false;
+        this.hidden = false;    
     }
 
     @Override

@@ -2,5 +2,6 @@ package com.playground.alex;
 
 public enum TrapEffectEnumPlayground {
     FALL,
-    HOLD
+    HOLD,
+    TELEPORT,
 }

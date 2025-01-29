@@ -68,6 +68,7 @@ public class DungeonFloor {
             } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
 
             TrapInterfacePlayground trap = getRandomTrap();
+            // TrapInterfacePlayground trap = new TeleportTrapPlayground(false);
             trap.setPosition(x, y);
             traps.add(trap);
             map[y][x] = '!'; // Mark trap location (for debugging, can be hidden)
@@ -76,20 +77,23 @@ public class DungeonFloor {
 
     private TrapInterfacePlayground getRandomTrap() {
         Random rand = new Random();
-        int trapType = rand.nextInt(2); // Adjust as more traps are added
+        int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
 
         return switch (trapType) {
             case 0 -> new BearTrapPlayground(false);
             case 1 -> new TrapDoorPlayground(false);
+            case 2 -> new TeleportTrapPlayground(false);
             default -> new BearTrapPlayground(false);
         };
     }
 
     public TrapInterfacePlayground getTrapAt(int x, int y) {
-        return traps.stream()
-                .filter(trap -> trap.getX() == x && trap.getY() == y)
-                .findFirst()
-                .orElse(null);
+        for (TrapInterfacePlayground trap : traps) {
+            if (trap.getX() == x && trap.getY() == y) {
+                return trap; 
+            }
+        }
+        return null;
     }
 
     public char[][] getMap() {

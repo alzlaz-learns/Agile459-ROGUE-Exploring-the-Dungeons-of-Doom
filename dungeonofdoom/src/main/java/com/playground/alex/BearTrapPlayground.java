@@ -16,11 +16,18 @@ public class BearTrapPlayground implements TrapInterfacePlayground{
     }
 
     @Override
-    public String trigger(Player player) {
+    public void applyEffect(Player player) {
         Random rand = new Random();
         int immobilizedTurns = rand.nextInt(4) + 1; // 1d4 turns
         player.setImmobile(immobilizedTurns);
-        return trapType.getMessage() + " You are stuck for " + immobilizedTurns + " turns!";
+    }
+
+    @Override
+    public String trigger(Player player) {
+        
+        applyEffect(player); 
+        this.hidden = false; 
+        return trapType.getMessage() + " You are stuck for " + player.getImmobile() + " turns!";
     }
 
     @Override
@@ -58,4 +65,6 @@ public class BearTrapPlayground implements TrapInterfacePlayground{
     public TrapEffectEnumPlayground getEffect(){
         return this.trapType.getEffect();
     }
+
+    
 }

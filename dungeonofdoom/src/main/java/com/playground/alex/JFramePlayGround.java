@@ -86,6 +86,8 @@ public class JFramePlayGround {
         }
 
         // Reset player position to a set spot 5,5
+        // basic implementation
+        //TODO: Eventualy have an implementation that places a player in a random position in a random room
         player.moveTo(5, 5);
 
         // Update the game panel with the new floor

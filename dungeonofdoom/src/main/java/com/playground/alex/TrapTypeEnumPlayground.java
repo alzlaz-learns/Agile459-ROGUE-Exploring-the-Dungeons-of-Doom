@@ -2,7 +2,8 @@ package com.playground.alex;
 
 public enum TrapTypeEnumPlayground {
     TRAP_DOOR("Trap Door", "You fell into a trap!", TrapEffectEnumPlayground.FALL),
-    BEAR_TRAP("Bear Trap", "You are caught in a bear trap.", TrapEffectEnumPlayground.HOLD);
+    BEAR_TRAP("Bear Trap", "You are caught in a bear trap.", TrapEffectEnumPlayground.HOLD),
+    TELEPORT_TRAP("Teleport Trap", "", TrapEffectEnumPlayground.TELEPORT);
     
     private final String name;
     private final String message;
@@ -24,6 +25,10 @@ public enum TrapTypeEnumPlayground {
 
     public TrapEffectEnumPlayground getEffect() {
         return effect;
+    }
+
+    public static int getTrapListCount(){
+        return values().length;
     }
 
 }

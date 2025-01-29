@@ -13,6 +13,7 @@ import java.awt.Color;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class GamePanelPlayground extends JPanel{
     //screen settings
@@ -70,7 +71,7 @@ public class GamePanelPlayground extends JPanel{
         });
     }
 
-
+    //logic to handle player movement
     private void handleMovement(KeyEvent e) {
 
         if (player.isImmobile()) {
@@ -172,9 +173,7 @@ public class GamePanelPlayground extends JPanel{
                     return;
                 }
                 break;
-                
 
-            
             default:
                 return;
         }
@@ -182,7 +181,7 @@ public class GamePanelPlayground extends JPanel{
         TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
         if (trap != null) {
             String trapMessage = trap.trigger(player);
-            System.out.println(trap.getEffect());// <-- here
+            // System.out.println(trap.getEffect());
             
             switch (trap.getEffect()) {
                 case FALL -> {
@@ -192,6 +191,9 @@ public class GamePanelPlayground extends JPanel{
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
+                }
+                case TELEPORT -> {
+                    randomizePlayerLocation();
                 }
                 //TODO: add more traps and cases.
             }
@@ -208,19 +210,31 @@ public class GamePanelPlayground extends JPanel{
         this.dungeon = newDungeon;
     }
 
+    private void randomizePlayerLocation(){
+        //this is a very basic implementation created for before a procedurally generated environment.
+        // it will just set randomly on the screen.
+        Random rand = new Random();
+        int randX = rand.nextInt(dungeon[0].length);
+        int randY = rand.nextInt(dungeon.length);
+        player.moveTo(randX, randY);
+    }
+
     //used to draw the dungeon on screen
     public void updateDungeon() {
         
         DungeonFloor currentFloor = frame.dungeonFloors.get(frame.currentFloorIndex);
         char[][] originalMap = currentFloor.getOriginalMap();
 
+        //this allows the map to be updated every key even so there isnt any @ sign trails
         for (int i = 0; i < dungeon.length; i++) {
             for (int j = 0; j < dungeon[i].length; j++) {
                 dungeon[i][j] = originalMap[i][j]; // Reset map
             }
         }
 
-        // Place the stairs back on the map temp example
+        // Place the stairs randomly on the map
+        //this is a very basic implementation created for before a procedurally generated environment.
+        // it will just set randomly on the screen.
         dungeon[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
 
@@ -232,7 +246,7 @@ public class GamePanelPlayground extends JPanel{
         }
 
 
-         // Place the player on the map
+        // draws the player on the map 
         dungeon[player.getY()][player.getX()] = player.getIcon();
 
         // Update UI to reflect the dungeon map
