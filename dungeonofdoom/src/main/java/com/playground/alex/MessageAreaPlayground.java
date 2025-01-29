@@ -11,7 +11,7 @@ public class MessageAreaPlayground extends JTextArea{
         
         this.setEditable(false);
         this.setBackground(Color.GRAY);
-        this.setForeground(Color.WHITE); //font color
+        this.setForeground(Color.YELLOW); //font color
         this.setFont(new Font("Monospaced", Font.PLAIN, 12));
     }
 

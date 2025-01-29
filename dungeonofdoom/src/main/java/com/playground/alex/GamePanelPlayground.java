@@ -72,6 +72,14 @@ public class GamePanelPlayground extends JPanel{
 
 
     private void handleMovement(KeyEvent e) {
+
+        if (player.isImmobile()) {
+            frame.updateMessage("You are trapped and cannot move for " + player.getImmobile() + " more turns!");
+            player.immobileDecrease();
+            // Stop movement if immobilized
+            return; 
+        }
+
         //the logic is simple for just the borders of the screen no collision with walls mostly because those dont exist yet.
         int newX = player.getX();
         int newY = player.getY();
@@ -171,7 +179,28 @@ public class GamePanelPlayground extends JPanel{
                 return;
         }
 
+        TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
+        if (trap != null) {
+            String trapMessage = trap.trigger(player);
+            System.out.println(trap.getEffect());// <-- here
+            
+            switch (trap.getEffect()) {
+                case FALL -> {
+                    frame.updateMessage(trapMessage);
+                    // Move down a floor
+                    frame.changeFloor(true); 
+                }
+                case HOLD -> {
+                    frame.updateMessage(trapMessage);
+                }
+                //TODO: add more traps and cases.
+            }
+            updateDungeon();
+            return; 
+        }
+
         player.moveTo(newX, newY);
+        frame.updateStats(player.toString());
         updateDungeon();
     }
 
@@ -193,6 +222,15 @@ public class GamePanelPlayground extends JPanel{
 
         // Place the stairs back on the map temp example
         dungeon[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
+
+
+        // Place the traps (Only show if revealed)
+        for (TrapInterfacePlayground trap : currentFloor.traps) {
+            if (!trap.isHidden()) {
+                dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
+            }
+        }
+
 
          // Place the player on the map
         dungeon[player.getY()][player.getX()] = player.getIcon();

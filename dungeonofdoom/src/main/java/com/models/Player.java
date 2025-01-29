@@ -16,7 +16,7 @@ public class Player {
     private char icon;
     private int x; // X position
     private int y; // Y position
-
+    private int immobile;
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -29,7 +29,7 @@ public class Player {
         this.strength = 3; // Default minimum strength
         //test attributes
         this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
-        
+        this.immobile = 0;
     }
     
     // Core Utility Methods
@@ -48,12 +48,7 @@ public class Player {
     @Override
     public String toString() {
         return String.format("""
-            Level: %d
-            Hits: %s
-            Str: %d
-            Gold: %d
-            Armor: %d
-            Exp: %s""",
+            Level: %d\tHits:\t%sStr:\t%d\tArmor: %d\tExp: %s""",
             level,
             getHealthStatus(),
             strength,
@@ -65,7 +60,18 @@ public class Player {
 
     //test method
     public void moveTo(int x, int y) {
-        this.x = x;
-        this.y = y;
+        if (!isImmobile()) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    //Lombok should generate a setter and getter for immobile
+    public boolean isImmobile(){
+        return immobile > 0;
+    }
+
+    public void immobileDecrease(){
+        if (isImmobile()) immobile --;
     }
 }

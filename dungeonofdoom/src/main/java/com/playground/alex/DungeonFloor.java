@@ -1,5 +1,7 @@
 package com.playground.alex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DungeonFloor {
@@ -13,6 +15,7 @@ public class DungeonFloor {
 
     private int stairX;
     private int stairY;
+    public List<TrapInterfacePlayground> traps; // eventually use lombok or make getter for this.
     
     //Sample to make simple floors
     private static final char[] FLOOR_SYMBOLS = {
@@ -28,7 +31,7 @@ public class DungeonFloor {
         this.random = new Random();
         // Cycle symbols to be removed when procedural generation is setup
         this.floorSymbol = FLOOR_SYMBOLS[(level - 1) % FLOOR_SYMBOLS.length]; 
-
+        this.traps = new ArrayList<>();
         generateDungeon();
         // Debugging
         // System.out.println("Floor " + level + " - Stairs Position: " + stairX + ", " + stairY);
@@ -48,6 +51,45 @@ public class DungeonFloor {
         stairX = random.nextInt(width);
         stairY = height - 2;
         map[stairY][stairX] = '>';
+
+        // Generate traps after placing stairs
+        generateTraps();
+    }
+    private void generateTraps() {
+        int numTraps = random.nextInt(4); // Randomly place 0-3 traps per floor
+
+        for (int i = 0; i < numTraps; i++) {
+            int x, y;
+
+            // Find a valid position that is NOT the stair position
+            do {
+                x = random.nextInt(width);
+                y = random.nextInt(height);
+            } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
+
+            TrapInterfacePlayground trap = getRandomTrap();
+            trap.setPosition(x, y);
+            traps.add(trap);
+            map[y][x] = '!'; // Mark trap location (for debugging, can be hidden)
+        }
+    }
+
+    private TrapInterfacePlayground getRandomTrap() {
+        Random rand = new Random();
+        int trapType = rand.nextInt(2); // Adjust as more traps are added
+
+        return switch (trapType) {
+            case 0 -> new BearTrapPlayground(false);
+            case 1 -> new TrapDoorPlayground(false);
+            default -> new BearTrapPlayground(false);
+        };
+    }
+
+    public TrapInterfacePlayground getTrapAt(int x, int y) {
+        return traps.stream()
+                .filter(trap -> trap.getX() == x && trap.getY() == y)
+                .findFirst()
+                .orElse(null);
     }
 
     public char[][] getMap() {

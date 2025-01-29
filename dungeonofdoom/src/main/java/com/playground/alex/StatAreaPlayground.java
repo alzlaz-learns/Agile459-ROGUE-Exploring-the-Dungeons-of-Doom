@@ -9,7 +9,7 @@ public class StatAreaPlayground extends JTextArea{
     public StatAreaPlayground(){
         this.setEditable(false);
         this.setBackground(Color.GRAY);
-        this.setForeground(Color.WHITE);
+        this.setForeground(Color.YELLOW);
         this.setFont(new Font("Monospaced", Font.PLAIN, 12));
     }
 
