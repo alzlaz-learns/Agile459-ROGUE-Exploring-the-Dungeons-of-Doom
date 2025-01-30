@@ -92,13 +92,13 @@ public class DungeonFloor {
         int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
     
         return switch (trapType) {
-            case 0 -> new BearTrap(false);
+            case 0 -> new BearTrap(false, rand);
             case 1 -> new TrapDoorTrap(false);
             case 2 -> new TeleportTrap(false, map);
-            case 3 -> new SleepTrap(false);
+            case 3 -> new SleepTrap(false, rand);
             case 4 -> new ArrowTrap(false);
             case 5 -> new DartTrap(false);
-            default -> new BearTrap(false);
+            default -> new BearTrap(false, rand);
         };
     }
     

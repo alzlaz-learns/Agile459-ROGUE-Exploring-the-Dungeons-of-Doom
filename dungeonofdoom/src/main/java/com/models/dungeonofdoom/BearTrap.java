@@ -7,13 +7,14 @@ import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 
 public class BearTrap extends AbstractTrap{
+    Random rand;
 
-    public BearTrap(boolean hidden) {
+    public BearTrap(boolean hidden, Random rand) {
         super(hidden, TrapTypeEnum.BEAR_TRAP);
+        this.rand = rand;
     }
 
     public void applyEffect(Player player) {
-        Random rand = new Random();
         int immobilizedTurns = rand.nextInt(4) + 1; // 1d4 turns
         player.setImmobile(immobilizedTurns);
     }
