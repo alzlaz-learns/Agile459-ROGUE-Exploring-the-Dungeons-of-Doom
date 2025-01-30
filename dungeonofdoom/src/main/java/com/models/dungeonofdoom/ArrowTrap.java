@@ -12,25 +12,28 @@ public class ArrowTrap extends AbstractTrap{
         //TODO Auto-generated constructor stub
     }
 
-    public void applyEffect(Player player) {
-        Random rand = new Random();
-        int hit = rand.nextInt(2);
-        if(hit == 1){
-            System.out.println("you got hit");
-            int damage = rand.nextInt(6) + 1;
-            // unsure how this will turn out when the method is implemented so hypothetical method
-            //player.takeDamage(damage) 
-            return;
-        }
-        //miss logic probably just an update to frame.message somehow
-        // player.addItem(new ArrowItem()); // hypothetical about
-    }
-    
 
+    //trigger method is semi-temporary until player is fully implemented.
     @Override
     public String trigger(Player player) {
         this.reveal();
-        applyEffect(player);
-        return trapType.getMessage(); 
+
+        Random rand = new Random();
+        int hit = rand.nextInt(2); 
+
+        if(hit == 1){ 
+            int damage = rand.nextInt(6) + 1; // 1d6 damage
+            //to be changed once implemented
+            player.setCurrentHealth(player.getCurrentHealth() - damage);
+
+            if (player.getCurrentHealth() <= 0) {
+                return "An arrow killed you";
+            }
+            //to be updated latter to match the output of from design doc
+            return "Oh no! An arrow shot you for " + damage + " damage!"; 
+        }
+
+        return "An arrow shoots past you!";
     }
+
 }

@@ -217,8 +217,14 @@ public class GamePanelPlayground extends JPanel{
                 } 
                 case TELEPORT -> {
                     frame.updateMessage(trapMessage);
-                    // trap.applyEffect(player); //maybe will implement something
                     trap.trigger(player);
+                }
+                case ARROW -> {
+                    frame.updateMessage(trapMessage);
+                    trap.trigger(player);
+                }
+                case DART -> {
+
                 }
             }
             updateDungeon();
@@ -234,6 +240,7 @@ public class GamePanelPlayground extends JPanel{
         this.dungeon = newDungeon;
     }
 
+    //to be changed once procedurally generated maps are created.
     private void randomizePlayerLocation(){
         //this is a very basic implementation created for before a procedurally generated environment.
         // it will just set randomly on the screen.

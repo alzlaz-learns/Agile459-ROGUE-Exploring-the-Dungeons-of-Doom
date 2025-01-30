@@ -3,7 +3,6 @@ package com.playground.alex;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 import com.models.Player;

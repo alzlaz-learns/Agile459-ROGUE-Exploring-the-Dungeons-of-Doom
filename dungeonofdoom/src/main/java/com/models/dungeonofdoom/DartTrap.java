@@ -13,24 +13,27 @@ public class DartTrap extends AbstractTrap {
     }
 
     
-    public void applyEffect(Player player) {
-        Random rand = new Random();
-        int hit = rand.nextInt(2);
-        if(hit == 1){
-            System.out.println("you got hit");
-            int damage = rand.nextInt(4) + 1;
-            // unsure how this will turn out when the method is implemented so hypothetical method
-            //player.takeDamage(damage) 
-            return;
-        }
-    }
-
-
+    //trigger method is semi-temporary until player is fully implemented.
     @Override
     public String trigger(Player player) {
         this.reveal();
-        applyEffect(player);
-        return trapType.getMessage(); 
+
+        Random rand = new Random();
+        int hit = rand.nextInt(2); 
+
+        if(hit == 1){ 
+            int damage = rand.nextInt(6) + 1; // 1d6 damage
+            //to be changed once implemented
+            player.setCurrentHealth(player.getCurrentHealth() - damage);
+
+            if (player.getCurrentHealth() <= 0) {
+                return "A poisoned dart killed you";
+            }
+            //to be updated latter to match the output of from design doc
+            return "A dart just hit you in the shoulder " + damage + " damage!";
+        }
+
+        return "A dart whizzes by your ear and vanishes";
     }
     
 }

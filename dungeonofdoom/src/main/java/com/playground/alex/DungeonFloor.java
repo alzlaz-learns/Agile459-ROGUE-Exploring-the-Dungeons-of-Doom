@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import com.models.dungeonofdoom.AbstractTrap;
+import com.models.dungeonofdoom.ArrowTrap;
 import com.models.dungeonofdoom.BearTrap;
+import com.models.dungeonofdoom.DartTrap;
+import com.models.dungeonofdoom.SleepTrap;
 import com.models.dungeonofdoom.TeleportTrap;
 import com.models.dungeonofdoom.TrapDoorTrap;
 
@@ -76,8 +79,8 @@ public class DungeonFloor {
             } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
 
             
-            // AbstractTrap trap = getRandomTrap();
-            AbstractTrap trap = new TeleportTrap(false, map);
+            AbstractTrap trap = getRandomTrap();
+            // AbstractTrap trap = new TeleportTrap(false, map);
             trap.setPosition(x, y);
             traps.add(trap);
             map[y][x] = '!'; // Mark trap location (for debugging, can be hidden)
@@ -92,6 +95,9 @@ public class DungeonFloor {
             case 0 -> new BearTrap(false);
             case 1 -> new TrapDoorTrap(false);
             case 2 -> new TeleportTrap(false, map);
+            case 3 -> new SleepTrap(false);
+            case 4 -> new ArrowTrap(false);
+            case 5 -> new DartTrap(false);
             default -> new BearTrap(false);
         };
     }
