@@ -75,9 +75,9 @@ public class DungeonFloor {
                 y = random.nextInt(height);
             } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
 
-            // TrapInterfacePlayground trap = getRandomTrap();
-            AbstractTrap trap = getRandomTrap();
-            // TrapInterfacePlayground trap = new TeleportTrapPlayground(false);
+            
+            // AbstractTrap trap = getRandomTrap();
+            AbstractTrap trap = new TeleportTrap(false, map);
             trap.setPosition(x, y);
             traps.add(trap);
             map[y][x] = '!'; // Mark trap location (for debugging, can be hidden)
@@ -91,7 +91,7 @@ public class DungeonFloor {
         return switch (trapType) {
             case 0 -> new BearTrap(false);
             case 1 -> new TrapDoorTrap(false);
-            case 2 -> new TeleportTrap(false);
+            case 2 -> new TeleportTrap(false, map);
             default -> new BearTrap(false);
         };
     }

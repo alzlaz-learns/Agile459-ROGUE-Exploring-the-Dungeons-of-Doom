@@ -12,10 +12,16 @@ public class BearTrap extends AbstractTrap{
         super(hidden, TrapTypeEnum.BEAR_TRAP);
     }
 
-    @Override
     public void applyEffect(Player player) {
         Random rand = new Random();
         int immobilizedTurns = rand.nextInt(4) + 1; // 1d4 turns
         player.setImmobile(immobilizedTurns);
+    }
+
+    @Override
+    public String trigger(Player player) {
+        this.reveal();
+        applyEffect(player);
+        return trapType.getMessage(); 
     }
 }

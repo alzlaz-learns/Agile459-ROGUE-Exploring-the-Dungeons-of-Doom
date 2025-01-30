@@ -218,7 +218,7 @@ public class GamePanelPlayground extends JPanel{
                 case TELEPORT -> {
                     frame.updateMessage(trapMessage);
                     // trap.applyEffect(player); //maybe will implement something
-                    randomizePlayerLocation();
+                    trap.trigger(player);
                 }
             }
             updateDungeon();

@@ -12,7 +12,7 @@ public class DartTrap extends AbstractTrap {
         //TODO Auto-generated constructor stub
     }
 
-    @Override
+    
     public void applyEffect(Player player) {
         Random rand = new Random();
         int hit = rand.nextInt(2);
@@ -23,6 +23,14 @@ public class DartTrap extends AbstractTrap {
             //player.takeDamage(damage) 
             return;
         }
+    }
+
+
+    @Override
+    public String trigger(Player player) {
+        this.reveal();
+        applyEffect(player);
+        return trapType.getMessage(); 
     }
     
 }

@@ -8,7 +8,7 @@ public abstract class AbstractTrap {
     private boolean hidden;
     private int x;
     private int y;
-    private final TrapTypeEnum trapType;
+    protected final TrapTypeEnum trapType;
 
     //TODO: TrapTypeEnumPlayground to be changed when appropriate class is created from enum and after some testing.
     public AbstractTrap(boolean hidden, TrapTypeEnum trapType) {
@@ -17,14 +17,18 @@ public abstract class AbstractTrap {
     }
 
     //Only method that changes so we are switching to an abstract method instead of interfaces
-    public abstract void applyEffect(Player player);
+    // public abstract void applyEffect(Player player);
 
+    
+    //refactoring
     //method for triggering when a Plater steps on it.
-    public String trigger(Player player) {
-        this.hidden = false;
-        applyEffect(player);
-        return trapType.getMessage(); 
-    }
+    // public String trigger(Player player) {
+    //     this.hidden = false;
+    //     applyEffect(player);
+    //     return trapType.getMessage(); 
+    // }
+
+    public abstract String trigger(Player player);
 
     public boolean isHidden() {
         return hidden;

@@ -12,12 +12,20 @@ public class SleepTrap extends AbstractTrap{
         //TODO Auto-generated constructor stub
     }
 
-    @Override
+    
     public void applyEffect(Player player) {
         // TODO Auto-generated method stub
         Random rand = new Random();
         int immobilizedTurns = rand.nextInt(5) + 1; // 1d5 turns
         player.setImmobile(immobilizedTurns);
+    }
+
+
+    @Override
+    public String trigger(Player player) {
+        this.reveal();
+        applyEffect(player);
+        return trapType.getMessage(); 
     }
     
 }

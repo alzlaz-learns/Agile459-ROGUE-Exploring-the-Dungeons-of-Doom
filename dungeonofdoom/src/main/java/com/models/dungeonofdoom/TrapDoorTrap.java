@@ -10,8 +10,9 @@ public class TrapDoorTrap extends AbstractTrap {
     }
 
     @Override
-    public void applyEffect(Player player) {
-
+    public String trigger(Player player) {
+        this.reveal();
+        return trapType.getMessage();
     }
-    
+
 }

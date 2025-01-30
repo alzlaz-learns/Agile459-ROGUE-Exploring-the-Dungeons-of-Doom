@@ -12,7 +12,6 @@ public class ArrowTrap extends AbstractTrap{
         //TODO Auto-generated constructor stub
     }
 
-    @Override
     public void applyEffect(Player player) {
         Random rand = new Random();
         int hit = rand.nextInt(2);
@@ -27,4 +26,11 @@ public class ArrowTrap extends AbstractTrap{
         // player.addItem(new ArrowItem()); // hypothetical about
     }
     
+
+    @Override
+    public String trigger(Player player) {
+        this.reveal();
+        applyEffect(player);
+        return trapType.getMessage(); 
+    }
 }
