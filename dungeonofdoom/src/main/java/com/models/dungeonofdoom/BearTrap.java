@@ -7,6 +7,7 @@ import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 
 public class BearTrap extends AbstractTrap{
+    //dependency injection implemented for testing but result created better class layout
     Random rand;
 
     public BearTrap(boolean hidden, Random rand) {
