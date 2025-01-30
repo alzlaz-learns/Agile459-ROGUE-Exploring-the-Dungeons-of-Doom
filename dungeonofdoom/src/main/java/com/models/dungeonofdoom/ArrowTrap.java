@@ -6,25 +6,28 @@ import com.models.Player;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 public class ArrowTrap extends AbstractTrap{
-
-    public ArrowTrap(boolean hidden) {
+    Random rand;
+    public ArrowTrap(boolean hidden,Random rand) {
         super(hidden, TrapTypeEnum.ARROW_TRAP);
         //TODO Auto-generated constructor stub
+        this.rand = rand;
+
     }
 
 
     //trigger method is semi-temporary until player is fully implemented.
+    //ui isnt updating properly until walking away from the trap.
     @Override
     public String trigger(Player player) {
         this.reveal();
-
-        Random rand = new Random();
         int hit = rand.nextInt(2); 
 
         if(hit == 1){ 
             int damage = rand.nextInt(6) + 1; // 1d6 damage
+            
             //to be changed once implemented
-            player.setCurrentHealth(player.getCurrentHealth() - damage);
+            int newHealth = Math.max(0, player.getCurrentHealth() - damage);
+            player.setCurrentHealth(newHealth);
 
             if (player.getCurrentHealth() <= 0) {
                 return "An arrow killed you";

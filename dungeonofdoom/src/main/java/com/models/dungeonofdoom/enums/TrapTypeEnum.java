@@ -5,7 +5,7 @@ package com.models.dungeonofdoom.enums;
 public enum TrapTypeEnum {
     TRAP_DOOR("Trap Door", "You fell into a trap!", TrapEffectEnum.FALL),
     BEAR_TRAP("Bear Trap", "You are caught in a bear trap.", TrapEffectEnum.HOLD),
-    TELEPORT_TRAP("Teleport Trap", "Test TELEPORT", TrapEffectEnum.TELEPORT),
+    TELEPORT_TRAP("Teleport Trap", "", TrapEffectEnum.TELEPORT),
     SLEEP_TRAP("Sleep Trap","A strange white mist envelops you and you fall asleep", TrapEffectEnum.HOLD),
     ARROW_TRAP("Arrow Trap", "IF the arrow hits the player and takes their health", TrapEffectEnum.ARROW),
     DART_TRAP("Dart trap","", TrapEffectEnum.DART );

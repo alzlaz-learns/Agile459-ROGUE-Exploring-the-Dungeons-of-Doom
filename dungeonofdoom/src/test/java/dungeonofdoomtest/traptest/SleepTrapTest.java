@@ -1,4 +1,4 @@
-package dungeonofdoomtest;
+package dungeonofdoomtest.traptest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,17 +12,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.models.Player;
-import com.models.dungeonofdoom.BearTrap;
+import com.models.dungeonofdoom.SleepTrap;
 
-public class BearTrapTest {
-    private BearTrap bearTrap;
+public class SleepTrapTest {
+    private SleepTrap sleepTrap;
     private Player player;
     private Random mockRandom;
 
     @BeforeEach
     void setUp() {
         mockRandom = mock(Random.class);
-        bearTrap = new BearTrap(true, mockRandom);
+        sleepTrap = new SleepTrap(true, mockRandom);
         player = new Player("TestPlayer");
         
     }
@@ -31,39 +31,39 @@ public class BearTrapTest {
     void testPlayerGetsExactImmobileTurns() {
         /*
          * I kind of get the gist of this mock
-         * mockRandom.nextInt(4) sets the bound of random to 0-3
+         * mockRandom.nextInt(5) sets the bound of random to 0-4
+         * what i dont understand is that when i copy and pasted 
          * .thenReturn forces the value of it to be 2
          * that value is then placed in int immobilizedTurns = 2 + 1; 
-         * 
          */
-        when(mockRandom.nextInt(4)).thenReturn(2); 
-        bearTrap.trigger(player);
+        when(mockRandom.nextInt(5)).thenReturn(2); 
+        sleepTrap.trigger(player);
         assertEquals(3, player.getImmobile(), "mocked: should be stuck for 3 times.");
     }
 
     @Test
     void testTrapStartsHidden() {
-        assertTrue(bearTrap.isHidden(), "Bear trap should start as hidden.");
+        assertTrue(sleepTrap.isHidden(), "Sleep trap should start as hidden.");
     }
 
     @Test
     void testTrapRevealsWhenTriggered() {
-        bearTrap.trigger(player);
-        assertFalse(bearTrap.isHidden(), "Bear trap should be revealed after being triggered.");
+        sleepTrap.trigger(player);
+        assertFalse(sleepTrap.isHidden(), "Sleep trap should be revealed after being triggered.");
     }
 
     @Test
     void testPlayerGetsImmobilized() {
         int initialImmobileTurns = player.getImmobile();
-        bearTrap.trigger(player);
+        sleepTrap.trigger(player);
         assertTrue(player.getImmobile() > initialImmobileTurns, 
-                   "Player should be immobilized after triggering the bear trap.");
+                   "Player should be immobilized after triggering the sleep trap.");
     }
 
     @Test
     void testCorrectMessageOnTrigger() {
-        String expectedMessage = "You are caught in a bear trap.";
-        String actualMessage = bearTrap.trigger(player);
+        String expectedMessage = "A strange white mist envelops you and you fall asleep";
+        String actualMessage = sleepTrap.trigger(player);
         assertEquals(expectedMessage, actualMessage, "Trap should return the correct message.");
     }
 }

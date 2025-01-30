@@ -7,9 +7,11 @@ import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 public class DartTrap extends AbstractTrap {
 
-    public DartTrap(boolean hidden) {
+    Random rand;
+    public DartTrap(boolean hidden, Random rand) {
         super(hidden, TrapTypeEnum.DART_TRAP);
         //TODO Auto-generated constructor stub
+        this.rand = rand;
     }
 
     
@@ -18,13 +20,14 @@ public class DartTrap extends AbstractTrap {
     public String trigger(Player player) {
         this.reveal();
 
-        Random rand = new Random();
         int hit = rand.nextInt(2); 
 
         if(hit == 1){ 
-            int damage = rand.nextInt(6) + 1; // 1d6 damage
+            int damage = rand.nextInt(4) + 1; // 1d6 damage
+
             //to be changed once implemented
-            player.setCurrentHealth(player.getCurrentHealth() - damage);
+            int newHealth = Math.max(0, player.getCurrentHealth() - damage);
+            player.setCurrentHealth(newHealth);
 
             if (player.getCurrentHealth() <= 0) {
                 return "A poisoned dart killed you";

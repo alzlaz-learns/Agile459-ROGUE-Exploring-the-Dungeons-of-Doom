@@ -94,10 +94,10 @@ public class DungeonFloor {
         return switch (trapType) {
             case 0 -> new BearTrap(false, rand);
             case 1 -> new TrapDoorTrap(false);
-            case 2 -> new TeleportTrap(false, map);
+            case 2 -> new TeleportTrap(false, map, rand);
             case 3 -> new SleepTrap(false, rand);
-            case 4 -> new ArrowTrap(false);
-            case 5 -> new DartTrap(false);
+            case 4 -> new ArrowTrap(false, rand);
+            case 5 -> new DartTrap(false, rand);
             default -> new BearTrap(false, rand);
         };
     }
