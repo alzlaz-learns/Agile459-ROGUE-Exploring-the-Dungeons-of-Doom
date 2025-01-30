@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.models.Player;
+import com.models.dungeonofdoom.AbstractTrap;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -178,27 +179,50 @@ public class GamePanelPlayground extends JPanel{
                 return;
         }
 
-        TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
+        // TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
+        // if (trap != null) {
+        //     String trapMessage = trap.trigger(player);
+        //     // System.out.println(trap.getEffect());
+            
+        //     switch (trap.getEffect()) {
+        //         case FALL -> {
+        //             frame.updateMessage(trapMessage);
+        //             // Move down a floor
+        //             frame.changeFloor(true); 
+        //         }
+        //         case HOLD -> {
+        //             frame.updateMessage(trapMessage);
+        //         }
+        //         case TELEPORT -> {
+        //             randomizePlayerLocation();
+        //         }
+        //         //TODO: add more traps and cases.
+        //     }
+        //     updateDungeon();
+        //     return; 
+        // }
+
+        AbstractTrap trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
         if (trap != null) {
             String trapMessage = trap.trigger(player);
-            // System.out.println(trap.getEffect());
             
             switch (trap.getEffect()) {
                 case FALL -> {
                     frame.updateMessage(trapMessage);
-                    // Move down a floor
+                    //take player to lower floor
                     frame.changeFloor(true); 
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
-                }
+                } 
                 case TELEPORT -> {
+                    frame.updateMessage(trapMessage);
+                    // trap.applyEffect(player); //maybe will implement something
                     randomizePlayerLocation();
                 }
-                //TODO: add more traps and cases.
             }
             updateDungeon();
-            return; 
+            return;
         }
 
         player.moveTo(newX, newY);
@@ -239,7 +263,13 @@ public class GamePanelPlayground extends JPanel{
 
 
         // Place the traps (Only show if revealed)
-        for (TrapInterfacePlayground trap : currentFloor.traps) {
+        // for (TrapInterfacePlayground trap : currentFloor.traps) {
+        //     if (!trap.isHidden()) {
+        //         dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
+        //     }
+        // }
+
+        for (AbstractTrap trap : currentFloor.traps) {
             if (!trap.isHidden()) {
                 dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
             }
@@ -259,7 +289,10 @@ public class GamePanelPlayground extends JPanel{
                 if (cellContent == '>') {
                     cell.setBackground(Color.GREEN);
                     cell.setText(""); 
-                } else if (cellContent == player.getIcon()) {
+                } else if (cellContent == '!'){
+                    cell.setBackground(Color.RED);
+                    cell.setText(""); 
+                }else if (cellContent == player.getIcon()) {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.ORANGE);
                     cell.setText(String.valueOf(cellContent));

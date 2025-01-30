@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.models.dungeonofdoom.AbstractTrap;
+import com.models.dungeonofdoom.BearTrap;
+import com.models.dungeonofdoom.TeleportTrap;
+import com.models.dungeonofdoom.TrapDoorTrap;
+
 public class DungeonFloor {
     private final int width;
     private final int height;
@@ -15,8 +20,11 @@ public class DungeonFloor {
 
     private int stairX;
     private int stairY;
-    public List<TrapInterfacePlayground> traps; // eventually use lombok or make getter for this.
+    // public List<TrapInterfacePlayground> traps; // eventually use lombok or make getter for this.
     
+    //testing abstract version of things
+    public List<AbstractTrap> traps;
+
     //Sample to make simple floors
     private static final char[] FLOOR_SYMBOLS = {
         '.', ',', '~', ':', '-', '=', '*', '+', 'o', '^', 'x', '%', '!', '?', '#', '$', '&', '@', 'Ω', '∆', '§', '¶', '¤', '‡', '†', '∑'
@@ -67,7 +75,8 @@ public class DungeonFloor {
                 y = random.nextInt(height);
             } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
 
-            TrapInterfacePlayground trap = getRandomTrap();
+            // TrapInterfacePlayground trap = getRandomTrap();
+            AbstractTrap trap = getRandomTrap();
             // TrapInterfacePlayground trap = new TeleportTrapPlayground(false);
             trap.setPosition(x, y);
             traps.add(trap);
@@ -75,22 +84,44 @@ public class DungeonFloor {
         }
     }
 
-    private TrapInterfacePlayground getRandomTrap() {
+    private AbstractTrap getRandomTrap() {
         Random rand = new Random();
         int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
-
+    
         return switch (trapType) {
-            case 0 -> new BearTrapPlayground(false);
-            case 1 -> new TrapDoorPlayground(false);
-            case 2 -> new TeleportTrapPlayground(false);
-            default -> new BearTrapPlayground(false);
+            case 0 -> new BearTrap(false);
+            case 1 -> new TrapDoorTrap(false);
+            case 2 -> new TeleportTrap(false);
+            default -> new BearTrap(false);
         };
     }
+    
 
-    public TrapInterfacePlayground getTrapAt(int x, int y) {
-        for (TrapInterfacePlayground trap : traps) {
+    // private TrapInterfacePlayground getRandomTrap() {
+    //     Random rand = new Random();
+    //     int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
+
+    //     return switch (trapType) {
+    //         case 0 -> new BearTrapPlayground(false);
+    //         case 1 -> new TrapDoorPlayground(false);
+    //         case 2 -> new TeleportTrapPlayground(false);
+    //         default -> new BearTrapPlayground(false);
+    //     };
+    // }
+
+    // public TrapInterfacePlayground getTrapAt(int x, int y) {
+    //     for (TrapInterfacePlayground trap : traps) {
+    //         if (trap.getX() == x && trap.getY() == y) {
+    //             return trap; 
+    //         }
+    //     }
+    //     return null;
+    // }
+
+    public AbstractTrap getTrapAt(int x, int y) {
+        for (AbstractTrap trap : traps) {
             if (trap.getX() == x && trap.getY() == y) {
-                return trap; 
+                return trap;
             }
         }
         return null;

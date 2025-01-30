@@ -3,7 +3,10 @@ package com.playground.alex;
 public enum TrapTypeEnumPlayground {
     TRAP_DOOR("Trap Door", "You fell into a trap!", TrapEffectEnumPlayground.FALL),
     BEAR_TRAP("Bear Trap", "You are caught in a bear trap.", TrapEffectEnumPlayground.HOLD),
-    TELEPORT_TRAP("Teleport Trap", "", TrapEffectEnumPlayground.TELEPORT);
+    TELEPORT_TRAP("Teleport Trap", "Test TELEPORT", TrapEffectEnumPlayground.TELEPORT),
+    SLEEP_TRAP("Sleep Trap","A strange white mist envelops you and you fall asleep", TrapEffectEnumPlayground.HOLD),
+    ARROW_TRAP("Arrow Trap", "IF the arrow hits the player and takes their health", TrapEffectEnumPlayground.ARROW),
+    ;
     
     private final String name;
     private final String message;
