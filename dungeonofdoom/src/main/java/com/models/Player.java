@@ -48,13 +48,14 @@ public class Player {
     @Override
     public String toString() {
         return String.format("""
-            Level: %d\tHits:\t%sStr:\t%d\tArmor: %d\tExp: %s""",
-            level,
-            getHealthStatus(),
-            strength,
-            gold,
-            armor,
-            getExperienceStatus());
+            Level: %d\tHits: %s\tStr: %d\tGold: %d\tArmor: %d\tExp: %s""",
+            level,               
+            getHealthStatus(),   
+            strength,            
+            gold,                
+            armor,               
+            getExperienceStatus() 
+        );
     }
 
 
