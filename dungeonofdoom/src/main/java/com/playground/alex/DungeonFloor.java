@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.models.dungeonofdoom.AbstractTrap;
-import com.models.dungeonofdoom.ArrowTrap;
-import com.models.dungeonofdoom.BearTrap;
-import com.models.dungeonofdoom.DartTrap;
-import com.models.dungeonofdoom.SleepTrap;
-import com.models.dungeonofdoom.TeleportTrap;
-import com.models.dungeonofdoom.TrapDoorTrap;
+import com.models.dungeonofdoom.Traps.AbstractTrap;
+import com.models.dungeonofdoom.Traps.ArrowTrap;
+import com.models.dungeonofdoom.Traps.BearTrap;
+import com.models.dungeonofdoom.Traps.DartTrap;
+import com.models.dungeonofdoom.Traps.SleepTrap;
+import com.models.dungeonofdoom.Traps.TeleportTrap;
+import com.models.dungeonofdoom.Traps.TrapDoorTrap;
 
 public class DungeonFloor {
     private final int width;

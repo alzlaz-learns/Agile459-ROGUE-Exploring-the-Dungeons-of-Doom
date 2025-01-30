@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.models.Player;
-import com.models.dungeonofdoom.DartTrap;
+import com.models.dungeonofdoom.Traps.DartTrap;
 
 public class DartTrapTest {
      private DartTrap dartTrap;

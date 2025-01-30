@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.models.Player;
-import com.models.dungeonofdoom.AbstractTrap;
+import com.models.dungeonofdoom.Traps.AbstractTrap;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -179,29 +179,6 @@ public class GamePanelPlayground extends JPanel{
                 return;
         }
 
-        // TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
-        // if (trap != null) {
-        //     String trapMessage = trap.trigger(player);
-        //     // System.out.println(trap.getEffect());
-            
-        //     switch (trap.getEffect()) {
-        //         case FALL -> {
-        //             frame.updateMessage(trapMessage);
-        //             // Move down a floor
-        //             frame.changeFloor(true); 
-        //         }
-        //         case HOLD -> {
-        //             frame.updateMessage(trapMessage);
-        //         }
-        //         case TELEPORT -> {
-        //             randomizePlayerLocation();
-        //         }
-        //         //TODO: add more traps and cases.
-        //     }
-        //     updateDungeon();
-        //     return; 
-        // }
-
         AbstractTrap trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
         if (trap != null) {
             String trapMessage = trap.trigger(player);
@@ -267,14 +244,6 @@ public class GamePanelPlayground extends JPanel{
         //this is a very basic implementation created for before a procedurally generated environment.
         // it will just set randomly on the screen.
         dungeon[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
-
-
-        // Place the traps (Only show if revealed)
-        // for (TrapInterfacePlayground trap : currentFloor.traps) {
-        //     if (!trap.isHidden()) {
-        //         dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
-        //     }
-        // }
 
         for (AbstractTrap trap : currentFloor.traps) {
             if (!trap.isHidden()) {

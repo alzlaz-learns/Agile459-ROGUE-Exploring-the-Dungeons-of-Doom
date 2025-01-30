@@ -1,4 +1,4 @@
-package com.models.dungeonofdoom;
+package com.models.dungeonofdoom.Traps;
 
 import com.models.Player;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;

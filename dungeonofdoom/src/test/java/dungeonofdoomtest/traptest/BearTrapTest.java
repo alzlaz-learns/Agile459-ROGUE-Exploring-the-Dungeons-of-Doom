@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.models.Player;
-import com.models.dungeonofdoom.BearTrap;
+import com.models.dungeonofdoom.Traps.BearTrap;
 
 public class BearTrapTest {
     private BearTrap bearTrap;

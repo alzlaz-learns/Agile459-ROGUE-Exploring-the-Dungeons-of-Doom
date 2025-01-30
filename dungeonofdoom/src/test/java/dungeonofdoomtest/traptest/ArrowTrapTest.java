@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.models.Player;
-import com.models.dungeonofdoom.ArrowTrap;
+import com.models.dungeonofdoom.Traps.ArrowTrap;
 
 public class ArrowTrapTest {
     private ArrowTrap arrowTrap;
