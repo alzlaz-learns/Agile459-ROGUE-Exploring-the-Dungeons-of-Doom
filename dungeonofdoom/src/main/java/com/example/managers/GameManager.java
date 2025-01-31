@@ -135,10 +135,10 @@ public class GameManager {
                 return;
         }
 
-        checkTrap(newX, newY);
-        //i swapped
-        player.moveTo(newX, newY);
         
+        //swapped so traps can actually be stepped on when triggering
+        player.moveTo(newX, newY);
+        checkTrap(newX, newY);
         frame.updateStats(player.toString());
         
     }

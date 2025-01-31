@@ -27,7 +27,7 @@ public class JFrameUI {
         /*
             ive come across an a truely goofy inconsistency that i dont understand why
             the focus isnt alway caught by the Jframe window so i added this so we can just click on it
-            I also think i might have resolved it the other way? but setting everyother focusable false
+            I also think i might have resolved it the other way? by setting everyother focusable false
             but who knows.
             
             It just randomly started with no major changes right before i was done
