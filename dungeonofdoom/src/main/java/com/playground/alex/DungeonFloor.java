@@ -23,8 +23,7 @@ public class DungeonFloor {
 
     private int stairX;
     private int stairY;
-    // public List<TrapInterfacePlayground> traps; // eventually use lombok or make getter for this.
-    
+   
     //testing abstract version of things
     public List<AbstractTrap> traps;
 
@@ -102,27 +101,6 @@ public class DungeonFloor {
         };
     }
     
-
-    // private TrapInterfacePlayground getRandomTrap() {
-    //     Random rand = new Random();
-    //     int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
-
-    //     return switch (trapType) {
-    //         case 0 -> new BearTrapPlayground(false);
-    //         case 1 -> new TrapDoorPlayground(false);
-    //         case 2 -> new TeleportTrapPlayground(false);
-    //         default -> new BearTrapPlayground(false);
-    //     };
-    // }
-
-    // public TrapInterfacePlayground getTrapAt(int x, int y) {
-    //     for (TrapInterfacePlayground trap : traps) {
-    //         if (trap.getX() == x && trap.getY() == y) {
-    //             return trap; 
-    //         }
-    //     }
-    //     return null;
-    // }
 
     public AbstractTrap getTrapAt(int x, int y) {
         for (AbstractTrap trap : traps) {
