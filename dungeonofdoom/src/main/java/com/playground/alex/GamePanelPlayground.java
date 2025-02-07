@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Traps.AbstractTrap;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -178,27 +179,33 @@ public class GamePanelPlayground extends JPanel{
                 return;
         }
 
-        TrapInterfacePlayground trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
+        AbstractTrap trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
         if (trap != null) {
             String trapMessage = trap.trigger(player);
-            // System.out.println(trap.getEffect());
             
             switch (trap.getEffect()) {
                 case FALL -> {
                     frame.updateMessage(trapMessage);
-                    // Move down a floor
+                    //take player to lower floor
                     frame.changeFloor(true); 
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
-                }
+                } 
                 case TELEPORT -> {
-                    randomizePlayerLocation();
+                    frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                 }
-                //TODO: add more traps and cases.
+                case ARROW -> {
+                    frame.updateMessage(trapMessage);
+                    trap.trigger(player);
+                }
+                case DART -> {
+
+                }
             }
             updateDungeon();
-            return; 
+            return;
         }
 
         player.moveTo(newX, newY);
@@ -210,6 +217,7 @@ public class GamePanelPlayground extends JPanel{
         this.dungeon = newDungeon;
     }
 
+    //to be changed once procedurally generated maps are created.
     private void randomizePlayerLocation(){
         //this is a very basic implementation created for before a procedurally generated environment.
         // it will just set randomly on the screen.
@@ -237,9 +245,7 @@ public class GamePanelPlayground extends JPanel{
         // it will just set randomly on the screen.
         dungeon[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
-
-        // Place the traps (Only show if revealed)
-        for (TrapInterfacePlayground trap : currentFloor.traps) {
+        for (AbstractTrap trap : currentFloor.traps) {
             if (!trap.isHidden()) {
                 dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
             }
@@ -259,7 +265,10 @@ public class GamePanelPlayground extends JPanel{
                 if (cellContent == '>') {
                     cell.setBackground(Color.GREEN);
                     cell.setText(""); 
-                } else if (cellContent == player.getIcon()) {
+                } else if (cellContent == '!'){
+                    cell.setBackground(Color.RED);
+                    cell.setText(""); 
+                }else if (cellContent == player.getIcon()) {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.ORANGE);
                     cell.setText(String.valueOf(cellContent));

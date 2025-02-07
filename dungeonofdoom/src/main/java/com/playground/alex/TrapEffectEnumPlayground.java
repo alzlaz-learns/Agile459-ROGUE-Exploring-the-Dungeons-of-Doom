@@ -4,4 +4,6 @@ public enum TrapEffectEnumPlayground {
     FALL,
     HOLD,
     TELEPORT,
+    ARROW,
+    DART
 }
