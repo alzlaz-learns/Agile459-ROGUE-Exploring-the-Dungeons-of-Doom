@@ -47,13 +47,35 @@ public class GamePanelPlayground extends JPanel{
 
         gridLabels = new JLabel[dungeon.length][dungeon[0].length];
 
+        // Try to get DejaVu Sans Mono first, fall back to other Unicode-compatible fonts
+        Font dungeonFont = null;
+        String[] fontNames = {
+            "DejaVu Sans Mono",
+            "Noto Mono",
+            "Lucida Console",
+            "Consolas",
+            "Monospaced"  // Final fallback
+        };
+        
+        for (String fontName : fontNames) {
+            try {
+                dungeonFont = new Font(fontName, Font.PLAIN, 16);
+                if (dungeonFont.canDisplay('║') && dungeonFont.canDisplay('═')) {
+                    break;
+                }
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        
         for (int i = 0; i < dungeon.length; i++) {
             for (int j = 0; j < dungeon[i].length; j++) {
                 JLabel cell = new JLabel(String.valueOf(dungeon[i][j]), SwingConstants.CENTER);
                 cell.setForeground(Color.WHITE);
                 cell.setBackground(Color.BLACK);
                 cell.setOpaque(true);
-                cell.setFont(new Font("Monospaced", Font.PLAIN, 12));
+                cell.setFont(dungeonFont);
+                System.out.println(cell.getFont());
                 this.add(cell);
                 gridLabels[i][j] = cell;
             }

@@ -32,6 +32,37 @@ public class DungeonFloor {
         '.', ',', '~', ':', '-', '=', '*', '+', 'o', '^', 'x', '%', '!', '?', '#', '$', '&', '@', 'Ω', '∆', '§', '¶', '¤', '‡', '†', '∑'
     };
 
+    // Room generation constants
+    private static final char VERTICAL_WALL = '║';
+    private static final char HORIZONTAL_WALL = '═';
+    private static final char TOP_LEFT_CORNER = '╔';
+    private static final char TOP_RIGHT_CORNER = '╗';
+    private static final char BOTTOM_LEFT_CORNER = '╚';
+    private static final char BOTTOM_RIGHT_CORNER = '╝';
+    private static final char FLOOR = '.';
+    private static final int MIN_ROOM_SIZE = 4;
+    private static final int MAX_ROOM_SIZE = 10;
+    private static final int MAX_ROOMS = 10;
+
+    // Room class to store room information
+    private class Room {
+        int x, y, width, height;
+
+        Room(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        boolean intersects(Room other) {
+            return (x <= other.x + other.width && x + width >= other.x &&
+                   y <= other.y + other.height && y + height >= other.y);
+        }
+    }
+
+    private List<Room> rooms;
+
     public DungeonFloor(int level, int width, int height) {
         this.level = level;
         this.width = width;
@@ -41,30 +72,108 @@ public class DungeonFloor {
         this.random = new Random();
         // Cycle symbols to be removed when procedural generation is setup
         this.floorSymbol = FLOOR_SYMBOLS[(level - 1) % FLOOR_SYMBOLS.length]; 
+        this.rooms = new ArrayList<>();
         this.traps = new ArrayList<>();
         generateDungeon();
         // Debugging
         // System.out.println("Floor " + level + " - Stairs Position: " + stairX + ", " + stairY);
     }
 
-    //Sample to make simple floors
     private void generateDungeon() {
-        // Fill map with different floor symbol
+        // Fill map with empty space instead of walls
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                map[i][j] = floorSymbol;
-                originalMap[i][j] = floorSymbol;
+                map[i][j] = ' ';
+                originalMap[i][j] = ' ';
             }
         }
 
-        // Place stairs down > (Always at the bottom as a sample)
-        stairX = random.nextInt(width);
-        stairY = height - 2;
-        map[stairY][stairX] = '>';
+        // Generate rooms
+        generateRooms();
 
-        // Generate traps after placing stairs
+        // Place stairs randomly in a room
+        placeStairs();
+
+        // Generate traps
         generateTraps();
     }
+
+    private void generateRooms() {
+        int attempts = 0;
+        while (rooms.size() < MAX_ROOMS && attempts < 1000) {
+            int width = MIN_ROOM_SIZE + random.nextInt(MAX_ROOM_SIZE - MIN_ROOM_SIZE + 1);
+            int height = MIN_ROOM_SIZE + random.nextInt(MAX_ROOM_SIZE - MIN_ROOM_SIZE + 1);
+            int x = random.nextInt(this.width - width - 1) + 1;
+            int y = random.nextInt(this.height - height - 1) + 1;
+
+            Room newRoom = new Room(x, y, width, height);
+            boolean intersects = false;
+
+            // Check if room intersects with existing rooms
+            for (Room room : rooms) {
+                if (newRoom.intersects(room)) {
+                    intersects = true;
+                    break;
+                }
+            }
+
+            if (!intersects) {
+                createRoom(newRoom);
+                rooms.add(newRoom);
+            }
+            attempts++;
+        }
+    }
+
+    private void createRoom(Room room) {
+        // Draw horizontal walls
+        for (int x = room.x; x < room.x + room.width; x++) {
+            map[room.y][x] = HORIZONTAL_WALL;
+            map[room.y + room.height - 1][x] = HORIZONTAL_WALL;
+            originalMap[room.y][x] = HORIZONTAL_WALL;
+            originalMap[room.y + room.height - 1][x] = HORIZONTAL_WALL;
+        }
+
+        // Draw vertical walls
+        for (int y = room.y; y < room.y + room.height; y++) {
+            map[y][room.x] = VERTICAL_WALL;
+            map[y][room.x + room.width - 1] = VERTICAL_WALL;
+            originalMap[y][room.x] = VERTICAL_WALL;
+            originalMap[y][room.x + room.width - 1] = VERTICAL_WALL;
+        }
+
+        // Draw corners
+        map[room.y][room.x] = TOP_LEFT_CORNER;
+        map[room.y][room.x + room.width - 1] = TOP_RIGHT_CORNER;
+        map[room.y + room.height - 1][room.x] = BOTTOM_LEFT_CORNER;
+        map[room.y + room.height - 1][room.x + room.width - 1] = BOTTOM_RIGHT_CORNER;
+
+        // Copy corners to original map
+        originalMap[room.y][room.x] = TOP_LEFT_CORNER;
+        originalMap[room.y][room.x + room.width - 1] = TOP_RIGHT_CORNER;
+        originalMap[room.y + room.height - 1][room.x] = BOTTOM_LEFT_CORNER;
+        originalMap[room.y + room.height - 1][room.x + room.width - 1] = BOTTOM_RIGHT_CORNER;
+
+        // Fill floor
+        for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
+            for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
+                map[y][x] = FLOOR;
+                originalMap[y][x] = FLOOR;
+            }
+        }
+    }
+
+    private void placeStairs() {
+        if (rooms.isEmpty()) return;
+        
+        // Pick a random room
+        Room room = rooms.get(random.nextInt(rooms.size()));
+        
+        // Place stairs randomly within the room
+        stairX = room.x + random.nextInt(room.width);
+        stairY = room.y + random.nextInt(room.height);
+    }
+
     private void generateTraps() {
         int numTraps = random.nextInt(4); // Randomly place 0-3 traps per floor
 
