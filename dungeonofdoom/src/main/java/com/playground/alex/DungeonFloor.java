@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -201,6 +202,15 @@ public class DungeonFloor {
         System.out.println("Stairs placed at: (" + stairX + ", " + stairY + ")");
     }
 
+    public void setStairs(int x, int y, boolean isDescending) {
+        stairX = x;
+        stairY = y;
+        map[y][x] = isDescending ? '>' : '<'; // '>' for downward stairs, '<' for upward stairs
+
+        System.out.println((isDescending ? "Downward" : "Upward") + " stairs placed at: (" + x + ", " + y + ")");
+    }
+
+
 
     private void generateTraps() {
         List<Point> validTiles = getValidRoomTiles(); // Get valid room tiles
@@ -302,5 +312,25 @@ public class DungeonFloor {
 
     public int getStairY() {
         return stairY;
+    }
+
+
+
+    public void placePlayer(Player player) {
+        // Get all valid room tiles
+        List<Point> validTiles = getValidRoomTiles();
+        if (validTiles.isEmpty()) {
+            System.err.println("No valid tiles available to place the player!");
+            return;
+        }
+
+        // Randomly select a valid tile
+        Point spawnTile = validTiles.get(random.nextInt(validTiles.size()));
+
+        // Set the player's position
+        player.moveTo(spawnTile.x, spawnTile.y);
+
+        // Debug print for confirmation
+        System.out.println("Player spawned at: (" + spawnTile.x + ", " + spawnTile.y + ")");
     }
 }

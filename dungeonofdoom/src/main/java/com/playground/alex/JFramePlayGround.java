@@ -4,8 +4,8 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import javax.swing.JFrame;
+
 import com.models.Player;
 
 public class JFramePlayGround {
@@ -34,7 +34,10 @@ public class JFramePlayGround {
             dungeonFloors.add(new DungeonFloor(i, 80, 22)); // 80x22 grid
         }
 
-        //Initialize UI
+        DungeonFloor firstFloor = dungeonFloors.get(0);
+        firstFloor.placePlayer(player);
+
+        // Initialize UI
         window = new JFrame();
         gamePanel = new GamePanelPlayground(player, dungeonFloors.get(currentFloorIndex).getMap(), this);
         messageArea = new MessageAreaPlayground();
@@ -76,29 +79,58 @@ public class JFramePlayGround {
     */
 
     public void changeFloor(boolean goingDown) {
-        if (goingDown && currentFloorIndex < 25) {
-            currentFloorIndex++;
-        } else if (!goingDown && currentFloorIndex > 0) {
-            currentFloorIndex--;
-        } else {
-            //cant pass 0 or 25
-            return; 
+        if (goingDown) { 
+            if (currentFloorIndex < 25) { 
+                currentFloorIndex++;
+            } else {
+                messageArea.updateMessage("You have reached the bottom floor!");
+                return;
+            }
+        } else { 
+            if (currentFloorIndex > 0) { 
+                currentFloorIndex--;
+            } else {
+                messageArea.updateMessage("You cannot go any higher!");
+                return;
+            }
         }
 
-        // Reset player position to a set spot 5,5
-        // basic implementation
-        //TODO: Eventualy have an implementation that places a player in a random position in a random room
-        player.moveTo(5, 5);
+        // Reference the new floor
+        DungeonFloor newFloor = dungeonFloors.get(currentFloorIndex);
 
-        // Update the game panel with the new floor
-        gamePanel.setDungeon(dungeonFloors.get(currentFloorIndex).getMap());
+        // Set the player's spawn position to match the previous stair location
+        int spawnX = dungeonFloors.get(goingDown ? currentFloorIndex - 1 : currentFloorIndex + 1).getStairX();
+        int spawnY = dungeonFloors.get(goingDown ? currentFloorIndex - 1 : currentFloorIndex + 1).getStairY();
+
+        // Place the player exactly where the stairs were
+        player.moveTo(spawnX, spawnY);
+
+        // Ensure the correct stairs exist
+        if (goingDown) {
+            newFloor.setStairs(spawnX, spawnY, true); // Downward stairs on new floor
+            dungeonFloors.get(currentFloorIndex - 1).setStairs(spawnX, spawnY, false); // Upward stairs on previous floor
+        } else {
+            newFloor.setStairs(spawnX, spawnY, false); // Upward stairs on new floor
+            dungeonFloors.get(currentFloorIndex + 1).setStairs(spawnX, spawnY, true); // Downward stairs on previous floor
+        }
+
+        // Update the player's tracked floor
+        player.setCurrentFloor(currentFloorIndex + 1);
+
+        // Refresh the game panel
+        gamePanel.setDungeon(newFloor.getMap());
         gamePanel.updateDungeon();
 
+        // Debugging
+        System.out.println("Player moved to floor: " + player.getCurrentFloor() + " at (" + spawnX + ", " + spawnY + ")");
+        
         // Update the message area
-        messageArea.updateMessage("You are now on floor " + (currentFloorIndex + 1));
+        messageArea.updateMessage("You are now on floor " + player.getCurrentFloor());
     }
 
-    private void updateDungeon() {
+
+
+    public void updateDungeon() {
         gamePanel.updateDungeon();
     }
 

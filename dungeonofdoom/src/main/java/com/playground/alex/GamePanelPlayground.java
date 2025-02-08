@@ -1,20 +1,19 @@
 package com.playground.alex;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Random;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
-
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Color;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Random;
 
 public class GamePanelPlayground extends JPanel{
     //screen settings
@@ -100,75 +99,69 @@ public class GamePanelPlayground extends JPanel{
         if (player.isImmobile()) {
             frame.updateMessage("You are trapped and cannot move for " + player.getImmobile() + " more turns!");
             player.immobileDecrease();
-            // Stop movement if immobilized
-            return; 
+            return; // Stop movement if immobilized
         }
 
-        //the logic is simple for just the borders of the screen no collision with walls mostly because those dont exist yet.
+        DungeonFloor currentFloor = frame.dungeonFloors.get(frame.currentFloorIndex);
+        char[][] dungeon = currentFloor.getMap(); // Access the current dungeon map
+
         int newX = player.getX();
         int newY = player.getY();
 
         int keyCode = e.getKeyCode();
-        
+
+        // Determine the new coordinates based on the key pressed
         switch (keyCode) {
-            // Move up (waterfalls in)
             case KeyEvent.VK_W: 
             case KeyEvent.VK_UP: 
                 if (newY > 0) newY--;
                 break;
-            // Move down (waterfalls in)
+
             case KeyEvent.VK_S:           
             case KeyEvent.VK_DOWN: 
                 if (newY < dungeon.length - 1) newY++;
                 break;
-            // Move left (waterfalls in)
+
             case KeyEvent.VK_A: 
             case KeyEvent.VK_LEFT: 
                 if (newX > 0) newX--;
                 break;
-            // Move right (waterfalls in)
+
             case KeyEvent.VK_D: 
             case KeyEvent.VK_RIGHT:
                 if (newX < dungeon[0].length - 1) newX++;
-                    break;
-            // Moves up-right
+                break;
+
             case KeyEvent.VK_PAGE_UP: 
                 if (newY > 0 && newX < dungeon[0].length - 1) {
                     newX++; 
                     newY--;
                 }
                 break;
-            // Move down-right
+
             case KeyEvent.VK_PAGE_DOWN: 
                 if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
                     newX++; 
                     newY++;
                 }
                 break;
-            // Move up-left
+
             case KeyEvent.VK_HOME: 
                 if (newY > 0 && newX > 0) {
                     newX--; 
                     newY--;
                 }
                 break;
-            // Move down-left   
+
             case KeyEvent.VK_END: 
                 if (newY < dungeon.length - 1 && newX > 0) {
                     newX--; 
                     newY++;
                 }
                 break;
-            // Go to the next floor (>)
+
             case KeyEvent.VK_PERIOD:
-                // Detect if Shift is held down
                 if (e.isShiftDown()) { 
-                    DungeonFloor currentFloor = frame.dungeonFloors.get(frame.currentFloorIndex);
-
-                    // Debugging: Print player and stairs positions
-                    // System.out.println("Player at: (" + player.getX() + ", " + player.getY() + ")");
-                    // System.out.println("Stairs at: (" + currentFloor.getStairX() + ", " + currentFloor.getStairY() + ")");
-
                     if (player.getX() == currentFloor.getStairX() && player.getY() == currentFloor.getStairY()) {
                         frame.messageArea.updateMessage("Descending to floor " + (frame.currentFloorIndex));
                         frame.changeFloor(true);
@@ -178,15 +171,9 @@ public class GamePanelPlayground extends JPanel{
                     return;
                 }
                 break;
-                case KeyEvent.VK_COMMA:
-                // Detect if Shift is held down
+
+            case KeyEvent.VK_COMMA:
                 if (e.isShiftDown()) { 
-                    DungeonFloor currentFloor = frame.dungeonFloors.get(frame.currentFloorIndex);
-
-                    // Debugging: Print player and stairs positions
-                    // System.out.println("Player at: (" + player.getX() + ", " + player.getY() + ")");
-                    // System.out.println("Stairs at: (" + currentFloor.getStairX() + ", " + currentFloor.getStairY() + ")");
-
                     if (player.getX() == currentFloor.getStairX() && player.getY() == currentFloor.getStairY()) {
                         frame.messageArea.updateMessage("Ascending to floor " + (frame.currentFloorIndex + 2));
                         frame.changeFloor(false);
@@ -201,39 +188,30 @@ public class GamePanelPlayground extends JPanel{
                 return;
         }
 
-        AbstractTrap trap = frame.dungeonFloors.get(frame.currentFloorIndex).getTrapAt(newX, newY);
-        if (trap != null) {
-            String trapMessage = trap.trigger(player);
-            
-            switch (trap.getEffect()) {
-                case FALL -> {
-                    frame.updateMessage(trapMessage);
-                    //take player to lower floor
-                    frame.changeFloor(true); 
-                }
-                case HOLD -> {
-                    frame.updateMessage(trapMessage);
-                } 
-                case TELEPORT -> {
-                    frame.updateMessage(trapMessage);
-                    trap.trigger(player);
-                }
-                case ARROW -> {
-                    frame.updateMessage(trapMessage);
-                    trap.trigger(player);
-                }
-                case DART -> {
-
-                }
-            }
-            updateDungeon();
-            return;
+        // Ensure player cannot walk into walls
+        if (dungeon[newY][newX] == '║' || dungeon[newY][newX] == '═' || 
+            dungeon[newY][newX] == '╔' || dungeon[newY][newX] == '╗' ||
+            dungeon[newY][newX] == '╚' || dungeon[newY][newX] == '╝') {
+            System.out.println("Wall detected at: (" + newX + ", " + newY + ")");
+            frame.updateMessage("You cannot walk into walls!");
+            return; // Stop movement if it's a wall
         }
 
-        player.moveTo(newX, newY);
-        frame.updateStats(player.toString());
-        updateDungeon();
+        // Debugging: Print before and after movement
+        System.out.println("Before move: Player at (" + player.getX() + ", " + player.getY() + ") - Tile: " + dungeon[player.getY()][player.getX()]);
+        
+        // Update player's position
+        dungeon[player.getY()][player.getX()] = '.'; // Clear old position
+        player.moveTo(newX, newY); // Move player
+        dungeon[newY][newX] = '@'; // Mark new position
+
+        System.out.println("After move: Player at (" + newX + ", " + newY + ") - Tile: " + dungeon[newY][newX]);
+
+        // Refresh game UI
+        frame.updateStats(player.toString()); 
+        frame.updateDungeon();
     }
+
 
     public void setDungeon(char[][] newDungeon) {
         this.dungeon = newDungeon;

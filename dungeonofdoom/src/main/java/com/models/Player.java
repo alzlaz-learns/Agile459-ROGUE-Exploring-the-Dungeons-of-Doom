@@ -17,6 +17,9 @@ public class Player {
     private int x; // X position
     private int y; // Y position
     private int immobile;
+
+    //Level tracking
+    private int currentFloor;
     // Constructor
     public Player(String name) {
         this.name = name;
