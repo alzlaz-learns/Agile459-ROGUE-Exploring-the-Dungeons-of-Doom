@@ -74,7 +74,7 @@ public class GamePanelPlayground extends JPanel{
                 cell.setBackground(Color.BLACK);
                 cell.setOpaque(true);
                 cell.setFont(dungeonFont);
-                System.out.println(cell.getFont());
+                //System.out.println(cell.getFont());
                 this.add(cell);
                 gridLabels[i][j] = cell;
             }
@@ -217,62 +217,66 @@ public class GamePanelPlayground extends JPanel{
         this.dungeon = newDungeon;
     }
 
-    //to be changed once procedurally generated maps are created.
-    private void randomizePlayerLocation(){
-        //this is a very basic implementation created for before a procedurally generated environment.
-        // it will just set randomly on the screen.
-        Random rand = new Random();
-        int randX = rand.nextInt(dungeon[0].length);
-        int randY = rand.nextInt(dungeon.length);
-        player.moveTo(randX, randY);
-    }
 
-    //used to draw the dungeon on screen
+    // Used to draw the dungeon on screen
     public void updateDungeon() {
-        
         DungeonFloor currentFloor = frame.dungeonFloors.get(frame.currentFloorIndex);
         char[][] originalMap = currentFloor.getOriginalMap();
 
-        //this allows the map to be updated every key even so there isnt any @ sign trails
+        // Reset the map every key event so there aren't any @ sign trails
         for (int i = 0; i < dungeon.length; i++) {
             for (int j = 0; j < dungeon[i].length; j++) {
-                dungeon[i][j] = originalMap[i][j]; // Reset map
+                dungeon[i][j] = originalMap[i][j]; // Reset map to original state
             }
         }
 
-        // Place the stairs randomly on the map
-        //this is a very basic implementation created for before a procedurally generated environment.
-        // it will just set randomly on the screen.
+        // Place the stairs correctly
         dungeon[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
+        // Ensure traps remain visible if not hidden
         for (AbstractTrap trap : currentFloor.traps) {
             if (!trap.isHidden()) {
-                dungeon[trap.getY()][trap.getX()] = '!'; // Change this if needed
+                dungeon[trap.getY()][trap.getX()] = '!'; // Keep traps in place
             }
         }
 
+        // **Ensure corridors remain visible**
+        for (int i = 0; i < dungeon.length; i++) {
+            for (int j = 0; j < dungeon[i].length; j++) {
+                if (originalMap[i][j] == '░') { 
+                    dungeon[i][j] = '░'; // Keep corridors
+                }
+            }
+        }
 
-        // draws the player on the map 
+        // Draw the player on the map
         dungeon[player.getY()][player.getX()] = player.getIcon();
 
-        // Update UI to reflect the dungeon map
+        // **Update UI to reflect the dungeon map**
         for (int i = 0; i < dungeon.length; i++) {
             for (int j = 0; j < dungeon[i].length; j++) {
                 JLabel cell = gridLabels[i][j];
                 char cellContent = dungeon[i][j];
 
-                //changes the stair symbol to a green box
-                if (cellContent == '>') {
+                if (cellContent == '>') { // Stairs down
                     cell.setBackground(Color.GREEN);
                     cell.setText(""); 
-                } else if (cellContent == '!'){
+                } else if (cellContent == '<') { // Stairs up
+                    cell.setBackground(Color.BLUE);
+                    cell.setText(""); 
+                } else if (cellContent == '!') { // Trap
                     cell.setBackground(Color.RED);
                     cell.setText(""); 
-                }else if (cellContent == player.getIcon()) {
+                } else if (cellContent == '░') { // Corridor
+                    cell.setBackground(new Color(20, 60, 20)); // Dark green
+                    cell.setForeground(new Color(150, 255, 150)); // Light green
+                    cell.setText("░");
+                    System.out.println("Corridor at: (" + i + ", " + j + ")");
+                } else if (cellContent == player.getIcon()) { // Player
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.ORANGE);
                     cell.setText(String.valueOf(cellContent));
-                } else {
+                } else { // Default rendering for walls, floors, etc.
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.WHITE);
                     cell.setText(String.valueOf(cellContent));
@@ -283,5 +287,5 @@ public class GamePanelPlayground extends JPanel{
         this.revalidate();
         this.repaint();
     }
-    
+
 }

@@ -112,6 +112,8 @@ public class GamePanel extends JPanel {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.ORANGE);
                     cell.setText(String.valueOf(c));
+                } else if (c == '░') {
+                    cell.setBackground(Color.GREEN);
                 } else {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.WHITE);
