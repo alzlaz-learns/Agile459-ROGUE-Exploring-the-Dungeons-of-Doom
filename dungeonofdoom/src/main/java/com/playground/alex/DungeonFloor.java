@@ -1,5 +1,6 @@
 package com.playground.alex;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +42,7 @@ public class DungeonFloor {
     private static final char BOTTOM_RIGHT_CORNER = '╝';
     private static final char FLOOR = '.';
     private static final int MIN_ROOM_SIZE = 4;
-    private static final int MAX_ROOM_SIZE = 10;
+    private static final int MAX_ROOM_SIZE = 18;
     private static final int MAX_ROOMS = 10;
 
     // Room class to store room information
@@ -78,6 +79,24 @@ public class DungeonFloor {
         // Debugging
         // System.out.println("Floor " + level + " - Stairs Position: " + stairX + ", " + stairY);
     }
+
+
+    public List<Point> getValidRoomTiles() {
+    List<Point> validTiles = new ArrayList<>();
+    
+    for (Room room : rooms) {
+        for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
+            for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
+                // Ensure we are selecting only floor tiles
+                if (map[y][x] == FLOOR) {
+                    validTiles.add(new Point(x, y));
+                }
+            }
+        }
+    }
+    return validTiles;
+}
+
 
     private void generateDungeon() {
         // Fill map with empty space instead of walls
@@ -165,35 +184,75 @@ public class DungeonFloor {
 
     private void placeStairs() {
         if (rooms.isEmpty()) return;
-        
-        // Pick a random room
-        Room room = rooms.get(random.nextInt(rooms.size()));
-        
-        // Place stairs randomly within the room
-        stairX = room.x + random.nextInt(room.width);
-        stairY = room.y + random.nextInt(room.height);
+
+        // Get all valid room tiles
+        List<Point> validTiles = getValidRoomTiles();
+        if (validTiles.isEmpty()) return; // No valid tiles to place stairs
+
+        // Randomly pick a tile from valid room tiles
+        Point stairTile = validTiles.get(random.nextInt(validTiles.size()));
+
+        // Set the stairs' position
+        stairX = stairTile.x;
+        stairY = stairTile.y;
+
+        // Mark the stairs on the map
+        map[stairY][stairX] = '>';
+        System.out.println("Stairs placed at: (" + stairX + ", " + stairY + ")");
     }
+
 
     private void generateTraps() {
-        int numTraps = random.nextInt(4); // Randomly place 0-3 traps per floor
+        List<Point> validTiles = getValidRoomTiles(); // Get valid room tiles
+        Random rand = new Random();
 
-        for (int i = 0; i < numTraps; i++) {
-            int x, y;
+        int numTraps = rand.nextInt(4); // 0-3 traps
+        System.out.println("Number of traps to generate: " + numTraps);
 
-            // Find a valid position that is NOT the stair position
-            do {
-                x = random.nextInt(width);
-                y = random.nextInt(height);
-            } while ((x == stairX && y == stairY)); // Avoid placing traps on stairs
+        for (int i = 0; i < numTraps && !validTiles.isEmpty(); i++) {
+            int index = rand.nextInt(validTiles.size());
+            Point tile = validTiles.remove(index);
 
-            
+            // Skip tiles that are walls
+            char currentTile = map[tile.y][tile.x];
+            if (currentTile == '║' || currentTile == '═' || currentTile == '╔' ||
+                currentTile == '╗' || currentTile == '╚' || currentTile == '╝') {
+                System.out.println("Skipping wall tile: (" + tile.x + ", " + tile.y + ") - Symbol: " + currentTile);
+                continue;
+            }
+
+            // Debug before placing
+            System.out.println("Attempting to place trap at: (" + tile.x + ", " + tile.y + ") - Current Symbol: " + currentTile);
+
+            // Place the trap
             AbstractTrap trap = getRandomTrap();
-            // AbstractTrap trap = new TeleportTrap(false, map);
-            trap.setPosition(x, y);
+            trap.setPosition(tile.x, tile.y);
             traps.add(trap);
-            map[y][x] = '!'; // Mark trap location (for debugging, can be hidden)
+
+            // Update the map
+            map[tile.y][tile.x] = '!';
+
+            // Debug after placing
+            System.out.println("Trap placed at: (" + tile.x + ", " + tile.y + ")");
         }
+
+        // Print the final map for verification
+        printMap();
     }
+
+
+    public void printMap() {
+        for (int y = 0; y < map.length; y++) {
+            for (int x = 0; x < map[y].length; x++) {
+                System.out.print(map[y][x] + " ");
+            }
+            System.out.println(); // Newline after each row
+        }
+        System.out.println(); // Extra newline for separation
+    }
+
+
+
 
     private AbstractTrap getRandomTrap() {
         Random rand = new Random();

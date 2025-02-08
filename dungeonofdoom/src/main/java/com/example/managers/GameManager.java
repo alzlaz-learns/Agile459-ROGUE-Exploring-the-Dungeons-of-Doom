@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.ui.GamePanel;
 import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
@@ -36,80 +35,65 @@ public class GameManager {
     //separated trap stuff from it
     //moved it all to Game Manager
     public void handleMovement(KeyEvent e) {
-
         if (player.isImmobile()) {
             frame.updateMessage("You are trapped and cannot move for " + player.getImmobile() + " more turns!");
             player.immobileDecrease();
-            // Stop movement if immobilized
             return; 
         }
 
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
 
-        //the logic is simple for just the borders of the screen no collision with walls mostly because those dont exist yet.
         int newX = player.getX();
         int newY = player.getY();
 
         int keyCode = e.getKeyCode();
         
         switch (keyCode) {
-            // Move up (waterfalls in)
             case KeyEvent.VK_W: 
             case KeyEvent.VK_UP: 
                 if (newY > 0) newY--;
                 break;
-            // Move down (waterfalls in)
             case KeyEvent.VK_S:           
             case KeyEvent.VK_DOWN: 
                 if (newY < dungeon.length - 1) newY++;
                 break;
-            // Move left (waterfalls in)
             case KeyEvent.VK_A: 
             case KeyEvent.VK_LEFT: 
                 if (newX > 0) newX--;
                 break;
-            // Move right (waterfalls in)
             case KeyEvent.VK_D: 
             case KeyEvent.VK_RIGHT:
                 if (newX < dungeon[0].length - 1) newX++;
-                    break;
-            // Moves up-right
+                break;
             case KeyEvent.VK_PAGE_UP: 
                 if (newY > 0 && newX < dungeon[0].length - 1) {
                     newX++; 
                     newY--;
                 }
                 break;
-            // Move down-right
             case KeyEvent.VK_PAGE_DOWN: 
                 if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
                     newX++; 
                     newY++;
                 }
                 break;
-            // Move up-left
             case KeyEvent.VK_HOME: 
                 if (newY > 0 && newX > 0) {
                     newX--; 
                     newY--;
                 }
                 break;
-            // Move down-left   
             case KeyEvent.VK_END: 
                 if (newY < dungeon.length - 1 && newX > 0) {
                     newX--; 
                     newY++;
                 }
                 break;
-            // Go to the next floor (>)
             case KeyEvent.VK_PERIOD:
-                // Detect if Shift is held down
                 if (e.isShiftDown()) { 
-                    
                     if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
                         frame.updateMessage("Descending to floor " + (currentFloor));
-                        
                         changeFloor(true);
                     } else {
                         frame.updateMessage("You need to be on the stairs (>) to go down!");
@@ -117,10 +101,8 @@ public class GameManager {
                     return;
                 }
                 break;
-                case KeyEvent.VK_COMMA:
-                // Detect if Shift is held down
+            case KeyEvent.VK_COMMA:
                 if (e.isShiftDown()) { 
-                    // have not implemented this yet mostly just copy and pasted 
                     if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
                         frame.updateMessage("Ascending to floor " + (currentFloor));
                         changeFloor(false);
@@ -130,18 +112,24 @@ public class GameManager {
                     return;
                 }
                 break;
-
             default:
                 return;
-        }
-
-        
-        //swapped so traps can actually be stepped on when triggering
-        player.moveTo(newX, newY);
-        checkTrap(newX, newY);
-        frame.updateStats(player.toString());
-        
     }
+
+    // **Wall Collision Detection**
+    char targetTile = dungeon[newY][newX];
+    if (targetTile == '║' || targetTile == '═' || targetTile == '╔' || targetTile == '╗' ||
+        targetTile == '╚' || targetTile == '╝') {
+        frame.updateMessage("You can't walk through walls!");
+        return; // Stop movement if it's a wall
+    }
+
+    // Move player only if the tile is walkable
+    player.moveTo(newX, newY);
+    checkTrap(newX, newY);
+    frame.updateStats(player.toString());
+}
+
 
     //logic to handle trapLogic based off of JFramePlayGround
     //separated trap stuff from it
