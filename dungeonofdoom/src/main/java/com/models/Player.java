@@ -1,5 +1,8 @@
 package com.models;
 
+import com.player.uday.MonsterPlayground;
+import com.player.uday.PlayerPackPlayground;
+
 import lombok.Data;
 
 @Data
@@ -7,23 +10,19 @@ public class Player {
     private final String name;
     private int level;
     private int currentHealth;
+    private int maxHealth;
+    private int gold;
     private int experience;
     private int armor;
     private int strength;
+    private int hungerCounter;
+
     //test attributes
     private char icon;
     private int x; // X position
     private int y; // Y position
     private int immobile;
-
-    //Level tracking
-    private int currentFloor;
-    private int health = 100;
-    private int maxHealth = 100;
-    private int hungerCounter = 1300;
-    private int gold = 0;
-    private PlayerPack pack = new PlayerPack();
-
+    private PlayerPackPlayground pack;
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -65,6 +64,61 @@ public class Player {
         );
     }
 
+    public void takeDamage(int damage) {
+        this.currentHealth -= damage;
+        if (this.currentHealth <= 0) {
+            die();
+        }
+    }
+
+    public void die() {
+        System.out.println(name + " has died.");
+        int goldLost = (int) (gold * 0.9);
+        gold -= goldLost;
+        System.out.println(goldLost + " gold added to the scoreboard.");
+    }
+
+        public void attack(MonsterPlayground monster) {
+        int damage = 10;
+        monster.takeDamage(damage);
+        System.out.println("You attack the " + monster.getName() + " for " + damage + " damage.");
+    }
+
+    public PlayerPackPlayground getPack() {
+        return pack;
+    }
+
+    public int getHealth() {
+        return currentHealth;
+    }
+
+    public void heal(int amount) {
+        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
+    }
+
+    public void eatFood() {
+        if (pack.containsItem("Food")) {
+            pack.dropItem(pack.getItem("Food"));
+            hungerCounter = 1300;
+            System.out.println("You eat some food. You feel refreshed.");//tochange later.
+        } else {
+            System.out.println("You have no food to eat.");//tochange later.
+        }
+    }
+
+    public void updateHunger() {
+        hungerCounter--;
+        if (hungerCounter == 300) {
+            System.out.println("You are starting to get hungry.");
+        } else if (hungerCounter == 150) {
+            System.out.println("You are starting to feel weak.");
+        } else if (hungerCounter == 0) {
+            System.out.println("You feel very weak. You faint.");
+        } else if (hungerCounter == -850) {
+            System.out.println("You have starved to death.");
+            die();
+        }
+    }
 
     //test method
     public void moveTo(int x, int y) {
