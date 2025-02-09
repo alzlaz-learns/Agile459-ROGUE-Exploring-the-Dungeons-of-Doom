@@ -7,8 +7,6 @@ public class Player {
     private final String name;
     private int level;
     private int currentHealth;
-    private int maxHealth;
-    private int gold;
     private int experience;
     private int armor;
     private int strength;
@@ -17,6 +15,12 @@ public class Player {
     private int x; // X position
     private int y; // Y position
     private int immobile;
+    private int health = 100;
+private int maxHealth = 100;
+private int hungerCounter = 1300;
+private int gold = 0;
+private PlayerPack pack = new PlayerPack();
+
     // Constructor
     public Player(String name) {
         this.name = name;
