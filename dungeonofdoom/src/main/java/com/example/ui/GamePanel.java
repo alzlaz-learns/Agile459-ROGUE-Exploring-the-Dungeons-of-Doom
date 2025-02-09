@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 import com.example.managers.GameManager;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
-import com.playground.alex.DungeonFloor;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 
 

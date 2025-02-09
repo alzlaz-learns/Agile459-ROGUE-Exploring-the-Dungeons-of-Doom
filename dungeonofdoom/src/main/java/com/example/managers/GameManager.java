@@ -7,8 +7,8 @@ import java.util.List;
 import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
-import com.playground.alex.DungeonFloor;
-import com.playground.alex.GamePanelPlayground;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.example.ui.GamePanel;
 
 public class GameManager {
 
@@ -16,19 +16,20 @@ public class GameManager {
     private List<DungeonFloor> dungeonFloors;
     private int currentFloor;
     private JFrameUI frame;
-    private GamePanelPlayground gamePanel;
+    private GamePanel gamePanel;
 
     public GameManager(JFrameUI frame) {
-
         this.frame = frame;
-        //eventually need to consider how to take a user input to make a custom player naem.
         this.player = new Player("hero");
         dungeonFloors = new ArrayList<>();
-        for(int i = 1; i < 26; i++){
-            //hard coded need to consider in the future  how not to do that
+        
+        // Create all dungeon floors
+        for(int i = 1; i < 26; i++) {
             dungeonFloors.add(new DungeonFloor(i, 80, 22));
         }
         this.currentFloor = 0;
+        // Place player on the first floor
+        dungeonFloors.get(currentFloor).placePlayer(player);
     }
 
     //logic to handle player movement based off of JFramePlayGround
@@ -114,21 +115,21 @@ public class GameManager {
                 break;
             default:
                 return;
-    }
+        }
 
-    // **Wall Collision Detection**
-    char targetTile = dungeon[newY][newX];
-    if (targetTile == '║' || targetTile == '═' || targetTile == '╔' || targetTile == '╗' ||
-        targetTile == '╚' || targetTile == '╝') {
-        frame.updateMessage("You can't walk through walls!");
-        return; // Stop movement if it's a wall
-    }
+        // **Wall Collision Detection**
+        char targetTile = dungeon[newY][newX];
+        if (targetTile == '║' || targetTile == '═' || targetTile == '╔' || targetTile == '╗' ||
+            targetTile == '╚' || targetTile == '╝') {
+            frame.updateMessage("You can't walk through walls!");
+            return; // Stop movement if it's a wall
+        }
 
-    // Move player only if the tile is walkable
-    player.moveTo(newX, newY);
-    checkTrap(newX, newY);
-    frame.updateStats(player.toString());
-}
+        // Move player only if the tile is walkable
+        player.moveTo(newX, newY);
+        checkTrap(newX, newY);
+        frame.updateStats(player.toString());
+    }
 
 
     //logic to handle trapLogic based off of JFramePlayGround
@@ -172,19 +173,21 @@ public class GameManager {
         } else if (!goingDown && currentFloor > 0) {
             currentFloor--;
         } else {
-            //cant pass 0 or 25
+            // Can't pass 0 or 25
+            frame.updateMessage(goingDown ? "You have reached the bottom floor!" : "You cannot go any higher!");
             return;
         }
 
-        // Reset player position to a set spot 5,5
-        // basic implementation
-        //TODO: Eventualy have an implementation that places a player in a random position in a random room
-        player.moveTo(5, 5);
+        // Get the new floor
+        DungeonFloor newFloor = dungeonFloors.get(currentFloor);
+        
+        // Place the player in a random valid position on the new floor
+        newFloor.placePlayer(player);
 
         // Update the game panel with the new floor
         frame.updateMessage("You are now on floor " + (currentFloor + 1));
 
-        // Update the message area
+        // Update the message area and game screen
         frame.updateGameScreen();
     }
 

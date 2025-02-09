@@ -1,4 +1,4 @@
-package com.playground.alex;
+package com.models.dungeonofdoom.dungeonfloor;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import com.models.dungeonofdoom.Traps.DartTrap;
 import com.models.dungeonofdoom.Traps.SleepTrap;
 import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.Traps.TrapDoorTrap;
+import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 public class DungeonFloor {
     private final int width;
@@ -111,13 +112,10 @@ public class DungeonFloor {
 
         // Generate rooms
         generateRooms();
-
         generateCorridors();
         placeDoors();
-
         // Place stairs randomly in a room
         placeStairs();
-
         // Generate traps
         generateTraps();
     }
@@ -270,7 +268,7 @@ public class DungeonFloor {
 
     private AbstractTrap getRandomTrap() {
         Random rand = new Random();
-        int trapType = rand.nextInt(TrapTypeEnumPlayground.getTrapListCount());
+        int trapType = rand.nextInt(TrapTypeEnum.getTrapListCount());
     
         return switch (trapType) {
             case 0 -> new BearTrap(false, rand);
