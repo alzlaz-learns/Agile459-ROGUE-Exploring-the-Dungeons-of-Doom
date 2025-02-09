@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 import com.example.managers.GameManager;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
-import com.playground.alex.DungeonFloor;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 
 
@@ -112,6 +112,8 @@ public class GamePanel extends JPanel {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.ORANGE);
                     cell.setText(String.valueOf(c));
+                } else if (c == '░') {
+                    cell.setBackground(Color.GREEN);
                 } else {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.WHITE);
