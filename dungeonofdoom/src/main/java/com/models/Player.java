@@ -72,15 +72,18 @@ public class Player {
     }
 
     public void die() {
-        System.out.println(name + " has died.");
+        System.out.println(name + " has died."); // to be changed to output on screen
         int goldLost = (int) (gold * 0.9);
         gold -= goldLost;
-        System.out.println(goldLost + " gold added to the scoreboard.");
+        System.out.println(goldLost + " gold added to the scoreboard."); // to be changed to output on screen
     }
 
-        public void attack(MonsterPlayground monster) {
+    
+    // to be changed to output on screen when monster
+    public void attack(MonsterPlayground monster) {
         int damage = 10;
         monster.takeDamage(damage);
+        // to be changed to output on screen
         System.out.println("You attack the " + monster.getName() + " for " + damage + " damage.");
     }
 
@@ -91,6 +94,7 @@ public class Player {
     public int getHealth() {
         return currentHealth;
     }
+
 
     public void heal(int amount) {
         this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
@@ -109,13 +113,13 @@ public class Player {
     public void updateHunger() {
         hungerCounter--;
         if (hungerCounter == 300) {
-            System.out.println("You are starting to get hungry.");
+            System.out.println("You are starting to get hungry."); // to be changed to output on screen
         } else if (hungerCounter == 150) {
-            System.out.println("You are starting to feel weak.");
+            System.out.println("You are starting to feel weak.");// to be changed to output on screen
         } else if (hungerCounter == 0) {
-            System.out.println("You feel very weak. You faint.");
+            System.out.println("You feel very weak. You faint.");// to be changed to output on screen
         } else if (hungerCounter == -850) {
-            System.out.println("You have starved to death.");
+            System.out.println("You have starved to death.");// to be changed to output on screen
             die();
         }
     }
