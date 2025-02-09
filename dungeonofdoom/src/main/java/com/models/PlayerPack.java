@@ -1,10 +1,13 @@
 package com.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerPack {
     private static final int MAX_CAPACITY = 23;
-    private List<Item> items = new ArrayList<>();
+    private List<Object> items = new ArrayList<>(); // to be made into an item class
 
-    public boolean addItem(Item item) {
+    public boolean addItem(Object item) {
         if (items.size() >= MAX_CAPACITY) {
             return false; // Pack full
         }
@@ -12,22 +15,27 @@ public class PlayerPack {
         return true;
     }
 
-    public boolean dropItem(Item item) {
+    public boolean dropItem(Object item) {
         return items.remove(item);
     }
 
     public void listItems() {
-        for (Item item : items) {
-            System.out.println(item.getName() + " (" + item.getType() + ")");
+        for (Object item : items) {
+            //TODO: implement item stuff
+            // System.out.println(item.getName() + " (" + item.getType() + ")");
         }
     }
 
     public boolean containsItem(String itemName) {
-        return items.stream().anyMatch(item -> item.getName().equalsIgnoreCase(itemName));
+        //TODO: implement item stuff
+        // return items.stream().anyMatch(item -> item.getName().equalsIgnoreCase(itemName));
+        return false;
     }
 
-    public Item getItem(String itemName) {
-        return items.stream().filter(item -> item.getName().equalsIgnoreCase(itemName)).findFirst().orElse(null);
+    public Object getItem(String itemName) {
+        //TODO: implement item stuff
+        // return items.stream().filter(item -> item.getName().equalsIgnoreCase(itemName)).findFirst().orElse(null);
+        return false;
     }
 }
 
