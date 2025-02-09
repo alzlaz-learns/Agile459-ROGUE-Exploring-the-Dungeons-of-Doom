@@ -15,11 +15,14 @@ public class Player {
     private int x; // X position
     private int y; // Y position
     private int immobile;
+
+    //Level tracking
+    private int currentFloor;
     private int health = 100;
-private int maxHealth = 100;
-private int hungerCounter = 1300;
-private int gold = 0;
-private PlayerPack pack = new PlayerPack();
+    private int maxHealth = 100;
+    private int hungerCounter = 1300;
+    private int gold = 0;
+    private PlayerPack pack = new PlayerPack();
 
     // Constructor
     public Player(String name) {
