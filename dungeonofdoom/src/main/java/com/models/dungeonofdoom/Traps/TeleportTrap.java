@@ -24,26 +24,8 @@ public class TeleportTrap extends AbstractTrap{
         this.rand = rand;
     }
 
-    
+
     public void applyEffect(Player player) {
-        //effect is applied by game logic so this empty for nbow to be considered how to handle once a dungeons are properly generated.
-
-        int newX, newY;
-        int width = dungeon[0].length;
-        int height = dungeon.length;
-        
-        // Ensure the player doesn't teleport onto a trap or stair
-        do {
-            newX = rand.nextInt(width);
-            newY = rand.nextInt(height);
-            System.out.println("Trying to teleport to: " + newX + "," + newY);
-        } while (dungeon[newY][newX] == '!' || dungeon[newY][newX] == '>'); // Avoid teleporting onto traps or stairs
-
-        System.out.println("Final teleport location: " + newX + "," + newY);
-        player.moveTo(newX, newY);
-    }
-
-    public void applyEffect2(Player player) {
         // Get valid room tiles instead of raw map data
         List<Point> validTiles = df.getValidRoomTiles();
 
@@ -52,10 +34,12 @@ public class TeleportTrap extends AbstractTrap{
             return;
         }
 
-        // Select a random valid room tile
-        Point newTile = validTiles.get(rand.nextInt(validTiles.size()));
+        Point newTile;
+        do {
+            newTile = validTiles.get(rand.nextInt(validTiles.size()));
+        } while (df.getTrapAt(newTile.x, newTile.y) != null); // 🔥 Ensure it's NOT a trap
 
-        System.out.println("Final teleport location: " + newTile.x + "," + newTile.y);
+        System.out.println("Teleporting to: " + newTile.x + "," + newTile.y);
         player.moveTo(newTile.x, newTile.y);
     }
 
@@ -65,7 +49,7 @@ public class TeleportTrap extends AbstractTrap{
     @Override
     public String trigger(Player player) {
             this.reveal();
-            applyEffect2(player);
+            applyEffect(player);
             return trapType.getMessage(); 
     }
     
