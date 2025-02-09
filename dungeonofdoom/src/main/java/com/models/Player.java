@@ -19,7 +19,7 @@ public class Player {
 private int maxHealth = 100;
 private int hungerCounter = 1300;
 private int gold = 0;
-private PlayerPack pack = new PlayerPack();
+//private PlayerPack pack = new PlayerPack();
 
     // Constructor
     public Player(String name) {
