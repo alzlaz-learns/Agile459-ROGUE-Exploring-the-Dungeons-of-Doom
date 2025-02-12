@@ -9,27 +9,29 @@ public class Monster {
     private MonsterEnum type;
     private int hpt;
     private int amr;
+    private Random rand;
 
-    public Monster(MonsterEnum type){
+    public Monster(MonsterEnum type, Random rand){
+        this.rand = rand;
         this.type = type;
         this.hpt = roll(type.getHpt());
         this.amr = type.getAmr();
+        
     }
 
     private int roll(Pair<Integer, Integer> pair){
         int left = pair.getA();
         int right = pair.getB();
-        Random random = new Random();
 
         int total = 0;
         for(int i = 0; i < left; i++){
-            total += random.nextInt(right) + 1;
+            total += rand.nextInt(right) + 1;
         }
 
         return total;
     }
 
-    private int calculateDmg(){
+    public int calculateDmg(){
         int dmg = 0;
         for(Pair<Integer, Integer> attack: type.getDmg()){
             dmg += roll(attack);
@@ -54,15 +56,15 @@ public class Monster {
         return type.getSymbol();
     }
 
-    public int getHealth() {
+    public int getHpt() {
         return this.hpt;
     }
 
-    public int getArmor() {
+    public int getAmr() {
         return this.amr;
     }
 
-    public int getExperience() {
+    public int getExp() {
         return type.getExp();
     }
 
