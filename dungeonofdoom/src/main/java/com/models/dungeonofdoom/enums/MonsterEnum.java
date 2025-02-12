@@ -79,7 +79,7 @@ public enum MonsterEnum {
     public int getCarryPercent() { return carryPercent; }
     public int getExp() { return exp; }
     public int getLvl() { return lvl; }
-    public int getAmr() { return exp;}
+    public int getAmr() { return amr;}
     public Pair<Integer, Integer> getHpt() { return hpt; }
     public Pair<Integer, Integer> getFloorFound() { return floorFound; }
     public List<Pair<Integer, Integer>> getDmg() { return dmg; }
