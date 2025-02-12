@@ -271,14 +271,14 @@ public class DungeonFloor {
         int trapType = rand.nextInt(TrapTypeEnum.getTrapListCount());
     
         return switch (trapType) {
-            // case 0 -> new BearTrap(false, rand);
-            // case 1 -> new TrapDoorTrap(false);
-            // case 2 -> new TeleportTrap(false, this, rand);
-            // case 3 -> new SleepTrap(false, rand);
-            // case 4 -> new ArrowTrap(false, rand);
-            // case 5 -> new DartTrap(false, rand);
-            // default -> new BearTrap(false, rand);
-            default -> new TeleportTrap(false, this, rand);
+            case 0 -> new BearTrap(false, rand);
+            case 1 -> new TrapDoorTrap(false);
+            case 2 -> new TeleportTrap(false, this, rand);
+            case 3 -> new SleepTrap(false, rand);
+            case 4 -> new ArrowTrap(false, rand);
+            case 5 -> new DartTrap(false, rand);
+            default -> new BearTrap(false, rand);
+            // default -> new TeleportTrap(false, this, rand);
         };
     }
     
