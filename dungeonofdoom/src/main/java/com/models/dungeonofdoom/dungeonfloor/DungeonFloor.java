@@ -15,6 +15,8 @@ import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.Traps.TrapDoorTrap;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
+import com.models.dungeonofdoom.dungeoncorridor.BfsCorridors;
+
 public class DungeonFloor {
     private final int width;
     private final int height;
@@ -362,29 +364,53 @@ public class DungeonFloor {
 
 
 
+    public class ArgsForBfsCorridors {
+        public int startX;
+        public int startY;
+        public int endX;
+        public int endY;
+        public int height;
+        public int width;
+        public char[][] map;
+    }
 
     // The drawCorridor method now only carves a path in blank spaces.
     private void drawCorridor(int x1, int y1, int x2, int y2) {
-        // Draw horizontal segment from (x1, y1) to (x2, y1).
-        int minX = Math.min(x1, x2);
-        int maxX = Math.max(x1, x2);
-        for (int x = minX; x <= maxX; x++) {
-            if (map[y1][x] == ' ') {
-                map[y1][x] = CORRIDOR;
-                originalMap[y1][x] = CORRIDOR;
-            }
+
+        ArgsForBfsCorridors args = new ArgsForBfsCorridors();
+        args.startX = x1;
+        args.startY = y1;
+        args.endX = x2;
+        args.endY = y2;
+        args.height = height;
+        args.width = width;
+        args.map = map;
+        // 1. Find a path of blank spaces from (x1, y1) to (x2, y2).
+        List<Point> path = BfsCorridors.findPathInBlankSpace(args);
+        if (path == null) {
+            // No path found; do nothing or print a debug message.
+            System.out.println("No valid corridor path found between (" + x1 + "," + y1 
+                               + ") and (" + x2 + "," + y2 + ")");
+            return;
         }
-        
-        // Draw vertical segment from (x2, y1) to (x2, y2).
-        int minY = Math.min(y1, y2);
-        int maxY = Math.max(y1, y2);
-        for (int y = minY; y <= maxY; y++) {
-            if (map[y][x2] == ' ') {
-                map[y][x2] = CORRIDOR;
-                originalMap[y][x2] = CORRIDOR;
+    
+        // 2. Carve out a corridor in all the interior path cells
+        //    (optionally skip the very first and last cells, because they are doors).
+        //    Up to you if you want to skip path.get(0) and path.get(path.size()-1).
+        for (int i = 0; i < path.size(); i++) {
+            Point p = path.get(i);
+            // If it's not the first or last cell, fill it in with corridor symbol
+            // (some people prefer to skip the door cells so that they remain 'd').
+            // But if you want the corridor symbol to overwrite them, do so.
+            if (i != 0 && i != path.size() - 1) {
+                map[p.y][p.x] = CORRIDOR;
+                originalMap[p.y][p.x] = CORRIDOR;
             }
         }
     }
+    
+
+
 
 
     // Revised connectLonelyRooms to also use door endpoints.
