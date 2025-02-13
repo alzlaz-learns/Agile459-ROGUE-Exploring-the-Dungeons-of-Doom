@@ -37,7 +37,7 @@ public class TeleportTrap extends AbstractTrap{
         Point newTile;
         do {
             newTile = validTiles.get(rand.nextInt(validTiles.size()));
-        } while (df.getTrapAt(newTile.x, newTile.y) != null); // 🔥 Ensure it's NOT a trap
+        } while (df.getTrapAt(newTile.x, newTile.y) != null); 
 
         System.out.println("Teleporting to: " + newTile.x + "," + newTile.y);
         player.moveTo(newTile.x, newTile.y);
