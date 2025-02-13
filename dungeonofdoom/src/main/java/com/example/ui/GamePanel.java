@@ -77,8 +77,9 @@ public class GamePanel extends JPanel {
         DungeonFloor currentFloor = gameManager.getCurrentFloor();
         char[][] map = currentFloor.getMap();
 
-        Player player = gameManager.getPlayer(); 
+        Player player = gameManager.getPlayer();
 
+        // Original 
         char[][] originalMap = currentFloor.getOriginalMap();
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {

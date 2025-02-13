@@ -1,7 +1,6 @@
 package com.models.dungeonofdoom.dungeonfloor;
 
 import java.awt.Point;
-import java.security.CodeSigner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -114,7 +113,7 @@ public class DungeonFloor {
         // Generate rooms
         generateRooms();
         generateCorridors();
-        placeDoors();
+        //placeDoors();
         // Place stairs randomly in a room
         placeStairs();
         // Generate traps
@@ -340,188 +339,125 @@ public class DungeonFloor {
     }
 
 
+    // Revised generateCorridors method that computes one door per room connection
     private void generateCorridors() {
         if (rooms.isEmpty()) return;
 
-        // Sort rooms by X first, then Y for natural connection flow
+        // Sort rooms for a natural connection order.
         rooms.sort((r1, r2) -> {
             if (r1.x == r2.x) return Integer.compare(r1.y, r2.y);
             return Integer.compare(r1.x, r2.x);
         });
 
+        // Connect each adjacent room pair.
         for (int i = 0; i < rooms.size() - 1; i++) {
             Room roomA = rooms.get(i);
             Room roomB = rooms.get(i + 1);
-
-            int startX = roomA.x + roomA.width / 2;
-            int startY = roomA.y + roomA.height / 2;
-            int endX = roomB.x + roomB.width / 2;
-            int endY = roomB.y + roomB.height / 2;
-
-            // Draw an L-shaped corridor
-            drawCorridor(startX, startY, endX, endY);
+            connectRooms(roomA, roomB);
         }
 
-        // Ensure all rooms have at least one connection by connecting to random neighbors
+        // Optionally, connect any "lonely" rooms.
         connectLonelyRooms();
     }
 
 
-    private void drawCorridor(int x1, int y1, int x2, int y2) {
-        //TODO: GOT THIS TENTATIVELY WORKING BUT JFRAME AINT LOVING THE Path ascii right
-        // int corridorChar = '░'; // Corridor character
 
-        // Move horizontally first
+
+    // The drawCorridor method now only carves a path in blank spaces.
+    private void drawCorridor(int x1, int y1, int x2, int y2) {
+        // Draw horizontal segment from (x1, y1) to (x2, y1).
         int minX = Math.min(x1, x2);
         int maxX = Math.max(x1, x2);
         for (int x = minX; x <= maxX; x++) {
-            if (map[y1][x] == '║' || map[y1][x] == '═') { 
-                map[y1][x] = 'd'; // Place a door if a corridor intersects a wall
-            } else if (map[y1][x] == ' ') {
-                map[y1][x] = CORRIDOR; // Draw the corridor
+            if (map[y1][x] == ' ') {
+                map[y1][x] = CORRIDOR;
                 originalMap[y1][x] = CORRIDOR;
             }
         }
-
-        // Move vertically
+        
+        // Draw vertical segment from (x2, y1) to (x2, y2).
         int minY = Math.min(y1, y2);
         int maxY = Math.max(y1, y2);
         for (int y = minY; y <= maxY; y++) {
-            if (map[y][x2] == '║' || map[y][x2] == '═') { 
-                map[y][x2] = 'd'; // Place a door if a corridor intersects a wall
-            } else if (map[y][x2] == ' ') {
-                map[y][x2] = CORRIDOR; // Draw the corridor
-                originalMap[y1][x2] = CORRIDOR;
+            if (map[y][x2] == ' ') {
+                map[y][x2] = CORRIDOR;
+                originalMap[y][x2] = CORRIDOR;
             }
         }
     }
 
-    // private void drawCorridor(int x1, int y1, int x2, int y2) {
-    //     //TODO: GOT THIS TENTATIVELY WORKING BUT JFRAME AINT LOVING THE Path ascii right
-    //     int corridorChar = '░'; // Corridor character
 
-    //     // Move horizontally first
-    //     int minX = Math.min(x1, x2);
-    //     int maxX = Math.max(x1, x2);
-    //     for (int x = minX; x <= maxX; x++) {
-    //         if (map[y1][x] == '║' || map[y1][x] == '═') { 
-    //             map[y1][x] = 'd'; // Place a door if a corridor intersects a wall
-    //         } else if (map[y1][x] == ' ') {
-    //             map[y1][x] = (char) corridorChar; // Draw the corridor
-    //             originalMap[y1][x] = (char) corridorChar;
-    //         }
-    //     }
-
-    //     // Move vertically
-    //     int minY = Math.min(y1, y2);
-    //     int maxY = Math.max(y1, y2);
-    //     for (int y = minY; y <= maxY; y++) {
-    //         if (map[y][x2] == '║' || map[y][x2] == '═') { 
-    //             map[y][x2] = 'd'; // Place a door if a corridor intersects a wall
-    //         } else if (map[y][x2] == ' ') {
-    //             map[y][x2] = (char) corridorChar; // Draw the corridor
-    //             originalMap[y1][x2] = (char) corridorChar;
-    //         }
-    //     }
-    // }
-
-
-
+    // Revised connectLonelyRooms to also use door endpoints.
     private void connectLonelyRooms() {
         Random rand = new Random();
-
         for (Room room : rooms) {
-            boolean hasCorridor = false;
-
-            // Check if any corridor is adjacent
+            boolean hasDoor = false;
+            // Check if a door ('d') exists on or immediately outside the room perimeter.
             for (int y = room.y - 1; y <= room.y + room.height; y++) {
                 for (int x = room.x - 1; x <= room.x + room.width; x++) {
-                    if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == (char) 176) {
-                        hasCorridor = true;
+                    if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == 'd') {
+                        hasDoor = true;
                         break;
                     }
                 }
-                if (hasCorridor) break;
+                if (hasDoor) break;
             }
-
-            // If no corridor is found, connect to a random room
-            if (!hasCorridor) {
+            if (!hasDoor) {
+                // Pick a random room (other than the current one) and connect.
                 Room target = rooms.get(rand.nextInt(rooms.size()));
-                drawCorridor(room.x + room.width / 2, room.y + room.height / 2,
-                            target.x + target.width / 2, target.y + target.height / 2);
-            }
-        }
-    }
-
-
-
-
-    //DOORS
-
-    private void placeDoors() {
-        for (Room room : rooms) {
-            // Check the perimeter of the room
-            for (int x = room.x; x < room.x + room.width; x++) {
-                // Top wall
-                if (room.y > 0 && map[room.y - 1][x] == CORRIDOR) {
-                    map[room.y][x] = 'd';
-                    originalMap[room.y][x] = 'd';
-                }
-                // Bottom wall
-                if (room.y + room.height < height && map[room.y + room.height][x] == CORRIDOR) {
-                    map[room.y + room.height - 1][x] = 'd';
-                    originalMap[room.y + room.height - 1][x] = 'd';
-                }
-            }
-            for (int y = room.y; y < room.y + room.height; y++) {
-                // Left wall
-                if (room.x > 0 && map[y][room.x - 1] == CORRIDOR) {
-                    map[y][room.x] = 'd';
-                    originalMap[y][room.x] = 'd';
-                }
-                // Right wall
-                if (room.x + room.width < width && map[y][room.x + room.width] == CORRIDOR) {
-                    map[y][room.x + room.width - 1] = 'd';
-                    originalMap[y][room.x + room.width - 1] = 'd';
+                if (target != room) {
+                    connectRooms(room, target);
                 }
             }
         }
     }
-    // private void placeDoors() {
-    //     for (Room room : rooms) {
-    //         // Check the perimeter of the room
-    //         for (int x = room.x; x < room.x + room.width; x++) {
-    //             // Top wall
-    //             if (room.y > 0 && map[room.y - 1][x] == '░') {
-    //                 map[room.y][x] = 'd';
-    //                 originalMap[room.y][x] = 'd';
-    //             }
-    //             // Bottom wall
-    //             if (room.y + room.height < height && map[room.y + room.height][x] == '░') {
-    //                 map[room.y + room.height - 1][x] = 'd';
-    //                 originalMap[room.y + room.height - 1][x] = 'd';
-    //             }
-    //         }
-    //         for (int y = room.y; y < room.y + room.height; y++) {
-    //             // Left wall
-    //             if (room.x > 0 && map[y][room.x - 1] == '░') {
-    //                 map[y][room.x] = 'd';
-    //                 originalMap[y][room.x] = 'd';
-    //             }
-    //             // Right wall
-    //             if (room.x + room.width < width && map[y][room.x + room.width] == '░') {
-    //                 map[y][room.x + room.width - 1] = 'd';
-    //                 originalMap[y][room.x + room.width - 1] = 'd';
-    //             }
-    //         }
-    //     }
-    // }
 
+    private void connectRooms(Room roomA, Room roomB) {
+        // Compute room centers
+        int centerA_x = roomA.x + roomA.width / 2;
+        int centerA_y = roomA.y + roomA.height / 2;
+        int centerB_x = roomB.x + roomB.width / 2;
+        int centerB_y = roomB.y + roomB.height / 2;
 
+        int doorA_x, doorA_y, doorB_x, doorB_y;
+        // Choose door positions based on the dominant axis of separation.
+        if (Math.abs(centerB_x - centerA_x) > Math.abs(centerB_y - centerA_y)) {
+            // Horizontal connection
+            if (centerB_x > centerA_x) {
+                doorA_x = roomA.x + roomA.width - 1;  // right wall of roomA
+                doorA_y = centerA_y;
+                doorB_x = roomB.x;                    // left wall of roomB
+                doorB_y = centerB_y;
+            } else {
+                doorA_x = roomA.x;                    // left wall of roomA
+                doorA_y = centerA_y;
+                doorB_x = roomB.x + roomB.width - 1;    // right wall of roomB
+                doorB_y = centerB_y;
+            }
+        } else {
+            // Vertical connection
+            if (centerB_y > centerA_y) {
+                doorA_x = centerA_x;
+                doorA_y = roomA.y + roomA.height - 1;   // bottom wall of roomA
+                doorB_x = centerB_x;
+                doorB_y = roomB.y;                      // top wall of roomB
+            } else {
+                doorA_x = centerA_x;
+                doorA_y = roomA.y;                      // top wall of roomA
+                doorB_x = centerB_x;
+                doorB_y = roomB.y + roomB.height - 1;     // bottom wall of roomB
+            }
+        }
 
-    
+        // Place door markers at the computed positions.
+        map[doorA_y][doorA_x] = 'd';
+        originalMap[doorA_y][doorA_x] = 'd';
+        map[doorB_y][doorB_x] = 'd';
+        originalMap[doorB_y][doorB_x] = 'd';
 
-
+        // Draw the corridor connecting these door positions.
+        drawCorridor(doorA_x, doorA_y, doorB_x, doorB_y);
+    }
 
 
 
