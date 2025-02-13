@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
@@ -14,7 +15,9 @@ import com.models.dungeonofdoom.Traps.DartTrap;
 import com.models.dungeonofdoom.Traps.SleepTrap;
 import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.Traps.TrapDoorTrap;
+import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
+import com.models.dungeonofdoom.monster.Monster;
 
 public class DungeonFloor {
     private final int width;
@@ -24,6 +27,9 @@ public class DungeonFloor {
     private final int level;
     private final char floorSymbol;
     private final Random random;
+
+    MonsterManager monsterManager; //THIS IS TESTING CODE
+    public List<Monster> monsters;
 
     private int stairX;
     private int stairY;
@@ -79,6 +85,10 @@ public class DungeonFloor {
         this.floorSymbol = FLOOR_SYMBOLS[(level - 1) % FLOOR_SYMBOLS.length]; 
         this.rooms = new ArrayList<>();
         this.traps = new ArrayList<>();
+
+        this.monsterManager = new MonsterManager(random); //this is testing code.
+        this.monsters = new ArrayList<>();
+
         generateDungeon();
         // Debugging
         // System.out.println("Floor " + level + " - Stairs Position: " + stairX + ", " + stairY);
@@ -119,6 +129,8 @@ public class DungeonFloor {
         placeStairs();
         // Generate traps
         generateTraps();
+        //Spawn Monsters
+        spawnMonster(); //TEST CODE 
     }
 
     private void generateRooms() {
@@ -214,6 +226,37 @@ public class DungeonFloor {
     }
 
 
+    private void spawnMonster(){
+        List<Point> validTiles = getValidRoomTiles();
+        int monsterCount = random.nextInt(6);
+        for(int i = 0; i < monsterCount; i++){
+            int index = random.nextInt(validTiles.size());
+            Point tile = validTiles.remove(index);
+
+            // Skip tiles that are walls
+            char currentTile = map[tile.y][tile.x];
+            if (currentTile == '║' || currentTile == '═' || currentTile == '╔' ||
+                currentTile == '╗' || currentTile == '╚' || currentTile == '╝') {
+                System.out.println("Skipping wall tile: (" + tile.x + ", " + tile.y + ") - Symbol: " + currentTile);
+                continue;
+            }
+
+            MonsterEnum randomMonster = MonsterEnum.values()[random.nextInt(MonsterEnum.values().length)];
+            Monster monster = monsterManager.monsterFactory(randomMonster);
+            monster.setPosition(tile.x, tile.y);
+
+            monsters.add(monster);
+            
+            // Update the map
+            map[tile.y][tile.x] = monster.getSymbol();
+
+        }
+
+    }
+
+    public List<Monster> getMonsters() {
+        return monsters;
+    }
 
     private void generateTraps() {
         List<Point> validTiles = getValidRoomTiles(); // Get valid room tiles

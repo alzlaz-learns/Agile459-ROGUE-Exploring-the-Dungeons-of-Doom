@@ -5,11 +5,14 @@ import java.util.Random;
 import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
+//might make abstract eventually
 public class Monster {
     private MonsterEnum type;
     private int hpt;
     private int amr;
     private Random rand;
+    private int x;
+    private int y;
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
@@ -96,6 +99,19 @@ public class Monster {
          */
         return currentFloor >= minFloor && currentFloor <= maxFloor;
     
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
 }
