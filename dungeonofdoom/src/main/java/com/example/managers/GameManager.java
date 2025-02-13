@@ -8,7 +8,7 @@ import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-import com.example.ui.GamePanel;
+
 
 public class GameManager {
 
@@ -16,7 +16,7 @@ public class GameManager {
     private List<DungeonFloor> dungeonFloors;
     private int currentFloor;
     private JFrameUI frame;
-    private GamePanel gamePanel;
+    
 
     public GameManager(JFrameUI frame) {
         this.frame = frame;

@@ -369,7 +369,7 @@ public class DungeonFloor {
 
     private void drawCorridor(int x1, int y1, int x2, int y2) {
         //TODO: GOT THIS TENTATIVELY WORKING BUT JFRAME AINT LOVING THE Path ascii right
-        // int corridorChar = '░'; // Corridor character
+        int corridorChar = '░'; // Corridor character
 
         // Move horizontally first
         int minX = Math.min(x1, x2);
@@ -380,6 +380,7 @@ public class DungeonFloor {
             } else if (map[y1][x] == ' ') {
                 map[y1][x] = CORRIDOR; // Draw the corridor
                 originalMap[y1][x] = CORRIDOR;
+                // originalMap[y1][x] = (char) corridorChar;
             }
         }
 
@@ -391,7 +392,8 @@ public class DungeonFloor {
                 map[y][x2] = 'd'; // Place a door if a corridor intersects a wall
             } else if (map[y][x2] == ' ') {
                 map[y][x2] = CORRIDOR; // Draw the corridor
-                originalMap[y1][x2] = CORRIDOR;
+                originalMap[y][x2] = CORRIDOR;
+                // originalMap[y][x2] = (char) corridorChar;
             }
         }
     }
