@@ -125,6 +125,12 @@ public class GameManager {
             return; // Stop movement if it's a wall
         }
 
+        //TODO: GOT TO CLEAN THIS UP
+        if (targetTile == ' ' ) {
+            frame.updateMessage("Cant walk into the void");
+            return; // Stop movement if it's a wall
+        }
+
         // Move player only if the tile is walkable
         player.moveTo(newX, newY);
         checkTrap(newX, newY);
