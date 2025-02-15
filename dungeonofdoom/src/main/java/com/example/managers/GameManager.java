@@ -128,6 +128,8 @@ public class GameManager {
             return;
         }
 
+        //todo: think of a way for player to handle running into a monster.
+
         // Move player only if the tile is walkable
         player.moveTo(newX, newY);
         checkTrap(newX, newY);

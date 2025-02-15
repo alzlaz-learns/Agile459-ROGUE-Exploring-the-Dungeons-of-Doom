@@ -486,6 +486,7 @@ public class DungeonFloor {
         }
     }
 
+    
     //method to check walkable spaces
     //code was getting redundant so made a method to clean stuff up
     //probably will need to do this eventually for alot of places.
@@ -494,6 +495,16 @@ public class DungeonFloor {
         if (tile == '║' || tile == '═' || tile == '╔' || tile == '╗' || tile == '╚' || tile == '╝' || tile == ' '){
             return false;
         }
+
+        
+        // check if a monster already occupies the space might mess with pathing for the monsters if the monster is considered an obstacle to others
+        // for (Monster monster : monsters) {
+        //     if (monster.getX() == x && monster.getY() == y) {
+        //         return false; 
+        //     }
+        // }
+
+
         return true;
     }
 }
