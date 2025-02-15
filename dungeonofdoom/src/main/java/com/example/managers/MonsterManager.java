@@ -1,7 +1,12 @@
 package com.example.managers;
 
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
@@ -49,13 +54,29 @@ public class MonsterManager {
         List<Monster> monsters = floor.getMonsters();
 
         for (Monster monster : monsters) {
+            // if(!monster.isActive()){
+            //     continue;
+            // }
             moveMonster(monster, floor, player);
         }
     }
 
     //to be implemented but add logic for monster
     private void moveMonster(Monster monster, DungeonFloor floor, Player player) {
-       
+        int x = monster.getX();
+        int y = monster.getY();
+        int newX = x, newY = y;
+    }
+
+    class BFSMonsterPath{
+
+        public static List<Point> findPath(Monster m, Player p, DungeonFloor df){
+            Queue<Point> queue = new LinkedList<>();
+            Set<Point> visited = new HashSet<>();
+            
+            return null;
+        }
+
     }
 
 }
