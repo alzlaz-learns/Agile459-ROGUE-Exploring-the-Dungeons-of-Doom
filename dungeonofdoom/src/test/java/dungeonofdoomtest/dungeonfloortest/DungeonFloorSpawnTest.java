@@ -1,10 +1,16 @@
 package dungeonofdoomtest.dungeonfloortest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.monster.Monster;
+import com.example.managers.MonsterManager;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -15,10 +21,13 @@ public class DungeonFloorSpawnTest {
     private static final int TEST_WIDTH = 50;
     private static final int TEST_HEIGHT = 50;
     private static final int TEST_LEVEL = 1;
-
+    private MonsterManager mockMM; 
     @BeforeEach
     void setUp() {
-        dungeonFloor = new DungeonFloor(TEST_LEVEL, TEST_WIDTH, TEST_HEIGHT);
+        mockMM = mock(MonsterManager.class);
+        when(mockMM.monsterFactory(any())).thenReturn(mock(Monster.class));
+
+        dungeonFloor = new DungeonFloor(TEST_LEVEL, TEST_WIDTH, TEST_HEIGHT, mockMM);
     }
 
     @Test

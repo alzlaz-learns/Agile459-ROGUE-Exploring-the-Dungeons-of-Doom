@@ -14,11 +14,36 @@ public class Monster {
     private int x;
     private int y;
 
+    //this is going to represent if a monster is active and doing what it does
+    //does not mean it will attack player all the time. 
+    //Monsters become active when players enter the same room as them.
+    private boolean active; 
+
+    //this means that the monster will be attacking the player if active.
+    //Not all monsters start aggressive but will become aggressive if attacked.
+    private boolean aggressive;
+
+    //we will want to parse the flags
+    private boolean mean;
+    private boolean flying;
+    private boolean regenerating;
+    private boolean greedy;
+    private boolean invisible;
+
+
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
         this.type = type;
         this.hpt = roll(type.getHpt());
         this.amr = type.getAmr();
+
+
+        String flags = type.getFlag();
+        this.mean = flags.contains("M");
+        this.flying = flags.contains("F");
+        this.regenerating = flags.contains("R");
+        this.greedy = flags.contains("G");
+        this.invisible = flags.contains("I");
         
     }
 
@@ -71,8 +96,34 @@ public class Monster {
         return type.getExp();
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void activate() {
+        this.active = true;
+    }
+
+    public boolean isMean() {
+        return mean;
+    }
+
+    public boolean isGreedy() {
+        return greedy;
+    }
+
+    //not sure how to deal with this one yet.
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public boolean isFlying(){
+        return flying;
+    }
+
     public boolean validFloor(int currentFloor){
         //TODO: Consider about the percentage of monster to spawn.
+        // i was thinking about this some do 
         Pair<Integer, Integer> floorPair = type.getFloorFound();
         int minFloor = floorPair.getA();
         int maxFloor = floorPair.getB();

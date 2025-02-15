@@ -3,6 +3,7 @@ package com.example.managers;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.example.ui.JFrameUI;
 import com.models.Player;
@@ -16,16 +17,20 @@ public class GameManager {
     private List<DungeonFloor> dungeonFloors;
     private int currentFloor;
     private JFrameUI frame;
+
+    private MonsterManager monsterManager;
     
 
     public GameManager(JFrameUI frame) {
         this.frame = frame;
         this.player = new Player("hero");
         dungeonFloors = new ArrayList<>();
+
+        this.monsterManager = new MonsterManager(new Random());
         
         // Create all dungeon floors
         for(int i = 1; i < 26; i++) {
-            dungeonFloors.add(new DungeonFloor(i, 80, 22));
+            dungeonFloors.add(new DungeonFloor(i, 80, 22, monsterManager));
         }
         this.currentFloor = 0;
         // Place player on the first floor
@@ -117,23 +122,18 @@ public class GameManager {
                 return;
         }
 
-        // **Wall Collision Detection**
-        char targetTile = dungeon[newY][newX];
-        if (targetTile == '║' || targetTile == '═' || targetTile == '╔' || targetTile == '╗' ||
-            targetTile == '╚' || targetTile == '╝') {
-            frame.updateMessage("You can't walk through walls!");
-            return; // Stop movement if it's a wall
-        }
-
-        //TODO: GOT TO CLEAN THIS UP
-        if (targetTile == ' ' ) {
-            frame.updateMessage("Cant walk into the void");
-            return; // Stop movement if it's a wall
+        // replaced all the redundant code with a method from floor to clean up stuff.
+        if(!currentDungeonFloor.isWalkable(newX, newY)){
+            frame.updateMessage("You cant go there!");
+            return;
         }
 
         // Move player only if the tile is walkable
         player.moveTo(newX, newY);
         checkTrap(newX, newY);
+
+        //check todo in Monstermanager.monsterAction()
+        monsterManager.monsterAction(currentDungeonFloor, player);
         frame.updateStats(player.toString());
     }
 
@@ -164,7 +164,8 @@ public class GameManager {
                     trap.trigger(player);
                 }
                 case DART -> {
-
+                    frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                 }
             }
             
