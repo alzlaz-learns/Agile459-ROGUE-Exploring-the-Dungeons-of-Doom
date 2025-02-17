@@ -486,7 +486,6 @@ public class DungeonFloor {
         }
     }
 
-    
     //method to check walkable spaces
     //code was getting redundant so made a method to clean stuff up
     //probably will need to do this eventually for alot of places.
@@ -496,15 +495,16 @@ public class DungeonFloor {
             return false;
         }
 
-        
-        // check if a monster already occupies the space might mess with pathing for the monsters if the monster is considered an obstacle to others
-        // for (Monster monster : monsters) {
-        //     if (monster.getX() == x && monster.getY() == y) {
-        //         return false; 
-        //     }
-        // }
-
-
         return true;
+    }
+
+    //checks where monsters are occupying was seperated from other logics so we can use it for attacking monster as player.
+    public boolean monsterOccupies(int x, int y){
+        for (Monster monster : monsters) {
+            if (monster.getX() == x && monster.getY() == y) {
+                return true; 
+            }
+        }
+        return false;
     }
 }

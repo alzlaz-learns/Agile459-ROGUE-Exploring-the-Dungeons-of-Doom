@@ -129,7 +129,10 @@ public class GameManager {
         }
 
         //todo: think of a way for player to handle running into a monster.
-
+        if(currentDungeonFloor.monsterOccupies(newX, newY)){
+            frame.updateMessage("there is a monster there.");
+            return;
+        }
         // Move player only if the tile is walkable
         player.moveTo(newX, newY);
         checkTrap(newX, newY);

@@ -75,6 +75,10 @@ public class MonsterManager {
     private void moveMonster(Monster monster, DungeonFloor floor, Player player) {
        
        List<Point> output = BFSMonsterPath.findPath(monster, player, floor);
+    
+        if (output == null || output.size() < 2) { 
+            return; 
+        }
        Point move = output.get(1);
        System.out.println(move);
        monster.setPosition(move.x, move.y);
@@ -125,8 +129,8 @@ public class MonsterManager {
                     int ni = i + dx[k];
                     int nj = j + dy[k];
                     
-                 // Check if the new cell (ni, nj) is within the grid boundaries
-                    if (ni >= 0 && ni < cols && nj >= 0 && nj < rows && !visited[nj][ni] && df.isWalkable(ni, nj)) { 
+                 // Check if the new cell (ni, nj) is within the grid boundaries check if is walkable check if there is no monster.
+                    if (ni >= 0 && ni < cols && nj >= 0 && nj < rows && !visited[nj][ni] && df.isWalkable(ni, nj) &&  !df.monsterOccupies(ni, nj)) { 
                         List<Monster> monsters = df.getMonsters();
                         // check if a monster already occupies the space might mess with pathing for the monsters if the monster is considered an obstacle to others
                         for (Monster monster : monsters) {
