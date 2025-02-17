@@ -14,7 +14,16 @@ import java.util.Set;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
+import com.models.dungeonofdoom.monster.Aquator;
+import com.models.dungeonofdoom.monster.GeneralMonster;
+import com.models.dungeonofdoom.monster.Leprechaun;
+import com.models.dungeonofdoom.monster.Medusa;
 import com.models.dungeonofdoom.monster.Monster;
+import com.models.dungeonofdoom.monster.Nymph;
+import com.models.dungeonofdoom.monster.Rattlesnake;
+import com.models.dungeonofdoom.monster.Vampire;
+import com.models.dungeonofdoom.monster.Wraith;
+import com.models.dungeonofdoom.monster.Xeroc;
 
 public class MonsterManager {
     private Random rand;
@@ -24,27 +33,31 @@ public class MonsterManager {
     }
 
     public Monster monsterFactory(MonsterEnum monsterEnum){
-        Monster monsterObject = null;
+         
 
         // a few for example
         //TODO:change eventually the only ones going to be listed are the ones with special abilities because they weill work differently.
-        switch(monsterEnum){
-            case AQUATOR:
-                monsterObject = new Monster(monsterEnum, rand);
-                break;
-            case BAT:
-                monsterObject = new Monster(monsterEnum, rand);
-                break;
             
-            case SNAKE:
-                monsterObject = new Monster(monsterEnum, rand);
-                break;
-
+        switch (monsterEnum) {
+            case AQUATOR:
+                return new Aquator(rand);
+            case VAMPIRE:
+                return new Vampire(rand);
+            case LEPRECHAUN:
+                return new Leprechaun(rand);
+            case MEDUSA:
+                return new Medusa(rand);
+            case NYMPH:
+                return new Nymph(rand);
+            case RATTLESNAKE:
+                return new Rattlesnake(rand);
+            case WRAITH:
+                return new Wraith(rand);
+            case XEROC:
+                return new Xeroc(rand);
             default:
-                monsterObject = new Monster(monsterEnum, rand);
+                return new GeneralMonster(monsterEnum, rand);
         }
-        
-        return monsterObject;
     }
 
     //loop through all monsters and if they are moving they move.
@@ -106,15 +119,12 @@ public class MonsterManager {
             Point start = new Point(m.getX(), m.getY()); //monster starting position
             Point target = new Point(p.getX(), p.getY()); //player starting position
 
-
             queue.add(start);
             visited[start.y][start.x] = true;
             cameFrom.put(start, null);
 
             while (!queue.isEmpty()){
                 Point current = queue.poll();
-
-
                 if (current.equals(target)) {
                     List<Point> test = reconstructPath(cameFrom, target);
                     // System.out.println(test);
@@ -145,8 +155,6 @@ public class MonsterManager {
                     }
                 }
             }
-    
-                 
             return null;
         }        
 

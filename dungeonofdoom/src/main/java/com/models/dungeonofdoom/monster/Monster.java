@@ -6,7 +6,7 @@ import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 //might make abstract eventually
-public class Monster {
+public abstract class Monster {
     private MonsterEnum type;
     private int hpt;
     private int amr;
@@ -165,4 +165,5 @@ public class Monster {
         this.y = y;
     }
 
+    public abstract void specialAbility(); 
 }
