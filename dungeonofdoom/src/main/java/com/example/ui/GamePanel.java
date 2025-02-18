@@ -15,6 +15,7 @@ import com.example.managers.GameManager;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.monster.Monster;
 
 
 
@@ -93,6 +94,11 @@ public class GamePanel extends JPanel {
             if (!trap.isHidden()) {
                 map[trap.getY()][trap.getX()] = '!';
             }
+        }
+
+        //DRAWING MONSTERS ON THE MAP.
+        for (Monster m: currentFloor.getMonsters()){
+            map[m.getY()][m.getX()] = m.getSymbol();
         }
 
         map[player.getY()][player.getX()] = player.getIcon();

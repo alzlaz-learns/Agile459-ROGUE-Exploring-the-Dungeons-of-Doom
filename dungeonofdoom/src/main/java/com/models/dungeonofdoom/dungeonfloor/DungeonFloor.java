@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
@@ -13,9 +14,10 @@ import com.models.dungeonofdoom.Traps.DartTrap;
 import com.models.dungeonofdoom.Traps.SleepTrap;
 import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.Traps.TrapDoorTrap;
-import com.models.dungeonofdoom.enums.TrapTypeEnum;
-
 import com.models.dungeonofdoom.dungeoncorridor.BfsCorridors;
+import com.models.dungeonofdoom.enums.MonsterEnum;
+import com.models.dungeonofdoom.enums.TrapTypeEnum;
+import com.models.dungeonofdoom.monster.Monster;
 
 public class DungeonFloor {
     private final int width;
@@ -23,19 +25,16 @@ public class DungeonFloor {
     private final char[][] map;
     private final char[][] originalMap;
     private final int level;
-    private final char floorSymbol;
     private final Random random;
+
+    MonsterManager monsterManager; //THIS IS TESTING CODE
+    public List<Monster> monsters;
 
     private int stairX;
     private int stairY;
    
     //testing abstract version of things
     public List<AbstractTrap> traps;
-
-    //Sample to make simple floors
-    private static final char[] FLOOR_SYMBOLS = {
-        '.', ',', '~', ':', '-', '=', '*', '+', 'o', '^', 'x', '%', '!', '?', '#', '$', '&', '@', 'Ω', '∆', '§', '¶', '¤', '‡', '†', '∑'
-    };
 
     // Room generation constants
     private static final char VERTICAL_WALL = '║';
@@ -69,38 +68,39 @@ public class DungeonFloor {
 
     private List<Room> rooms;
 
-    public DungeonFloor(int level, int width, int height) {
+    public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
         this.width = width;
         this.height = height;
         this.map = new char[height][width];
         this.originalMap = new char[height][width];
         this.random = new Random();
-        // Cycle symbols to be removed when procedural generation is setup
-        this.floorSymbol = FLOOR_SYMBOLS[(level - 1) % FLOOR_SYMBOLS.length]; 
+
         this.rooms = new ArrayList<>();
         this.traps = new ArrayList<>();
+
+        this.monsterManager = monsterManager; //this is testing code.
+        this.monsters = new ArrayList<>();
+
         generateDungeon();
-        // Debugging
-        // System.out.println("Floor " + level + " - Stairs Position: " + stairX + ", " + stairY);
     }
 
 
     public List<Point> getValidRoomTiles() {
-    List<Point> validTiles = new ArrayList<>();
-    
-    for (Room room : rooms) {
-        for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
-            for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
-                // Ensure we are selecting only floor tiles
-                if (map[y][x] == FLOOR) {
-                    validTiles.add(new Point(x, y));
+        List<Point> validTiles = new ArrayList<>();
+        
+        for (Room room : rooms) {
+            for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
+                for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
+                    // Ensure we are selecting only floor tiles
+                    if (map[y][x] == FLOOR) {
+                        validTiles.add(new Point(x, y));
+                    }
                 }
             }
         }
+        return validTiles;
     }
-    return validTiles;
-}
 
 
     private void generateDungeon() {
@@ -120,6 +120,8 @@ public class DungeonFloor {
         placeStairs();
         // Generate traps
         generateTraps();
+        //Spawn Monsters
+        spawnMonster();
     }
 
     private void generateRooms() {
@@ -215,7 +217,6 @@ public class DungeonFloor {
     }
 
 
-
     private void generateTraps() {
         List<Point> validTiles = getValidRoomTiles(); // Get valid room tiles
         Random rand = new Random();
@@ -308,9 +309,6 @@ public class DungeonFloor {
         return level;
     }
 
-    public char getFloorSymbol() {
-        return floorSymbol;
-    }
 
     public int getStairX() {
         return stairX;
@@ -320,6 +318,38 @@ public class DungeonFloor {
         return stairY;
     }
 
+
+    public void spawnMonster(){
+        List<Point> validTiles = getValidRoomTiles();
+        int monsterCount = random.nextInt(6);
+        for(int i = 0; i < monsterCount; i++){
+            int index = random.nextInt(validTiles.size());
+            Point tile = validTiles.remove(index);
+
+            // Skip tiles that are walls
+            char currentTile = map[tile.y][tile.x];
+            if (currentTile == '║' || currentTile == '═' || currentTile == '╔' ||
+                currentTile == '╗' || currentTile == '╚' || currentTile == '╝') {
+                System.out.println("Skipping wall tile: (" + tile.x + ", " + tile.y + ") - Symbol: " + currentTile);
+                continue;
+            }
+
+            MonsterEnum randomMonster = MonsterEnum.values()[random.nextInt(MonsterEnum.values().length)];
+            Monster monster = monsterManager.monsterFactory(randomMonster);
+            monster.setPosition(tile.x, tile.y);
+
+            monsters.add(monster);
+            
+            // Update the map
+            map[tile.y][tile.x] = monster.getSymbol();
+
+        }
+
+    }
+
+    public List<Monster> getMonsters() {
+        return monsters;
+    }
 
 
     public void placePlayer(Player player) {
@@ -483,6 +513,29 @@ public class DungeonFloor {
 
         // Draw the corridor connecting these door positions.
         drawCorridor(doorA_x, doorA_y, doorB_x, doorB_y);
+    }
+
+
+    //method to check walkable spaces
+    //code was getting redundant so made a method to clean stuff up
+    //probably will need to do this eventually for alot of places.
+    public boolean isWalkable(int x, int y) {
+        char tile = map[y][x];
+        if (tile == '║' || tile == '═' || tile == '╔' || tile == '╗' || tile == '╚' || tile == '╝' || tile == ' '){
+            return false;
+        }
+
+        return true;
+    }
+
+    //checks where monsters are occupying was seperated from other logics so we can use it for attacking monster as player.
+    public boolean monsterOccupies(int x, int y){
+        for (Monster monster : monsters) {
+            if (monster.getX() == x && monster.getY() == y) {
+                return true; 
+            }
+        }
+        return false;
     }
 
 
