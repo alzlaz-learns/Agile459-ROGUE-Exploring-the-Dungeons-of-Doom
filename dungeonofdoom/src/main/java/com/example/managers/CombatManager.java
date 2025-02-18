@@ -4,27 +4,29 @@ import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class CombatManager {
-     public static void handleCombat(Player player, Monster monster) {
-        System.out.println("Combat initiated between " + player.getName() + " and " + monster.getName());
 
-        // Player attacks first
-        int playerDamage = player.attack(monster);
-        monster.takeDmg(playerDamage);
-        System.out.println(player.getName() + " attacks " + monster.getName() + " for " + playerDamage + " damage!");
+    
+     public static void monsterAttack(Player player, Monster monster) {
+        System.out.println(monster.getName() + ": is attacking " + player.getName());
 
-        if (monster.isDead()) {
-            System.out.println(monster.getName() + " has been defeated!");
-            return; // No counterattack if the monster is dead
-        }
+        int damage = monster.calculateDmg();
 
-        // Monster attacks back
-        int monsterDamage = monster.calculateDmg();
-        player.takeDamage(monsterDamage);
-        System.out.println(monster.getName() + " attacks " + player.getName() + " for " + monsterDamage + " damage!");
+        System.out.println("Player is taking " + damage);
+        player.takeDamage(damage);
 
-        if (player.isDead()) {
-            System.out.println(player.getName() + " has died. Game Over!");
-            // Handle player death (perhaps end the game)
+        
+    }
+
+    public static void playerAttack(Player player, Monster monster){
+        System.out.println( player.getName()+ ": is attacking " + monster.getName());
+
+        int damage = player.calculateDmg();
+
+        System.out.println(monster.getName() + "is taking " + damage);
+        monster.takeDmg(damage);
+
+        if(monster.isDead()){
+            System.out.println(monster.getName()+ " died");
         }
     }
 }

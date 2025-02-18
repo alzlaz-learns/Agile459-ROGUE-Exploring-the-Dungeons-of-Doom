@@ -3,13 +3,13 @@ package com.example.managers;
 import java.awt.Point;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
+
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
@@ -66,21 +66,28 @@ public class MonsterManager {
         section this is going to be a method that checks if the player is in the target if they 
         are attack if not move
         */
-        List<Monster> monsters = floor.getMonsters();
+        // List<Monster> monsters = floor.getMonsters();
 
-
+        //https://www.quora.com/What-does-the-exception-in-thread-main-Java-util-concurrentmodificationexception-mean-in-Java
         //https://www.reddit.com/r/roguelikedev/comments/o8dy9l/calculate_distance_between_2_entities_on_a_tile/?rdt=54629
-        for (Monster monster : monsters) {
-            // if(!monster.isActive()){
-            //     continue;
-            // }
-            if(Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
-                System.out.println("Imma attack");
-            } else{
+        Iterator<Monster> monsterIterator = floor.getMonsters().iterator(); // ✅ Use an iterator
+
+        while (monsterIterator.hasNext()) {
+            Monster monster = monsterIterator.next();
+
+            if (monster.isDead()) {
+                monsterIterator.remove();
+                System.out.println(monster.getName() + " has been removed from the floor.");
+                continue; 
+            }
+
+            if (Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
+                CombatManager.monsterAttack(player, monster);
+            } else {
                 moveMonster(monster, floor, player);
             }
-            
         }
+        
     }
 
     //to be implemented but add logic for monster

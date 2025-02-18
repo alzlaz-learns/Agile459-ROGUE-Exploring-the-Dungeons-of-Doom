@@ -9,6 +9,7 @@ import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.monster.Monster;
 
 
 public class GameManager {
@@ -130,6 +131,10 @@ public class GameManager {
 
         //todo: think of a way for player to handle running into a monster.
         if(currentDungeonFloor.monsterOccupies(newX, newY)){
+            
+            Monster monster = currentDungeonFloor.getMonsterAt(newX, newY);
+            CombatManager.playerAttack(player, monster);
+            
             frame.updateMessage("there is a monster there.");
             return;
         }
@@ -206,6 +211,8 @@ public class GameManager {
     public Player getPlayer() {
         return player;
     }
+
+    
 
     public DungeonFloor getCurrentFloor() {
         return dungeonFloors.get(currentFloor);

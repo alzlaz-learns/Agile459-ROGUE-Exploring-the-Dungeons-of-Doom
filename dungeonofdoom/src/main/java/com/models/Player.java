@@ -83,7 +83,8 @@ public class Player {
     // to be changed to output on screen when monster
     
     //updated to handle monsters.
-    public int attack() {
+    //updated this to be inline with naming of monster attacking (calculateDamage)
+    public int calculateDmg() {
         int damage = 10;
         
         return damage;
