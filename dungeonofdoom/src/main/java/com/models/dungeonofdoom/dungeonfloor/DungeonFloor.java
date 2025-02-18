@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.example.managers.MonsterManager;
 import com.models.Player;
+import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -14,7 +15,7 @@ import com.models.dungeonofdoom.Traps.DartTrap;
 import com.models.dungeonofdoom.Traps.SleepTrap;
 import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.Traps.TrapDoorTrap;
-import com.models.dungeonofdoom.dungeoncorridor.BfsCorridors;
+import com.models.dungeonofdoom.dungeoncorridor.Corridor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 import com.models.dungeonofdoom.monster.Monster;
@@ -43,7 +44,6 @@ public class DungeonFloor {
     private static final char TOP_RIGHT_CORNER = '╗';
     private static final char BOTTOM_LEFT_CORNER = '╚';
     private static final char BOTTOM_RIGHT_CORNER = '╝';
-    private static final char CORRIDOR = 'X';
     private static final char FLOOR = '.';
     private static final int MIN_ROOM_SIZE = 4;
     private static final int MAX_ROOM_SIZE = 18;
@@ -393,56 +393,6 @@ public class DungeonFloor {
     }
 
 
-
-    public class ArgsForBfsCorridors {
-        public int startX;
-        public int startY;
-        public int endX;
-        public int endY;
-        public int height;
-        public int width;
-        public char[][] map;
-    }
-
-    // The drawCorridor method now only carves a path in blank spaces.
-    private void drawCorridor(int x1, int y1, int x2, int y2) {
-
-        ArgsForBfsCorridors args = new ArgsForBfsCorridors();
-        args.startX = x1;
-        args.startY = y1;
-        args.endX = x2;
-        args.endY = y2;
-        args.height = height;
-        args.width = width;
-        args.map = map;
-        // 1. Find a path of blank spaces from (x1, y1) to (x2, y2).
-        List<Point> path = BfsCorridors.findPathInBlankSpace(args);
-        if (path == null) {
-            // No path found; do nothing or print a debug message.
-            System.out.println("No valid corridor path found between (" + x1 + "," + y1 
-                               + ") and (" + x2 + "," + y2 + ")");
-            return;
-        }
-    
-        // 2. Carve out a corridor in all the interior path cells
-        //    (optionally skip the very first and last cells, because they are doors).
-        //    Up to you if you want to skip path.get(0) and path.get(path.size()-1).
-        for (int i = 0; i < path.size(); i++) {
-            Point p = path.get(i);
-            // If it's not the first or last cell, fill it in with corridor symbol
-            // (some people prefer to skip the door cells so that they remain 'd').
-            // But if you want the corridor symbol to overwrite them, do so.
-            if (i != 0 && i != path.size() - 1) {
-                map[p.y][p.x] = CORRIDOR;
-                originalMap[p.y][p.x] = CORRIDOR;
-            }
-        }
-    }
-    
-
-
-
-
     // Revised connectLonelyRooms to also use door endpoints.
     private void connectLonelyRooms() {
         Random rand = new Random();
@@ -511,8 +461,9 @@ public class DungeonFloor {
         map[doorB_y][doorB_x] = 'd';
         originalMap[doorB_y][doorB_x] = 'd';
 
-        // Draw the corridor connecting these door positions.
-        drawCorridor(doorA_x, doorA_y, doorB_x, doorB_y);
+        ArgsForBfsCorridorsDto bfsArgs = buildArgsForDfs(doorA_x,doorA_y,doorB_x,doorB_y);
+        Corridor corridor = Corridor.createCorridor(bfsArgs);
+        corridor.draw();     
     }
 
 
@@ -539,6 +490,20 @@ public class DungeonFloor {
     }
 
 
+    private ArgsForBfsCorridorsDto buildArgsForDfs(int startDoorX, int startDoorY, int endDoorX, int endDoorY){
 
+        ArgsForBfsCorridorsDto bfsArgs = new ArgsForBfsCorridorsDto();
+        bfsArgs.setStartX(startDoorX);
+        bfsArgs.setStartY(startDoorY);
+        bfsArgs.setEndX(endDoorX);
+        bfsArgs.setEndY(endDoorY);
+        bfsArgs.setHeight(height);
+        bfsArgs.setWidth(width);
+        bfsArgs.setMap(map);
+        bfsArgs.setOriginalMap(originalMap);
+
+        return bfsArgs;
+        
+    }
 
 }

@@ -7,26 +7,24 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 
-import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-
 public class BfsCorridors {
 
 
 
 
-    public static List<Point> findPathInBlankSpace(DungeonFloor.ArgsForBfsCorridors args) {
+    public static List<Point> findPathInBlankSpace(ArgsForBfsCorridorsDto args) {
         // We’ll allow BFS to treat the start and end cells specially
         // (even if they're not blank), but it will only move through cells
         // that are strictly ' ' (space).
 
         //unpack
-        int startX = args.startX;
-        int startY = args.startY;
-        int endX = args.endX;
-        int endY = args.endY;
-        int width = args.width;
-        int height = args.height;
-        char[][] map = args.map;
+        int startX = args.getStartX();
+        int startY = args.getStartY();
+        int endX = args.getEndX();
+        int endY = args.getEndY();
+        int width = args.getWidth();
+        int height = args.getHeight();
+        char[][] map = args.getMap();
     
         // If the start or end are out of bounds, bail out.
         if (!inBounds(startX, startY, width, height) || !inBounds(endX, endY, width, height)) {
