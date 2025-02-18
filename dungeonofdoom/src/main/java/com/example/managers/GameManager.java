@@ -133,14 +133,19 @@ public class GameManager {
         if(currentDungeonFloor.monsterOccupies(newX, newY)){
             
             Monster monster = currentDungeonFloor.getMonsterAt(newX, newY);
-            CombatManager.playerAttack(player, monster);
+           
+            CombatManager.playerAttack(player, monster, currentDungeonFloor);
             
-            frame.updateMessage("there is a monster there.");
-            return;
+            frame.updateGameScreen();
+            
+            
+            
+        } else {
+            // Move player only if the tile is walkable
+            player.moveTo(newX, newY);
+            checkTrap(newX, newY);
         }
-        // Move player only if the tile is walkable
-        player.moveTo(newX, newY);
-        checkTrap(newX, newY);
+        
 
         //check todo in Monstermanager.monsterAction()
         monsterManager.monsterAction(currentDungeonFloor, player);

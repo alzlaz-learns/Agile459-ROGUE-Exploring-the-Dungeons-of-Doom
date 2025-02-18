@@ -1,6 +1,7 @@
 package com.example.managers;
 
 import com.models.Player;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class CombatManager {
@@ -17,7 +18,7 @@ public class CombatManager {
         
     }
 
-    public static void playerAttack(Player player, Monster monster){
+    public static void playerAttack(Player player, Monster monster, DungeonFloor dungeonFloor){
         System.out.println( player.getName()+ ": is attacking " + monster.getName());
 
         int damage = player.calculateDmg();
@@ -26,6 +27,7 @@ public class CombatManager {
         monster.takeDmg(damage);
 
         if(monster.isDead()){
+            dungeonFloor.removeMonster(monster);
             System.out.println(monster.getName()+ " died");
         }
     }

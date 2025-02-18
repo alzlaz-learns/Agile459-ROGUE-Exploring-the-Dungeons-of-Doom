@@ -95,11 +95,14 @@ public class DungeonFloor {
     }
 
     public void removeMonster(Monster monster) {
-        monsters.remove(monster);
-        map[monster.getY()][monster.getX()] = '.';
-        originalMap[monster.getY()][monster.getX()] = '.';
-        
-        System.out.println(monster.getName() + " has been removed from the floor.");
+        if(monsters.contains(monster)){
+            monsters.remove(monster);
+            map[monster.getY()][monster.getX()] = '.';
+            originalMap[monster.getY()][monster.getX()] = '.';
+            
+            System.out.println(monster.getName() + " has been removed from the floor.");
+            
+        }
     }
 
     public List<Point> getValidRoomTiles() {
