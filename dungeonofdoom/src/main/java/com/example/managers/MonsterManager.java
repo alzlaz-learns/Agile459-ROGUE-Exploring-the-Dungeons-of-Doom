@@ -61,7 +61,6 @@ public class MonsterManager {
     }
 
     //loop through all monsters and if they are moving they move.
-    
     public void monsterAction(DungeonFloor floor, Player player) {
         /*TODO: right now this is going to be basic movement once we get to combat 
         section this is going to be a method that checks if the player is in the target if they 

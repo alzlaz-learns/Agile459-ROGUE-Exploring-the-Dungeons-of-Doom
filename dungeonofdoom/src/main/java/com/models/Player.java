@@ -1,5 +1,6 @@
 package com.models;
 
+import com.models.dungeonofdoom.monster.Monster;
 import com.player.uday.MonsterPlayground;
 import com.player.uday.PlayerPackPlayground;
 
@@ -80,11 +81,12 @@ public class Player {
 
     
     // to be changed to output on screen when monster
-    public void attack(MonsterPlayground monster) {
+    
+    //updated to handle monsters.
+    public int attack() {
         int damage = 10;
-        monster.takeDamage(damage);
-        // to be changed to output on screen
-        System.out.println("You attack the " + monster.getName() + " for " + damage + " damage.");
+        
+        return damage;
     }
 
     public PlayerPackPlayground getPack() {
@@ -139,5 +141,9 @@ public class Player {
 
     public void immobileDecrease(){
         if (isImmobile()) immobile --;
+    }
+
+    public boolean isDead(){
+        return this.currentHealth < 1;
     }
 }
