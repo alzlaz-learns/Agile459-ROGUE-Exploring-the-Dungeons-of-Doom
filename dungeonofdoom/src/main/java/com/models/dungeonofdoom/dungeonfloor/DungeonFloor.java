@@ -49,23 +49,6 @@ public class DungeonFloor {
     private static final int MAX_ROOM_SIZE = 18;
     private static final int MAX_ROOMS = 10;
 
-    // Room class to store room information
-    private class Room {
-        int x, y, width, height;
-
-        Room(int x, int y, int width, int height) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-
-        boolean intersects(Room other) {
-            return (x <= other.x + other.width && x + width >= other.x &&
-                   y <= other.y + other.height && y + height >= other.y);
-        }
-    }
-
     private List<Room> rooms;
 
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
@@ -524,5 +507,26 @@ public class DungeonFloor {
         return bfsArgs;
         
     }
+
+    //used to check when a player enters a room
+    public boolean isInsideRoom(int x, int y) {
+        for (Room room : rooms) {
+            if (x >= room.x && x < room.x + room.width &&
+                y >= room.y && y < room.y + room.height) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public Room getRoomAt(int x, int y) {
+        for (Room room : rooms) {
+            if (room.contains(x, y)) {
+                return room; // Return the room the coordinates belong to
+            }
+        }
+        return null; // Not inside a room
+    }
+
 
 }

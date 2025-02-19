@@ -13,6 +13,7 @@ import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.dungeonfloor.Room;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.Aquator;
 import com.models.dungeonofdoom.monster.GeneralMonster;
@@ -59,8 +60,8 @@ public class MonsterManager {
             case ICEMONSTER:
                 return new IceMonster(rand);
             default:
-                // return new GeneralMonster(monsterEnum, rand);
-                return new Vampire(rand);
+                return new GeneralMonster(monsterEnum, rand);
+                
         }
     }
 
@@ -70,11 +71,10 @@ public class MonsterManager {
         section this is going to be a method that checks if the player is in the target if they 
         are attack if not move
         */
-        // List<Monster> monsters = floor.getMonsters();
-
+    
         //https://www.quora.com/What-does-the-exception-in-thread-main-Java-util-concurrentmodificationexception-mean-in-Java
         //https://www.reddit.com/r/roguelikedev/comments/o8dy9l/calculate_distance_between_2_entities_on_a_tile/?rdt=54629
-        Iterator<Monster> monsterIterator = floor.getMonsters().iterator(); // ✅ Use an iterator
+        Iterator<Monster> monsterIterator = floor.getMonsters().iterator(); // Use an iterator
 
         while (monsterIterator.hasNext()) {
             Monster monster = monsterIterator.next();
@@ -82,6 +82,9 @@ public class MonsterManager {
             if (monster.isDead()) {
                 monsterIterator.remove();
                 continue; 
+            }
+            if(!monster.isActive()){
+                continue;
             }
 
             if (Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
@@ -166,6 +169,23 @@ public class MonsterManager {
             return null;
         }        
 
+    }
+
+    public void activateRoomMonsters(DungeonFloor floor, int playerX, int playerY) {
+        // Find which room the player is in
+        Room playerRoom = floor.getRoomAt(playerX, playerY);
+        
+        if (playerRoom == null) {
+            return; // Not inside a room
+        }
+    
+        // Only activate monsters that are inside the same room as the player
+        for (Monster monster : floor.getMonsters()) {
+            if (playerRoom.contains(monster.getX(), monster.getY()) && !monster.isActive()) {
+                monster.activate();
+                System.out.println(monster.getName() + " wakes up!");
+            }
+        }
     }
 
     private static List<Point> reconstructPath(Map<Point, Point> cameFrom, Point target) {

@@ -20,6 +20,9 @@ public abstract class Monster {
     //Monsters become active when players enter the same room as them.
     private boolean active; 
 
+    //this means that the monster will be attacking the player if active.
+    //Not all monsters start aggressive but will become aggressive if attacked.
+    private boolean aggressive;
 
     //we will want to parse the flags
     private boolean mean;
@@ -67,6 +70,7 @@ public abstract class Monster {
 
     public void takeDmg(int dmg){
         this.hpt -= dmg;
+        //TODO: implement dying
     }
 
     public boolean isDead(){
@@ -160,6 +164,10 @@ public abstract class Monster {
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public int getLevel(){
+        return this.type.getLvl();
     }
 
     public abstract void specialAbility(Player player); 

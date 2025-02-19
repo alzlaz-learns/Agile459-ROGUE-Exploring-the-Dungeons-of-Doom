@@ -94,6 +94,7 @@ public class Player {
     //updated to add place holder value for items so we can set up Item handling in the future.
     public int calculateDmg() {
         int damage = getStrength();
+        //getting con fused on how to do this damage.
         for (Integer i: equippedItems){
             damage += i;
         }

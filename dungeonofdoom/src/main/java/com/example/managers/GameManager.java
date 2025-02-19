@@ -140,6 +140,9 @@ public class GameManager {
                     return;
             }
         }
+        
+        //check if player enters the room to activate
+        checkRoomEntry(newX, newY);
 
         // replaced all the redundant code with a method from floor to clean up stuff.
         if(!currentDungeonFloor.isWalkable(newX, newY)){
@@ -152,7 +155,7 @@ public class GameManager {
             
             Monster monster = currentDungeonFloor.getMonsterAt(newX, newY);
            
-            CombatManager.playerAttack(player, monster, currentDungeonFloor);
+            CombatManager.combatOrdering(player, monster, currentDungeonFloor);
             
             frame.updateGameScreen();
             
@@ -168,6 +171,14 @@ public class GameManager {
         //check todo in Monstermanager.monsterAction()
         monsterManager.monsterAction(currentDungeonFloor, player);
         frame.updateStats(player.toString());
+    }
+
+    private void checkRoomEntry(int x, int y) {
+        DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
+        
+        if (currentDungeonFloor.isInsideRoom(x, y)) {
+            monsterManager.activateRoomMonsters(currentDungeonFloor, x, y);
+        }
     }
 
 
@@ -230,6 +241,8 @@ public class GameManager {
         // Update the message area and game screen
         frame.updateGameScreen();
     }
+
+    
 
     public Player getPlayer() {
         return player;
