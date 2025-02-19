@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 public class Vampire extends Monster {
@@ -12,9 +13,10 @@ public class Vampire extends Monster {
     }
 
     @Override
-    public void specialAbility() {
-        // TODO Auto-generated method stub
-        System.out.println("the vampire");
+    public void specialAbility(Player player) {
+       int modifications = -1;
+       player.adjustMaxHealth(modifications);
     }
-    
+
+  
 }

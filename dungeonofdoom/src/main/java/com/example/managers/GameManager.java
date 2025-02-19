@@ -48,6 +48,8 @@ public class GameManager {
             return; 
         }
 
+       
+
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
 
@@ -55,72 +57,88 @@ public class GameManager {
         int newY = player.getY();
 
         int keyCode = e.getKeyCode();
-        
-        switch (keyCode) {
-            case KeyEvent.VK_W: 
-            case KeyEvent.VK_UP: 
-                if (newY > 0) newY--;
-                break;
-            case KeyEvent.VK_S:           
-            case KeyEvent.VK_DOWN: 
-                if (newY < dungeon.length - 1) newY++;
-                break;
-            case KeyEvent.VK_A: 
-            case KeyEvent.VK_LEFT: 
-                if (newX > 0) newX--;
-                break;
-            case KeyEvent.VK_D: 
-            case KeyEvent.VK_RIGHT:
-                if (newX < dungeon[0].length - 1) newX++;
-                break;
-            case KeyEvent.VK_PAGE_UP: 
-                if (newY > 0 && newX < dungeon[0].length - 1) {
-                    newX++; 
-                    newY--;
-                }
-                break;
-            case KeyEvent.VK_PAGE_DOWN: 
-                if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
-                    newX++; 
-                    newY++;
-                }
-                break;
-            case KeyEvent.VK_HOME: 
-                if (newY > 0 && newX > 0) {
-                    newX--; 
-                    newY--;
-                }
-                break;
-            case KeyEvent.VK_END: 
-                if (newY < dungeon.length - 1 && newX > 0) {
-                    newX--; 
-                    newY++;
-                }
-                break;
-            case KeyEvent.VK_PERIOD:
-                if (e.isShiftDown()) { 
-                    if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
-                        frame.updateMessage("Descending to floor " + (currentFloor));
-                        changeFloor(true);
-                    } else {
-                        frame.updateMessage("You need to be on the stairs (>) to go down!");
+
+        if (player.isConfused()) {
+            frame.updateMessage("Wait, what's going on? Huh? What? Who?");
+            
+            Random rand = new Random();
+            int randomDirection = rand.nextInt(4); 
+            
+            switch (randomDirection) {
+                case 0: if (newY > 0) newY--; break; 
+                case 1: if (newY < dungeon.length - 1) newY++; break; 
+                case 2: if (newX > 0) newX--; break; 
+                case 3: if (newX < dungeon[0].length - 1) newX++; break; 
+            }
+    
+            player.confusedDecrease(); // Reduce confusion counter
+        } else{
+            switch (keyCode) {
+                case KeyEvent.VK_W: 
+                case KeyEvent.VK_UP: 
+                    if (newY > 0) newY--;
+                    break;
+                case KeyEvent.VK_S:           
+                case KeyEvent.VK_DOWN: 
+                    if (newY < dungeon.length - 1) newY++;
+                    break;
+                case KeyEvent.VK_A: 
+                case KeyEvent.VK_LEFT: 
+                    if (newX > 0) newX--;
+                    break;
+                case KeyEvent.VK_D: 
+                case KeyEvent.VK_RIGHT:
+                    if (newX < dungeon[0].length - 1) newX++;
+                    break;
+                case KeyEvent.VK_PAGE_UP: 
+                    if (newY > 0 && newX < dungeon[0].length - 1) {
+                        newX++; 
+                        newY--;
                     }
-                    return;
-                }
-                break;
-            case KeyEvent.VK_COMMA:
-                if (e.isShiftDown()) { 
-                    if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
-                        frame.updateMessage("Ascending to floor " + (currentFloor));
-                        changeFloor(false);
-                    } else {
-                        frame.updateMessage("You need to be on the stairs (>) to go up!");
+                    break;
+                case KeyEvent.VK_PAGE_DOWN: 
+                    if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
+                        newX++; 
+                        newY++;
                     }
+                    break;
+                case KeyEvent.VK_HOME: 
+                    if (newY > 0 && newX > 0) {
+                        newX--; 
+                        newY--;
+                    }
+                    break;
+                case KeyEvent.VK_END: 
+                    if (newY < dungeon.length - 1 && newX > 0) {
+                        newX--; 
+                        newY++;
+                    }
+                    break;
+                case KeyEvent.VK_PERIOD:
+                    if (e.isShiftDown()) { 
+                        if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
+                            frame.updateMessage("Descending to floor " + (currentFloor));
+                            changeFloor(true);
+                        } else {
+                            frame.updateMessage("You need to be on the stairs (>) to go down!");
+                        }
+                        return;
+                    }
+                    break;
+                case KeyEvent.VK_COMMA:
+                    if (e.isShiftDown()) { 
+                        if (player.getX() == currentDungeonFloor.getStairX() && player.getY() == currentDungeonFloor.getStairY()) {
+                            frame.updateMessage("Ascending to floor " + (currentFloor));
+                            changeFloor(false);
+                        } else {
+                            frame.updateMessage("You need to be on the stairs (>) to go up!");
+                        }
+                        return;
+                    }
+                    break;
+                default:
                     return;
-                }
-                break;
-            default:
-                return;
+            }
         }
 
         // replaced all the redundant code with a method from floor to clean up stuff.

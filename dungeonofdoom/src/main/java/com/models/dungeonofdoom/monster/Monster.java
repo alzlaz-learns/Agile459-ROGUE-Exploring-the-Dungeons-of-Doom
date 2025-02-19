@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
@@ -10,7 +11,7 @@ public abstract class Monster {
     private MonsterEnum type;
     private int hpt;
     private int amr;
-    private Random rand;
+    protected Random rand;
     private int x;
     private int y;
 
@@ -19,9 +20,6 @@ public abstract class Monster {
     //Monsters become active when players enter the same room as them.
     private boolean active; 
 
-    //this means that the monster will be attacking the player if active.
-    //Not all monsters start aggressive but will become aggressive if attacked.
-    private boolean aggressive;
 
     //we will want to parse the flags
     private boolean mean;
@@ -69,7 +67,6 @@ public abstract class Monster {
 
     public void takeDmg(int dmg){
         this.hpt -= dmg;
-        //TODO: implement dying
     }
 
     public boolean isDead(){
@@ -165,5 +162,5 @@ public abstract class Monster {
         this.y = y;
     }
 
-    public abstract void specialAbility(); 
+    public abstract void specialAbility(Player player); 
 }

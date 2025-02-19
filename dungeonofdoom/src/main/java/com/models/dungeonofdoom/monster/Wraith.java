@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 public class Wraith extends Monster {
@@ -11,10 +12,12 @@ public class Wraith extends Monster {
         //TODO Auto-generated constructor stub
     }
 
+   
+
     @Override
-    public void specialAbility() {
-        // TODO Auto-generated method stub
-        System.out.println("the wraith");
+    public void specialAbility(Player player) {
+       int modifier = rand.nextInt(3) + 1;
+       player.adjustExperience(-modifier);
     }
     
 }

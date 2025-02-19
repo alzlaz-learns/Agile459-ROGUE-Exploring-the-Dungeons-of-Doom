@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 public class Aquator extends Monster{
@@ -10,9 +11,12 @@ public class Aquator extends Monster{
         super(MonsterEnum.AQUATOR, rand);
     }
 
+    
+
     @Override
-    public void specialAbility() {
-        System.out.println("The Aquator!");
+    public void specialAbility(Player player) {
+        int modification = -1;
+        player.adjustArmor(modification);
     }
 
 }

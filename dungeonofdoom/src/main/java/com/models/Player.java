@@ -1,5 +1,8 @@
 package com.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.models.dungeonofdoom.monster.Monster;
 import com.player.uday.MonsterPlayground;
 import com.player.uday.PlayerPackPlayground;
@@ -23,20 +26,24 @@ public class Player {
     private int x; // X position
     private int y; // Y position
     private int immobile;
+    private int confused;
     private PlayerPackPlayground pack;
+    private List<Integer> equippedItems; //placeHolder <Integer>
     // Constructor
     public Player(String name) {
         this.name = name;
         this.level = 1;
-        this.currentHealth = 100;
         this.maxHealth = 100;
+        this.currentHealth = this.maxHealth;
         this.gold = 0;
         this.experience = 0;
-        this.armor = 0;
+        this.armor = 5;
         this.strength = 3; // Default minimum strength
         //test attributes
         this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
         this.immobile = 0;
+        this.confused = 0;
+        this.equippedItems = new ArrayList<Integer>();
     }
     
     // Core Utility Methods
@@ -84,8 +91,12 @@ public class Player {
     
     //updated to handle monsters.
     //updated this to be inline with naming of monster attacking (calculateDamage)
+    //updated to add place holder value for items so we can set up Item handling in the future.
     public int calculateDmg() {
-        int damage = 10;
+        int damage = getStrength();
+        for (Integer i: equippedItems){
+            damage += i;
+        }
         
         return damage;
     }
@@ -140,11 +151,42 @@ public class Player {
         return immobile > 0;
     }
 
+    public boolean isConfused(){
+        return confused > 0;
+    }
+
     public void immobileDecrease(){
         if (isImmobile()) immobile --;
     }
 
+    public void confusedDecrease(){
+        if (isConfused()) confused --;
+    }
+
     public boolean isDead(){
-        return this.currentHealth < 1;
+        return this.currentHealth < 1 || this.maxHealth < 1;
+    }
+
+    //reduce armor by -1 since
+    //changed for being more open for future calls if it happens.
+    public void adjustArmor(int modification){
+        this.armor += modification;
+    }
+
+    //making this so minimum is always one
+    public void adjustStrength(int modifier){
+        this.strength = Math.max(1, this.strength + modifier);
+    }
+
+    public void adjustMaxHealth(int modifier){
+        this.maxHealth += modifier;
+    }
+    public void adjustGold(int modifier){
+        //gold cant become negative.
+        this.gold = Math.max(0, this.gold + modifier);
+    }
+
+    public void adjustExperience(int modifier){
+        this.experience += modifier;
     }
 }

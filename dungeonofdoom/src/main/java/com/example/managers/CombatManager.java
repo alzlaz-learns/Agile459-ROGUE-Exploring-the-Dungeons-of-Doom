@@ -6,16 +6,27 @@ import com.models.dungeonofdoom.monster.Monster;
 
 public class CombatManager {
 
+    /*
+     * Attacks are not guaranteed to hit and each attack may deal a variable amount of damage. To
+        hit, an attack roll must be greater than the defender’s armor class. For each attack, roll 1d20,
+        then compare that to the following: 20 - attacker’s level - defender’s armor class.
+        For example, if a level 5 Wraith attacks a player with an armor class of 3, then the Wraith will
+        need at least (20 - 5) - 3 = 12 to hit.
+
+     */
+
+
+     //need to make a method for calculating the odds of an attack hitting
     
      public static void monsterAttack(Player player, Monster monster) {
+        //eventually need to pass things out maybe to make messages.
         System.out.println(monster.getName() + ": is attacking " + player.getName());
 
         int damage = monster.calculateDmg();
 
-        System.out.println("Player is taking " + damage);
         player.takeDamage(damage);
 
-        
+        monster.specialAbility(player);
     }
 
     public static void playerAttack(Player player, Monster monster, DungeonFloor dungeonFloor){

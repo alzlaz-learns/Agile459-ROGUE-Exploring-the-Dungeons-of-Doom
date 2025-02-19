@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 public class GeneralMonster extends Monster{
@@ -10,7 +11,7 @@ public class GeneralMonster extends Monster{
     }
 
     @Override
-    public void specialAbility() {
+    public void specialAbility(Player player) {
         // No special ability
     }
 }

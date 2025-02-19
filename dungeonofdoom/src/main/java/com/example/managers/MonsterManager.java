@@ -16,6 +16,7 @@ import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.Aquator;
 import com.models.dungeonofdoom.monster.GeneralMonster;
+import com.models.dungeonofdoom.monster.IceMonster;
 import com.models.dungeonofdoom.monster.Leprechaun;
 import com.models.dungeonofdoom.monster.Medusa;
 import com.models.dungeonofdoom.monster.Monster;
@@ -55,8 +56,11 @@ public class MonsterManager {
                 return new Wraith(rand);
             case XEROC:
                 return new Xeroc(rand);
+            case ICEMONSTER:
+                return new IceMonster(rand);
             default:
-                return new GeneralMonster(monsterEnum, rand);
+                // return new GeneralMonster(monsterEnum, rand);
+                return new Vampire(rand);
         }
     }
 
@@ -77,7 +81,6 @@ public class MonsterManager {
 
             if (monster.isDead()) {
                 monsterIterator.remove();
-                System.out.println(monster.getName() + " has been removed from the floor.");
                 continue; 
             }
 
@@ -99,7 +102,6 @@ public class MonsterManager {
             return; 
         }
        Point move = output.get(1);
-       System.out.println(move);
        monster.setPosition(move.x, move.y);
     }
 

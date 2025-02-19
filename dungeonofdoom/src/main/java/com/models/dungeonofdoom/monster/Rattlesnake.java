@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 public class Rattlesnake extends Monster{
@@ -11,10 +12,13 @@ public class Rattlesnake extends Monster{
         //TODO Auto-generated constructor stub
     }
 
+   
+
     @Override
-    public void specialAbility() {
-        // TODO Auto-generated method stub
-        System.out.println("The rattle snake");    
+    public void specialAbility(Player player) {
+      int reduceStrength = rand.nextInt(3) + 1;
+      System.out.println("players strength is reduced by: " + reduceStrength);
+      player.adjustStrength(-reduceStrength);
     }
 
 }
