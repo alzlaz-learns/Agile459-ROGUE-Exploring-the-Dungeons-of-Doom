@@ -394,6 +394,8 @@ public class DungeonFloor {
         connectLonelyRooms();
     }
 
+    
+
 
     // Revised connectLonelyRooms to also use door endpoints.
     private void connectLonelyRooms() {
