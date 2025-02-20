@@ -2,15 +2,16 @@ package com.models.dungeonofdoom.monster;
 
 import java.util.Random;
 
+import com.models.Player;
 import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 
 //might make abstract eventually
-public class Monster {
+public abstract class Monster {
     private MonsterEnum type;
     private int hpt;
     private int amr;
-    private Random rand;
+    protected Random rand;
     private int x;
     private int y;
 
@@ -165,4 +166,9 @@ public class Monster {
         this.y = y;
     }
 
+    public int getLevel(){
+        return this.type.getLvl();
+    }
+
+    public abstract void specialAbility(Player player); 
 }

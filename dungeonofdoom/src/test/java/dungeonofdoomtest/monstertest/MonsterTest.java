@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.models.dungeonofdoom.enums.MonsterEnum;
+import com.models.dungeonofdoom.monster.GeneralMonster;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class MonsterTest {
@@ -28,10 +29,10 @@ public class MonsterTest {
         when(mockRandom.nextInt(8)).thenReturn(7);
         when(mockRandom.nextInt(6)).thenReturn(5);
 
-        monster = new Monster(MonsterEnum.ORC, mockRandom);
+        monster = new GeneralMonster(MonsterEnum.ORC, mockRandom);
 
         when(mockRandom.nextInt(6)).thenReturn(4, 2);
-        multiAttackMonster = new Monster(MonsterEnum.CENTAUR, mockRandom);
+        multiAttackMonster = new GeneralMonster(MonsterEnum.CENTAUR, mockRandom);
     }
 
     @Test

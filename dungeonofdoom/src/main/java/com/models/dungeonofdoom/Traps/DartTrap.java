@@ -33,6 +33,7 @@ public class DartTrap extends AbstractTrap {
                 return "A poisoned dart killed you";
             }
             //to be updated latter to match the output of from design doc
+            player.adjustStrength(-1);
             return "A dart just hit you in the shoulder " + damage + " damage!";
         }
 
