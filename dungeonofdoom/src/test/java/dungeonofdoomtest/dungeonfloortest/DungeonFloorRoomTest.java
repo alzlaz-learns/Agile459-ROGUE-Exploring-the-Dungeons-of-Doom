@@ -38,7 +38,7 @@ public class DungeonFloorRoomTest {
         List<Object> rooms = (List<Object>) roomsField.get(dungeonFloor);
 
         // Get the Room class
-        Class<?> roomClass = Class.forName("com.models.dungeonofdoom.dungeonfloor.DungeonFloor$Room");
+        Class<?> roomClass = Class.forName("com.models.dungeonofdoom.dungeonfloor.Room");
         Field xField = roomClass.getDeclaredField("x");
         Field yField = roomClass.getDeclaredField("y");
         Field widthField = roomClass.getDeclaredField("width");
@@ -84,7 +84,7 @@ public class DungeonFloorRoomTest {
         @SuppressWarnings("unchecked")
         List<Object> rooms = (List<Object>) roomsField.get(dungeonFloor);
 
-        Class<?> roomClass = Class.forName("com.models.dungeonofdoom.dungeonfloor.DungeonFloor$Room");
+        Class<?> roomClass = Class.forName("com.models.dungeonofdoom.dungeonfloor.Room");
         Field widthField = roomClass.getDeclaredField("width");
         Field heightField = roomClass.getDeclaredField("height");
 
