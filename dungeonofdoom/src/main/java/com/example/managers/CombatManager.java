@@ -10,9 +10,6 @@ public class CombatManager {
 
     private static final Random rand = new Random();
 
-
-    
-
     private static int getAttackModifier(int strength) {
         if (strength < 8) return -7;
         if (strength < 17) return -6;
