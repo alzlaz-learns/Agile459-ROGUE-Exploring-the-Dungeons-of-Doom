@@ -2,6 +2,8 @@ package com.models.dungeonofdoom.dungeonfloor;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -116,7 +118,8 @@ public class DungeonFloor {
 
         // Generate rooms
         generateRooms();
-        generateCorridors();
+        // generateCorridors();
+        generateCorridorsWithKruskal();
         //placeDoors();
         // Place stairs randomly in a room
         placeStairs();
@@ -374,51 +377,128 @@ public class DungeonFloor {
 
 
     // Revised generateCorridors method that computes one door per room connection
-    private void generateCorridors() {
+    // private void generateCorridors() {
+    //     if (rooms.isEmpty()) return;
+
+    //     // Sort rooms for a natural connection order.
+    //     rooms.sort((r1, r2) -> {
+    //         if (r1.x == r2.x) return Integer.compare(r1.y, r2.y);
+    //         return Integer.compare(r1.x, r2.x);
+    //     });
+
+    //     // Connect each adjacent room pair.
+    //     for (int i = 0; i < rooms.size() - 1; i++) {
+    //         Room roomA = rooms.get(i);
+    //         Room roomB = rooms.get(i + 1);
+    //         connectRooms(roomA, roomB);
+    //     }
+
+    //     // Optionally, connect any "lonely" rooms.
+    //     connectLonelyRooms();
+    // }
+
+
+    // Replace or add a new corridor generation method using Kruskal’s algorithm:
+    private void generateCorridorsWithKruskal() {
         if (rooms.isEmpty()) return;
 
-        // Sort rooms for a natural connection order.
-        rooms.sort((r1, r2) -> {
-            if (r1.x == r2.x) return Integer.compare(r1.y, r2.y);
-            return Integer.compare(r1.x, r2.x);
-        });
-
-        // Connect each adjacent room pair.
-        for (int i = 0; i < rooms.size() - 1; i++) {
-            Room roomA = rooms.get(i);
-            Room roomB = rooms.get(i + 1);
-            connectRooms(roomA, roomB);
+        // Build all possible edges between rooms with their weight (distance between room centers)
+        List<Edge> edges = new ArrayList<>();
+        for (int i = 0; i < rooms.size(); i++) {
+            for (int j = i + 1; j < rooms.size(); j++) {
+                Room roomA = rooms.get(i);
+                Room roomB = rooms.get(j);
+                int centerAx = roomA.x + roomA.width / 2;
+                int centerAy = roomA.y + roomA.height / 2;
+                int centerBx = roomB.x + roomB.width / 2;
+                int centerBy = roomB.y + roomB.height / 2;
+                double distance = Math.sqrt(Math.pow(centerAx - centerBx, 2) + Math.pow(centerAy - centerBy, 2));
+                edges.add(new Edge(i, j, distance));
+            }
         }
 
-        // Optionally, connect any "lonely" rooms.
-        connectLonelyRooms();
+        // Sort edges by distance (lowest weight first)
+        Collections.sort(edges, Comparator.comparingDouble(e -> e.weight));
+
+        // Initialize union-find (disjoint set) for the rooms
+        UnionFind uf = new UnionFind(rooms.size());
+        for (Edge edge : edges) {
+            if (uf.find(edge.roomIndex1) != uf.find(edge.roomIndex2)) {
+                uf.union(edge.roomIndex1, edge.roomIndex2);
+                // Retrieve the rooms to connect
+                Room roomA = rooms.get(edge.roomIndex1);
+                Room roomB = rooms.get(edge.roomIndex2);
+                // Use your existing connectRooms method to add a corridor between these rooms.
+                connectRooms(roomA, roomB);
+            }
+        }
     }
+
+    private static class Edge {
+        int roomIndex1, roomIndex2;
+        double weight;
+
+        public Edge(int roomIndex1, int roomIndex2, double weight) {
+            this.roomIndex1 = roomIndex1;
+            this.roomIndex2 = roomIndex2;
+            this.weight = weight;
+        }
+    }
+
+
+    private static class UnionFind {
+        int[] parent;
+
+        public UnionFind(int n) {
+            parent = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+            }
+        }
+
+        public int find(int i) {
+            if (parent[i] != i) {
+                parent[i] = find(parent[i]);
+            }
+            return parent[i];
+        }
+
+        public void union(int i, int j) {
+            int rootI = find(i);
+            int rootJ = find(j);
+            if (rootI != rootJ) {
+                parent[rootJ] = rootI;
+            }
+        }
+    }
+
+
 
 
     // Revised connectLonelyRooms to also use door endpoints.
-    private void connectLonelyRooms() {
-        Random rand = new Random();
-        for (Room room : rooms) {
-            boolean hasDoor = false;
-            // Check if a door ('d') exists on or immediately outside the room perimeter.
-            for (int y = room.y - 1; y <= room.y + room.height; y++) {
-                for (int x = room.x - 1; x <= room.x + room.width; x++) {
-                    if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == 'd') {
-                        hasDoor = true;
-                        break;
-                    }
-                }
-                if (hasDoor) break;
-            }
-            if (!hasDoor) {
-                // Pick a random room (other than the current one) and connect.
-                Room target = rooms.get(rand.nextInt(rooms.size()));
-                if (target != room) {
-                    connectRooms(room, target);
-                }
-            }
-        }
-    }
+    // private void connectLonelyRooms() {
+    //     Random rand = new Random();
+    //     for (Room room : rooms) {
+    //         boolean hasDoor = false;
+    //         // Check if a door ('d') exists on or immediately outside the room perimeter.
+    //         for (int y = room.y - 1; y <= room.y + room.height; y++) {
+    //             for (int x = room.x - 1; x <= room.x + room.width; x++) {
+    //                 if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == 'd') {
+    //                     hasDoor = true;
+    //                     break;
+    //                 }
+    //             }
+    //             if (hasDoor) break;
+    //         }
+    //         if (!hasDoor) {
+    //             // Pick a random room (other than the current one) and connect.
+    //             Room target = rooms.get(rand.nextInt(rooms.size()));
+    //             if (target != room) {
+    //                 connectRooms(room, target);
+    //             }
+    //         }
+    //     }
+    // }
 
     private void connectRooms(Room roomA, Room roomB) {
         // Compute room centers
@@ -426,7 +506,7 @@ public class DungeonFloor {
         int centerA_y = roomA.y + roomA.height / 2;
         int centerB_x = roomB.x + roomB.width / 2;
         int centerB_y = roomB.y + roomB.height / 2;
-
+    
         int doorA_x, doorA_y, doorB_x, doorB_y;
         // Choose door positions based on the dominant axis of separation.
         if (Math.abs(centerB_x - centerA_x) > Math.abs(centerB_y - centerA_y)) {
@@ -456,18 +536,28 @@ public class DungeonFloor {
                 doorB_y = roomB.y + roomB.height - 1;     // bottom wall of roomB
             }
         }
-
+    
         // Place door markers at the computed positions.
         map[doorA_y][doorA_x] = 'd';
         originalMap[doorA_y][doorA_x] = 'd';
         map[doorB_y][doorB_x] = 'd';
         originalMap[doorB_y][doorB_x] = 'd';
-
-        ArgsForBfsCorridorsDto bfsArgs = buildArgsForDfs(doorA_x,doorA_y,doorB_x,doorB_y);
+    
+        // Temporarily set the door cells to blank so the BFS corridor carving works.
+        char origA = map[doorA_y][doorA_x];
+        char origB = map[doorB_y][doorB_x];
+        map[doorA_y][doorA_x] = ' ';
+        map[doorB_y][doorB_x] = ' ';
+    
+        ArgsForBfsCorridorsDto bfsArgs = buildArgsForDfs(doorA_x, doorA_y, doorB_x, doorB_y);
         Corridor corridor = Corridor.createCorridor(bfsArgs);
-        corridor.draw();     
+        corridor.draw();
+    
+        // Restore the door markers
+        map[doorA_y][doorA_x] = origA;
+        map[doorB_y][doorB_x] = origB;
     }
-
+    
 
     //method to check walkable spaces
     //code was getting redundant so made a method to clean stuff up

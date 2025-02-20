@@ -62,10 +62,16 @@ public class BfsCorridors {
     
                 // Check bounds
                 if (!inBounds(nx, ny, width, height)) continue;
-                // If not visited yet
+
+
                 if (!visited[ny][nx]) {
-                    // If it's either the end cell or a truly blank space, we can move there
-                    if ((nx == endX && ny == endY) || map[ny][nx] == ' ') {
+                    char cell = map[ny][nx];
+                    
+                    // If it's the end cell or one of the passable cell types, allow BFS
+                    if ((nx == endX && ny == endY) 
+                         || cell == ' ' 
+                         || cell == 'X' 
+                         || cell == 'd') {
                         visited[ny][nx] = true;
                         parent[ny][nx] = current;
                         queue.offer(new Point(nx, ny));
