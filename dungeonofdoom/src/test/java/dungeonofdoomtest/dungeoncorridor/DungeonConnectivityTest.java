@@ -21,51 +21,60 @@ import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class DungeonConnectivityMockTest {
+public class DungeonConnectivityTest {
 
-    // Run a BFS using the dungeon's own isWalkable method.
+    // Run a BFS using the dungeon's own isWalkable method to check full connectivity.
     private boolean isDungeonConnected(DungeonFloor dungeon) {
-        char[][] map = dungeon.getMap();
-        int height = map.length;
-        int width = map[0].length;
+        char[][] dungeonMap = dungeon.getMap();
+        int dungeonHeight = dungeonMap.length;
+        int dungeonWidth = dungeonMap[0].length;
 
-        List<Point> validTiles = dungeon.getValidRoomTiles();
-        if (validTiles.isEmpty()) {
+        List<Point> roomFloorTiles = dungeon.getValidRoomTiles();
+        if (roomFloorTiles.isEmpty()) {
             System.out.println("No valid room tiles found.");
             return false;
         }
-        
-        // Use the first valid tile as the starting point.
-        Point start = validTiles.get(0);
-        boolean[][] visited = new boolean[height][width];
-        Queue<Point> queue = new ArrayDeque<>();
-        visited[start.y][start.x] = true;
-        queue.offer(start);
 
-        // 4-directional BFS using dungeon.isWalkable to determine passability.
-        int[] dx = {1, -1, 0, 0};
-        int[] dy = {0, 0, 1, -1};
-        while (!queue.isEmpty()) {
-            Point cur = queue.poll();
-            int cx = cur.x, cy = cur.y;
+        // Use the first valid room floor tile as the starting point.
+        Point startingTile = roomFloorTiles.get(0);
+        boolean[][] visitedTiles = new boolean[dungeonHeight][dungeonWidth];
+        Queue<Point> tilesToExplore = new ArrayDeque<>();
+        visitedTiles[startingTile.y][startingTile.x] = true;
+        tilesToExplore.offer(startingTile);
+
+        // Define movement directions (right, left, down, up).
+        int[] xOffsets = {1, -1, 0, 0};
+        int[] yOffsets = {0, 0, 1, -1};
+
+        // Perform BFS to explore all walkable tiles.
+        while (!tilesToExplore.isEmpty()) {
+            Point currentTile = tilesToExplore.poll();
+            int currentX = currentTile.x;
+            int currentY = currentTile.y;
+
             for (int i = 0; i < 4; i++) {
-                int nx = cx + dx[i], ny = cy + dy[i];
-                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                    if (!visited[ny][nx] && dungeon.isWalkable(nx, ny)) {
-                        visited[ny][nx] = true;
-                        queue.offer(new Point(nx, ny));
+                int neighborX = currentX + xOffsets[i];
+                int neighborY = currentY + yOffsets[i];
+
+                // Ensure the neighbor tile is within the map bounds.
+                if (neighborX >= 0 && neighborX < dungeonWidth && neighborY >= 0 && neighborY < dungeonHeight) {
+                    // Check if the tile is walkable and has not been visited yet.
+                    if (!visitedTiles[neighborY][neighborX] && dungeon.isWalkable(neighborX, neighborY)) {
+                        visitedTiles[neighborY][neighborX] = true;
+                        tilesToExplore.offer(new Point(neighborX, neighborY));
                     }
                 }
             }
         }
-        
-        // Verify every valid room tile is reached.
-        for (Point p : validTiles) {
-            if (!visited[p.y][p.x]) {
-                System.out.println("Tile not reachable at: (" + p.x + ", " + p.y + ")");
+
+        // Verify that every room floor tile has been reached.
+        for (Point roomTile : roomFloorTiles) {
+            if (!visitedTiles[roomTile.y][roomTile.x]) {
+                System.out.println("Unreachable room tile detected at: (" + roomTile.x + ", " + roomTile.y + ")");
                 return false;
             }
         }
+        
         return true;
     }
     
