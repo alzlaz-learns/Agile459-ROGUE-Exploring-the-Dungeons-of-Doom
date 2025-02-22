@@ -82,11 +82,9 @@ public class DungeonFloor {
     public void removeMonster(Monster monster) {
         if(monsters.contains(monster)){
             monsters.remove(monster);
-            map[monster.getY()][monster.getX()] = '.';
-            originalMap[monster.getY()][monster.getX()] = '.';
-            
-            System.out.println(monster.getName() + " has been removed from the floor.");
-            
+            // Get the original tile from originalMap instead of assuming it's a floor
+            char originalTile = originalMap[monster.getY()][monster.getX()];
+            map[monster.getY()][monster.getX()] = originalTile;
         }
     }
 
@@ -398,7 +396,7 @@ public class DungeonFloor {
     // }
 
 
-    // Replace or add a new corridor generation method using Kruskal’s algorithm:
+    // Replace or add a new corridor generation method using Kruskal's algorithm:
     private void generateCorridorsWithKruskal() {
         if (rooms.isEmpty()) return;
 
