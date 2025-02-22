@@ -70,7 +70,9 @@ public abstract class Monster {
 
     public void takeDmg(int dmg){
         this.hpt -= dmg;
-        //TODO: implement dying
+        if (!isDead()) {
+            this.aggressive = true; // Monster becomes aggressive when attacked
+        }
     }
 
     public boolean isDead(){
@@ -171,4 +173,12 @@ public abstract class Monster {
     }
 
     public abstract void specialAbility(Player player); 
+
+    public void setAggressive(boolean aggressive) {
+        this.aggressive = aggressive;
+    }
+    
+    public boolean isAggressive() {
+        return aggressive || mean; // Mean monsters are always aggressive
+    }
 }

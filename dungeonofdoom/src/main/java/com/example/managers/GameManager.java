@@ -42,6 +42,12 @@ public class GameManager {
     //separated trap stuff from it
     //moved it all to Game Manager
     public void handleMovement(KeyEvent e) {
+        // Check if player is dead first
+        if (player.isDead()) {
+            frame.updateMessage("Game Over! You are dead.");
+            return;
+        }
+
         if (player.isImmobile()) {
             frame.updateMessage("You are trapped and cannot move for " + player.getImmobile() + " more turns!");
             player.immobileDecrease();

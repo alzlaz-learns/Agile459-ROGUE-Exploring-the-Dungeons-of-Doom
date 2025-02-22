@@ -101,9 +101,11 @@ public class GamePanel extends JPanel {
             map[m.getY()][m.getX()] = m.getSymbol();
         }
 
-        map[player.getY()][player.getX()] = player.getIcon();
+        // Only draw the player if they're alive
+        if (!player.isDead()) {
+            map[player.getY()][player.getX()] = player.getIcon();
+        }
 
-        
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
                 JLabel cell = gridLabels[y][x];
