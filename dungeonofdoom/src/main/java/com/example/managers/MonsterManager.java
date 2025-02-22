@@ -81,19 +81,24 @@ public class MonsterManager {
 
             if (monster.isDead()) {
                 monsterIterator.remove();
-                continue; 
+                continue;
             }
-            if(!monster.isActive()){
+            
+            if (!monster.isActive()) {
                 continue;
             }
 
-            if (Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
-                CombatManager.monsterAttack(player, monster);
-            } else {
-                moveMonster(monster, floor, player);
+            // Only chase and attack if monster is mean or has been provoked
+            if (monster.isAggressive()) {
+                // Check if monster is adjacent to player
+                if (Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
+                    CombatManager.monsterAttack(player, monster);
+                } else {
+                    moveMonster(monster, floor, player);
+                }
             }
+            // Non-aggressive monsters will stay in place
         }
-        
     }
 
     //to be implemented but add logic for monster

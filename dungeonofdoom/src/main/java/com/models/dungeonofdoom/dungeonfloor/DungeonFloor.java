@@ -10,6 +10,7 @@ import java.util.Random;
 import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
+import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -82,11 +83,9 @@ public class DungeonFloor {
     public void removeMonster(Monster monster) {
         if(monsters.contains(monster)){
             monsters.remove(monster);
-            map[monster.getY()][monster.getX()] = '.';
-            originalMap[monster.getY()][monster.getX()] = '.';
-            
-            System.out.println(monster.getName() + " has been removed from the floor.");
-            
+            // Get the original tile from originalMap instead of assuming it's a floor
+            char originalTile = originalMap[monster.getY()][monster.getX()];
+            map[monster.getY()][monster.getX()] = originalTile;
         }
     }
 
@@ -327,7 +326,23 @@ public class DungeonFloor {
     public void spawnMonster(){
         List<Point> validTiles = getValidRoomTiles();
         int monsterCount = random.nextInt(6);
-        for(int i = 0; i < monsterCount; i++){
+        
+        // Get all valid monsters for this floor
+        List<MonsterEnum> validMonsters = new ArrayList<>();
+        for (MonsterEnum monsterType : MonsterEnum.values()) {
+            if (isValidMonsterForFloor(monsterType)) {
+                validMonsters.add(monsterType);
+            }
+        }
+        
+        // If no valid monsters for this floor, return
+        if (validMonsters.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < monsterCount; i++) {
+            if (validTiles.isEmpty()) break;
+            
             int index = random.nextInt(validTiles.size());
             Point tile = validTiles.remove(index);
 
@@ -339,7 +354,8 @@ public class DungeonFloor {
                 continue;
             }
 
-            MonsterEnum randomMonster = MonsterEnum.values()[random.nextInt(MonsterEnum.values().length)];
+            // Select a random valid monster for this floor
+            MonsterEnum randomMonster = validMonsters.get(random.nextInt(validMonsters.size()));
             Monster monster = monsterManager.monsterFactory(randomMonster);
             monster.setPosition(tile.x, tile.y);
 
@@ -347,9 +363,27 @@ public class DungeonFloor {
             
             // Update the map
             map[tile.y][tile.x] = monster.getSymbol();
-
         }
+    }
 
+    // Helper method to check if a monster can spawn on the current floor
+    private boolean isValidMonsterForFloor(MonsterEnum monsterType) {
+        Pair<Integer, Integer> floorRange = monsterType.getFloorFound();
+        int minFloor = floorRange.getA();
+        int maxFloor = floorRange.getB();
+        
+        // Special case: (0,0) means monster can spawn on any floor
+        if (minFloor == 0 && maxFloor == 0) {
+            return true;
+        }
+        
+        // Special case: (x,0) where x > 0 means monster only spawns on floor x
+        if (minFloor > 0 && maxFloor == 0) {
+            return level == minFloor;
+        }
+        
+        // Regular case: monster can spawn between minFloor and maxFloor inclusive
+        return level >= minFloor && level <= maxFloor;
     }
 
     public List<Monster> getMonsters() {
@@ -398,7 +432,7 @@ public class DungeonFloor {
     // }
 
 
-    // Replace or add a new corridor generation method using Kruskal’s algorithm:
+    // Replace or add a new corridor generation method using Kruskal's algorithm:
     private void generateCorridorsWithKruskal() {
         if (rooms.isEmpty()) return;
 
