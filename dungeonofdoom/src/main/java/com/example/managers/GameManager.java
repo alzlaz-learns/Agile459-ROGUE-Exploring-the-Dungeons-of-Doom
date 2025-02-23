@@ -229,8 +229,13 @@ public class GameManager {
     public void changeFloor(boolean goingDown) {
         if (goingDown && currentFloor < dungeonFloors.size() - 1) {
             currentFloor++;
+            player.updateLvl(currentFloor + 1);
+            System.out.println(player.getLevel());
+            frame.updateStats(player.toString());
         } else if (!goingDown && currentFloor > 0) {
             currentFloor--;
+            player.updateLvl(currentFloor);
+            frame.updateStats(player.toString());
         } else {
             // Can't pass 0 or 25
             frame.updateMessage(goingDown ? "You have reached the bottom floor!" : "You cannot go any higher!");
