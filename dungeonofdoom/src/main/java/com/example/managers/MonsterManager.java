@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.ArrayList;
 
 
 import com.models.Player;
@@ -77,13 +78,16 @@ public class MonsterManager {
     
         //https://www.quora.com/What-does-the-exception-in-thread-main-Java-util-concurrentmodificationexception-mean-in-Java
         //https://www.reddit.com/r/roguelikedev/comments/o8dy9l/calculate_distance_between_2_entities_on_a_tile/?rdt=54629
-        Iterator<Monster> monsterIterator = floor.getMonsters().iterator(); // Use an iterator
+        //Iterator<Monster> monsterIterator = floor.getMonsters().iterator(); // Use an iterator
 
-        while (monsterIterator.hasNext()) {
-            Monster monster = monsterIterator.next();
-
+        // while (monsterIterator.hasNext()) {
+        //     Monster monster = monsterIterator.next();
+        List<Monster> monstersToRemove = new ArrayList<>();
+        
+        for (Monster monster : floor.getMonsters()) {
             if (monster.isDead()) {
-                monsterIterator.remove();
+                // monsterIterator.remove();
+                monstersToRemove.add(monster);
                 continue;
             }
             
@@ -102,6 +106,9 @@ public class MonsterManager {
             }
             // Non-aggressive monsters will stay in place
         }
+        
+        // Remove dead monsters after iteration
+        floor.getMonsters().removeAll(monstersToRemove);
     }
 
     //to be implemented but add logic for monster

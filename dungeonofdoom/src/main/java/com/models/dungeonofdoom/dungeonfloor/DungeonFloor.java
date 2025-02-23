@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.example.managers.MonsterManager;
 import com.models.Player;
@@ -32,7 +33,7 @@ public class DungeonFloor {
     private final Random random;
 
     MonsterManager monsterManager; //THIS IS TESTING CODE
-    public List<Monster> monsters;
+    public List<Monster> monsters = new CopyOnWriteArrayList<>();
 
     private int stairX;
     private int stairY;
@@ -66,7 +67,6 @@ public class DungeonFloor {
         this.traps = new ArrayList<>();
 
         this.monsterManager = monsterManager; //this is testing code.
-        this.monsters = new ArrayList<>();
 
         generateDungeon();
     }
