@@ -324,7 +324,7 @@ public class DungeonFloor {
 
     public void spawnMonster(){
         List<Point> validTiles = getValidRoomTiles();
-        int monsterCount = random.nextInt(6);
+        int monsterCount = random.nextInt(8) + 2;
         
         // Get all valid monsters for this floor
         List<MonsterEnum> validMonsters = new ArrayList<>();
