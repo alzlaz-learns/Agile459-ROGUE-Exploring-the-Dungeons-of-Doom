@@ -88,6 +88,8 @@ public class CombatManager {
 
             if (monster.isDead()) {
                 frame.updateMessage("The " + monster.getName() + " has been slain!");
+                int expRecieved = monster.getExp();
+                player.adjustExperience(expRecieved);
                 frame.updateGameScreen();
                 dungeonFloor.removeMonster(monster);
             }

@@ -35,7 +35,7 @@ public class Player {
         this.maxHealth = 100;
         this.currentHealth = this.maxHealth;
         this.gold = 0;
-        this.experience = 0;
+        this.experience = 1;
         this.armor = 5;
         this.strength = 3; // Default minimum strength
         //test attributes
@@ -56,6 +56,10 @@ public class Player {
 
     public String getExperienceStatus() {
         return level + "/" + experience;
+    }
+
+    public void updateLvl(int i){
+        this.level = i;
     }
 
     @Override
@@ -173,7 +177,7 @@ public class Player {
     }
 
     public boolean isDead(){
-        return this.currentHealth < 1 || this.maxHealth < 1;
+        return this.currentHealth < 1 || this.maxHealth < 1 || this.experience < 0;
     }
 
     //reduce armor by -1 since
