@@ -26,12 +26,15 @@ import com.models.dungeonofdoom.monster.Rattlesnake;
 import com.models.dungeonofdoom.monster.Vampire;
 import com.models.dungeonofdoom.monster.Wraith;
 import com.models.dungeonofdoom.monster.Xeroc;
+import com.example.ui.JFrameUI;
 
 public class MonsterManager {
     private Random rand;
+    private JFrameUI frame;
 
-    public MonsterManager(Random rand){
+    public MonsterManager(Random rand, JFrameUI frame){
         this.rand = rand;
+        this.frame = frame;
     }
 
     public Monster monsterFactory(MonsterEnum monsterEnum){
@@ -92,7 +95,7 @@ public class MonsterManager {
             if (monster.isAggressive()) {
                 // Check if monster is adjacent to player
                 if (Math.abs(monster.getX() - player.getX()) + Math.abs(monster.getY() - player.getY()) == 1) {
-                    CombatManager.monsterAttack(player, monster);
+                    CombatManager.combatOrdering(player, monster, floor, frame);
                 } else {
                     moveMonster(monster, floor, player);
                 }
@@ -186,9 +189,9 @@ public class MonsterManager {
     
         // Only activate monsters that are inside the same room as the player
         for (Monster monster : floor.getMonsters()) {
-            if (playerRoom.contains(monster.getX(), monster.getY()) && !monster.isActive()) {
+            if (!monster.isActive() && playerRoom.contains(monster.getX(), monster.getY())) {
                 monster.activate();
-                System.out.println(monster.getName() + " wakes up!");
+                frame.updateMessage("The " + monster.getName() + " wakes up!");
             }
         }
     }
