@@ -84,21 +84,28 @@ public class Player {
         gold -= goldLost;
         System.out.println(goldLost + " gold added to the scoreboard."); // to be changed to output on screen
     }
-
-    
-    // to be changed to output on screen when monster
     
     //updated to handle monsters.
     //updated this to be inline with naming of monster attacking (calculateDamage)
     //updated to add place holder value for items so we can set up Item handling in the future.
     public int calculateDmg() {
-        int damage = getStrength();
-        //getting con fused on how to do this damage.
-        for (Integer i: equippedItems){
-            damage += i;
+        // Base damage will come from equipped weapon (currently placeholder)
+        int baseDamage = 0;
+        int bonusDamage = 0;
+        
+        // For now, we're using placeholder integers for items
+        // This should be updated when proper item system is implemented
+        for (Integer item : equippedItems) {
+            baseDamage += item; // Base damage from weapon
+            bonusDamage += 0;   // Bonus damage from magical enhancements
         }
         
-        return damage;
+        // If no weapon equipped, use minimum damage
+        if (baseDamage == 0) {
+            baseDamage = 1;
+        }
+        
+        return baseDamage + bonusDamage;
     }
 
     public PlayerPackPlayground getPack() {
@@ -111,7 +118,9 @@ public class Player {
 
 
     public void heal(int amount) {
-        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
+        if (this.currentHealth < this.maxHealth) {
+            this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
+        }
     }
 
     public void eatFood() {

@@ -27,7 +27,7 @@ public class GameManager {
         this.player = new Player("hero");
         dungeonFloors = new ArrayList<>();
 
-        this.monsterManager = new MonsterManager(new Random());
+        this.monsterManager = new MonsterManager(new Random(), frame);
         
         // Create all dungeon floors
         for(int i = 1; i < 26; i++) {
@@ -150,7 +150,12 @@ public class GameManager {
         //check if player enters the room to activate
         checkRoomEntry(newX, newY);
 
-        // replaced all the redundant code with a method from floor to clean up stuff.
+        handleMovement(newX, newY);
+    }
+
+    private void handleMovement(int newX, int newY) {
+        DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
+        //check if we can move there and if we can clean up stuff.
         if(!currentDungeonFloor.isWalkable(newX, newY)){
             frame.updateMessage("You cant go there!");
             return;
@@ -158,21 +163,18 @@ public class GameManager {
 
         //todo: think of a way for player to handle running into a monster.
         if(currentDungeonFloor.monsterOccupies(newX, newY)){
-            
             Monster monster = currentDungeonFloor.getMonsterAt(newX, newY);
-           
-            CombatManager.combatOrdering(player, monster, currentDungeonFloor);
-            
+            CombatManager.combatOrdering(player, monster, currentDungeonFloor, frame);
             frame.updateGameScreen();
-            
-            
-            
+            // Reset healing counter after combat
+            HealingManager.resetNonCombatCounter();
         } else {
             // Move player only if the tile is walkable
             player.moveTo(newX, newY);
             checkTrap(newX, newY);
+            // Process healing for non-combat turn
+            HealingManager.processHealing(player, false, frame);
         }
-        
 
         //check todo in Monstermanager.monsterAction()
         monsterManager.monsterAction(currentDungeonFloor, player);
