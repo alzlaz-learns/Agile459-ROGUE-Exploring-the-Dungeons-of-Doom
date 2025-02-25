@@ -18,7 +18,6 @@ import com.models.Player;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.TeleportTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-import com.models.dungeonofdoom.enums.TrapEffectEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 public class TeleportTest {
