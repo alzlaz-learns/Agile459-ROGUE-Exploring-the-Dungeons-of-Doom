@@ -28,7 +28,8 @@ public class Player {
     private int confused;
     private PlayerPackPlayground pack;
     private List<Integer> equippedItems; //placeHolder <Integer>
-
+    private int maxStrength;
+    private int minStrength;
 
     //potion effects
     private int blindTimer;
@@ -41,7 +42,9 @@ public class Player {
         this.gold = 0;
         this.experience = 1;
         this.armor = 5;
-        this.strength = 3; // Default minimum strength
+        this.maxStrength = 31;
+        this.minStrength = 3;
+        this.strength = this.minStrength; // Default minimum strength
         //test attributes
         this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
         this.immobile = 0;
@@ -195,7 +198,8 @@ public class Player {
 
     //making this so minimum is always one
     public void adjustStrength(int modifier){
-        this.strength = Math.max(1, this.strength + modifier);
+        //changed to max minimum strength 3 max strength 31
+        this.strength = Math.min(31, Math.max(3, this.strength + modifier));
     }
 
     public void adjustMaxHealth(int modifier){

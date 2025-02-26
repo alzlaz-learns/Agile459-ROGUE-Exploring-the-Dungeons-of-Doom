@@ -80,13 +80,26 @@ public class PlayerTest {
 
     @Test
     void testAdjustStrength() {
+
         testPlayer.adjustStrength(5);
         assertEquals(8, testPlayer.getStrength());
 
-        // Strength cannot go below 1
-        testPlayer.adjustStrength(-20);
-        assertEquals(1, testPlayer.getStrength());
+  
+        testPlayer.adjustStrength(50);
+        assertEquals(31, testPlayer.getStrength());
+
+    
+        testPlayer.adjustStrength(-50);
+        assertEquals(3, testPlayer.getStrength() );
+
+        testPlayer.adjustStrength(28);
+        assertEquals(31, testPlayer.getStrength());
+
+
+        testPlayer.adjustStrength(-100);
+        assertEquals(3, testPlayer.getStrength());
     }
+
 
     @Test
     void testApplyBlind() {
