@@ -6,10 +6,17 @@ import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class Blindness implements PotionEffect{
+    private final Random random;
+
     
+    public Blindness(Random random) {
+        this.random = random;
+    }
+
     @Override
     public void applyToPlayer(Player player) {
         int duration = randomDuration();
+        player.applyBlind(duration);
         // need to eventually apply blind status effect to player
     }
 
@@ -30,8 +37,8 @@ public class Blindness implements PotionEffect{
     }
 
     private int randomDuration(){
-        boolean randomBoolean = Math.random() < 0.5;
-        return randomBoolean ? (int)(20 * .01): (int)(20 * -.01);
+        boolean randomBoolean = random.nextBoolean();
+        return randomBoolean ? 20 + (int)(20 * .1): 20 - (int)(20 * .1);
     }
 
 }
