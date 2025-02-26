@@ -28,6 +28,10 @@ public class Player {
     private int confused;
     private PlayerPackPlayground pack;
     private List<Integer> equippedItems; //placeHolder <Integer>
+
+
+    //potion effects
+    private int blindTimer;
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -43,6 +47,9 @@ public class Player {
         this.immobile = 0;
         this.confused = 0;
         this.equippedItems = new ArrayList<Integer>();
+
+        // potion
+        this.blindTimer = 0;
     }
     
     // Core Utility Methods
@@ -201,5 +208,9 @@ public class Player {
 
     public void adjustExperience(int modifier){
         this.experience += modifier;
+    }
+
+    public void applyBlind(int blind){
+        this.blindTimer += blind;
     }
 }
