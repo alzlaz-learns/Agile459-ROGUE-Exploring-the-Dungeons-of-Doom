@@ -86,18 +86,18 @@ public class PlayerTest {
 
   
         testPlayer.adjustStrength(50);
-        assertEquals(31, testPlayer.getStrength());
+        assertEquals(testPlayer.getMaxStrength(), testPlayer.getStrength());
 
     
         testPlayer.adjustStrength(-50);
-        assertEquals(3, testPlayer.getStrength() );
+        assertEquals(testPlayer.getMinStrength(), testPlayer.getStrength() );
 
         testPlayer.adjustStrength(28);
-        assertEquals(31, testPlayer.getStrength());
+        assertEquals(testPlayer.getMaxStrength(), testPlayer.getStrength());
 
 
         testPlayer.adjustStrength(-100);
-        assertEquals(3, testPlayer.getStrength());
+        assertEquals(testPlayer.getMinStrength(), testPlayer.getStrength());
     }
 
 

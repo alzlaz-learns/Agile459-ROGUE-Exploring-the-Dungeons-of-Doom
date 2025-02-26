@@ -199,7 +199,11 @@ public class Player {
     //making this so minimum is always one
     public void adjustStrength(int modifier){
         //changed to max minimum strength 3 max strength 31
-        this.strength = Math.min(31, Math.max(3, this.strength + modifier));
+        this.strength = Math.min(getMaxStrength(), Math.max(getMinStrength(), this.strength + modifier));
+    }
+    public void adjustMaxStrength(){
+        //changed to max minimum strength 3 max strength 31
+        this.maxStrength += 1;
     }
 
     public void adjustMaxHealth(int modifier){
