@@ -1,13 +1,12 @@
 package com.models.dungeonofdoom.enums;
 
-import com.models.dungeonofdoom.Items.Potion.Blindness;
-import com.models.dungeonofdoom.Items.Potion.NoEffect;
-import com.models.dungeonofdoom.Items.Potion.PotionEffect;
+import com.models.dungeonofdoom.Items.Potion.*;
+
 
 public enum PotionEnum {
     
     BLINDNESS(new Blindness()),
-    CONFUSION,
+    CONFUSION(new Confusion()),
     EXTRA_HEALING,
     GAIN_STRENGTH,
     HASTE_SELF,
@@ -29,7 +28,7 @@ public enum PotionEnum {
     }
     
     PotionEnum() {
-        this.effect = new NoEffect(); // Or any default you choose
+        this.effect = new NoEffect(); 
     }
 
     public PotionEffect getEffect() {

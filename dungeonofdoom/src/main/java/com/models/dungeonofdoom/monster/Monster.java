@@ -10,6 +10,7 @@ import com.models.dungeonofdoom.enums.MonsterEnum;
 public abstract class Monster {
     private MonsterEnum type;
     private int hpt;
+    private int maxHpt;
     private int amr;
     protected Random rand;
     private int x;
@@ -35,7 +36,8 @@ public abstract class Monster {
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
         this.type = type;
-        this.hpt = roll(type.getHpt());
+        this.maxHpt = roll(type.getHpt());
+        this.hpt = maxHpt;
         this.amr = type.getAmr();
 
 
@@ -87,8 +89,26 @@ public abstract class Monster {
         return type.getSymbol();
     }
 
+    public int getMaxHpt(){
+        return this.maxHpt;
+    }
+
     public int getHpt() {
         return this.hpt;
+    }
+
+    public void setMaxHpt(int i){
+        this.maxHpt = i;
+    }
+
+    public void setCurrentHpt(int i){
+        this.hpt = i;
+    }
+
+    public void heal(int amount) {
+        if (this.hpt < this.maxHpt) {
+            this.hpt = Math.min(this.maxHpt, this.hpt + amount);
+        }
     }
 
     public int getAmr() {

@@ -213,4 +213,8 @@ public class Player {
     public void applyBlind(int blind){
         this.blindTimer += blind;
     }
+
+    public void clearBlind(){
+        this.blindTimer = 0;
+    }
 }

@@ -5,44 +5,45 @@ import java.util.Random;
 import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class Blindness implements PotionEffect{
-    private final Random random;
+public class Confusion implements PotionEffect{
 
+    private final Random random;
     
-    public Blindness(Random random) {
+    public Confusion(Random random) {
         this.random = random;
     }
 
-    public Blindness() {
+    public Confusion() {
         this.random = new Random();
     }
-
     @Override
     public void applyToPlayer(Player player) {
         int duration = randomDuration();
-        player.applyBlind(duration);
-        // need to eventually apply blind status effect to player
+        player.setConfused(duration);
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        int duration = randomDuration();
+       int duration = randomDuration();
         // need to eventually apply blind status effect to player
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-       return "A cloak of darkness falls around you";
+        //this might need to be changed in the future
+        return "Wait, what's going on? Huh? What? Who? You feel less confused now";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        return ("The " + monster.getName() + " appears confused");
+        //this might need to be changed in the future
+        return "The " + monster.getName() + " appears confused The " + monster.getName() + " seems less confused now.";
+        
+
     }
 
     private int randomDuration(){
-        boolean randomBoolean = random.nextBoolean();
-        return randomBoolean ? 20 + (int)(20 * .1): 20 - (int)(20 * .1);
+        return random.nextInt(8) + 20 + 1;
     }
-
+    
 }
