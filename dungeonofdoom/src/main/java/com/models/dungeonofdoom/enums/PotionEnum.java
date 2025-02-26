@@ -7,7 +7,7 @@ public enum PotionEnum {
     
     BLINDNESS(new Blindness()),
     CONFUSION(new Confusion()),
-    EXTRA_HEALING,
+    EXTRA_HEALING(new ExtraHealing()),
     GAIN_STRENGTH,
     HASTE_SELF,
     HEALING,
