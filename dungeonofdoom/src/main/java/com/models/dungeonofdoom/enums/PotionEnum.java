@@ -8,7 +8,7 @@ public enum PotionEnum {
     BLINDNESS(new Blindness()),
     CONFUSION(new Confusion()),
     EXTRA_HEALING(new ExtraHealing()),
-    GAIN_STRENGTH,
+    GAIN_STRENGTH(new GainStrength()),
     HASTE_SELF,
     HEALING,
     MAGIC_DETECTION,
@@ -17,8 +17,8 @@ public enum PotionEnum {
     RAISE_LEVEL,
     RESTORE_STRENGTH,
     SEE_INVISIBLE,
-    THIRST_QUENCHING,
-    OTHER_POTION
+    THIRST_QUENCHING(new ThirstQuenching()),
+    OTHER_POTION(new OtherPotion())
     ;
 
     private final PotionEffect effect;
