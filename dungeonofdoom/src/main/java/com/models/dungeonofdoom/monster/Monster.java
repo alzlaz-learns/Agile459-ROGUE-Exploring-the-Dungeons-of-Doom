@@ -115,6 +115,10 @@ public abstract class Monster {
         return this.amr;
     }
 
+    public void setAmr(int amr){
+        this.amr = amr;
+    }
+
     public int getExp() {
         return type.getExp();
     }

@@ -30,6 +30,7 @@ public class Player {
     private List<Integer> equippedItems; //placeHolder <Integer>
     private int maxStrength;
     private int minStrength;
+    private boolean isCursed;
 
     //potion effects
     private int blindTimer;
@@ -41,7 +42,7 @@ public class Player {
         this.currentHealth = this.maxHealth;
         this.gold = 0;
         this.experience = 1;
-        this.armor = 5;
+        this.armor = 10;
         this.maxStrength = 31;
         this.minStrength = 3;
         this.strength = this.minStrength; // Default minimum strength
@@ -53,6 +54,7 @@ public class Player {
 
         // potion
         this.blindTimer = 0;
+        this.isCursed = false;
     }
     
     // Core Utility Methods
@@ -178,6 +180,12 @@ public class Player {
         return confused > 0;
     }
 
+    public void curseSelf(){
+        this.isCursed = true;
+        System.out.println("Monsters are scared of you now, but you aren't long for this world.");
+        //TODO: add a timer that counts down to players death 
+    }
+
     public void immobileDecrease(){
         if (isImmobile()) immobile --;
     }
@@ -194,6 +202,10 @@ public class Player {
     //changed for being more open for future calls if it happens.
     public void adjustArmor(int modification){
         this.armor += modification;
+    }
+
+    public void setArmor(int armor){
+        this.armor = armor;
     }
 
     //making this so minimum is always one
