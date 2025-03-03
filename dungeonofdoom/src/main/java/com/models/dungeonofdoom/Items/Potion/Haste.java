@@ -30,7 +30,11 @@ public class Haste implements PotionEffect{
     @Override
     public void applyToMonster(Monster monster) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+        if(monster.isHasted()){
+            //does nothing
+            return;
+        }
+        monster.applyHaste(4);    
     }
 
     @Override

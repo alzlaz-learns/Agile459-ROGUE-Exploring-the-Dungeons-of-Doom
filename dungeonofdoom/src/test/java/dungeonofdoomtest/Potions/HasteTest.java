@@ -48,5 +48,15 @@ public class HasteTest {
         haste.applyToPlayer(player);
         assertTrue(player.isFainted());
     }
+
+    @Test
+    void testApplyHasteToMonster() {
+        Player player = new Player("TestHero");
+        
+        when(mockRandom.nextInt(4)).thenReturn(3);
+        Haste haste = new Haste(mockRandom);
+        haste.applyToPlayer(player);
+        assertEquals(player.getHasteTimer(), 4);
+    }
     
 }

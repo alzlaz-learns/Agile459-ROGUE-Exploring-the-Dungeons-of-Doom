@@ -236,6 +236,12 @@ public class Player {
         this.blindTimer = 0;
     }
 
+    public void decrementBlind(){
+        if (isBlind()){
+            this.blindTimer--;
+        }
+    }
+
     public boolean isHasted(){
         return this.hasteTimer > 0;
     }

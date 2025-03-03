@@ -114,13 +114,23 @@ public class MonsterManager {
     //to be implemented but add logic for monster
     private void moveMonster(Monster monster, DungeonFloor floor, Player player) {
        
-       List<Point> output = BFSMonsterPath.findPath(monster, player, floor);
-    
+        List<Point> output = BFSMonsterPath.findPath(monster, player, floor);
+        int moveMultiplier = monster.isHasted() ? 2 : 1; // Move twice if hasted
+
+        if(monster.isBlind()){
+            //cant tell what monster does when blind so will do nothing
+            monster.decrementBlind();
+            return;
+        }
         if (output == null || output.size() < 2) { 
             return; 
         }
-       Point move = output.get(1);
-       monster.setPosition(move.x, move.y);
+        for (int i = 1; i <= moveMultiplier && i < output.size(); i++) {
+            Point move = output.get(i);
+            if (!floor.monsterOccupies(move.x, move.y)) {
+                monster.setPosition(move.x, move.y);
+            }
+        }
     }
 
     static class BFSMonsterPath{
