@@ -10,7 +10,7 @@ public enum PotionEnum {
     EXTRA_HEALING(new ExtraHealing()),
     GAIN_STRENGTH(new GainStrength()),
     HASTE_SELF(new Haste()),
-    HEALING,
+    HEALING(new Healing()),
     MAGIC_DETECTION,
     MONSTER_DETECTION,
     PARALYSIS,
