@@ -40,6 +40,7 @@ public class Haste implements PotionEffect{
     @Override
     public String messageStringPlayer(Player player) {
         // TODO Auto-generated method stub
+        //im considering another way of handling strings.
         throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
     }
 

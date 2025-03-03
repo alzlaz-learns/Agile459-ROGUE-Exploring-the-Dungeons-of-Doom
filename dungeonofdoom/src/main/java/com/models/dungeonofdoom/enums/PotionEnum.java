@@ -9,7 +9,7 @@ public enum PotionEnum {
     CONFUSION(new Confusion()),
     EXTRA_HEALING(new ExtraHealing()),
     GAIN_STRENGTH(new GainStrength()),
-    HASTE_SELF,
+    HASTE_SELF(new Haste()),
     HEALING,
     MAGIC_DETECTION,
     MONSTER_DETECTION,
