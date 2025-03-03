@@ -230,4 +230,14 @@ public abstract class Monster {
     public void applyHaste(int turns){
         this.hasteTimer = turns;
     }
+
+    public int getHasteTimer(){
+        return this.hasteTimer;
+    }
+
+    public void decrementHaste(){
+        if(isHasted()){
+            this.hasteTimer--;
+        }
+    }
 }

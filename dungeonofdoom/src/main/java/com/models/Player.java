@@ -249,6 +249,12 @@ public class Player {
         this.hasteTimer = turns;
     }
 
+    public void decrementHaste(){
+        if(isHasted()){
+            this.hasteTimer--;
+        }
+    }
+
     public boolean isFainted(){
         return this.faintTimer > 0;
     }

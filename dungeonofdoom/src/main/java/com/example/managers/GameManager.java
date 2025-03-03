@@ -65,6 +65,7 @@ public class GameManager {
         int keyCode = e.getKeyCode();
 
         int moveMultiplier = player.isHasted() ? 2 : 1;
+        player.decrementHaste();
 
         if (player.isConfused()) {
             frame.updateMessage("Wait, what's going on? Huh? What? Who?");
