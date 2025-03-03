@@ -64,6 +64,8 @@ public class GameManager {
 
         int keyCode = e.getKeyCode();
 
+        int moveMultiplier = player.isHasted() ? 2 : 1;
+
         if (player.isConfused()) {
             frame.updateMessage("Wait, what's going on? Huh? What? Who?");
             
@@ -71,10 +73,10 @@ public class GameManager {
             int randomDirection = rand.nextInt(4); 
             
             switch (randomDirection) {
-                case 0: if (newY > 0) newY--; break; 
-                case 1: if (newY < dungeon.length - 1) newY++; break; 
-                case 2: if (newX > 0) newX--; break; 
-                case 3: if (newX < dungeon[0].length - 1) newX++; break; 
+                case 0: if (newY > 0) newY -= moveMultiplier; break; 
+                case 1: if (newY < dungeon.length - 1) newY += moveMultiplier; break; 
+                case 2: if (newX > 0) newX -= moveMultiplier; break; 
+                case 3: if (newX < dungeon[0].length - 1) newX += moveMultiplier; break;
             }
     
             player.confusedDecrease(); // Reduce confusion counter
@@ -82,42 +84,42 @@ public class GameManager {
             switch (keyCode) {
                 case KeyEvent.VK_W: 
                 case KeyEvent.VK_UP: 
-                    if (newY > 0) newY--;
+                    if (newY > 0) newY -= moveMultiplier;
                     break;
                 case KeyEvent.VK_S:           
                 case KeyEvent.VK_DOWN: 
-                    if (newY < dungeon.length - 1) newY++;
+                    if (newY < dungeon.length - 1) newY += moveMultiplier;
                     break;
                 case KeyEvent.VK_A: 
                 case KeyEvent.VK_LEFT: 
-                    if (newX > 0) newX--;
+                    if (newX > 0) newX -= moveMultiplier;
                     break;
                 case KeyEvent.VK_D: 
                 case KeyEvent.VK_RIGHT:
-                    if (newX < dungeon[0].length - 1) newX++;
+                    if (newX < dungeon[0].length - 1) newX += moveMultiplier;
                     break;
                 case KeyEvent.VK_PAGE_UP: 
                     if (newY > 0 && newX < dungeon[0].length - 1) {
-                        newX++; 
-                        newY--;
+                        newX+= moveMultiplier;
+                        newY-= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_PAGE_DOWN: 
                     if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
-                        newX++; 
-                        newY++;
+                        newX+= moveMultiplier;
+                        newY+= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_HOME: 
                     if (newY > 0 && newX > 0) {
-                        newX--; 
-                        newY--;
+                        newX-= moveMultiplier;
+                        newY-= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_END: 
                     if (newY < dungeon.length - 1 && newX > 0) {
-                        newX--; 
-                        newY++;
+                        newX-= moveMultiplier;
+                        newY+= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_PERIOD:
