@@ -1,20 +1,21 @@
-package com.models.dungeonofdoom.Items.Potion;
+package com.models.dungeonofdoom.enums;
 
 import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Potion.PotionEffect;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class MagicDetection implements PotionEffect{
+public class MonsterDetection implements PotionEffect{
     private final Random random;
 
-    public MagicDetection(){
+    public MonsterDetection(){
         this.random = new Random();
     }
 
-    public MagicDetection(Random random){
+    public MonsterDetection(Random random){
         this.random = random;
     }
     @Override
@@ -31,19 +32,23 @@ public class MagicDetection implements PotionEffect{
 
     @Override
     public String messageStringPlayer(Player player) {
-        return "You sense the presence of magic!";
+        return "You sense the presence of monsters!";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return ""; 
     }
 
     @Override
-    public void applyToPlayer(Player player, DungeonFloor dungeonFloor){
-        for(Item i: dungeonFloor.getItems()){
-            dungeonFloor.revealItemLocation(i);
+    public void applyToPlayer(Player player, DungeonFloor dungeonFloor) {
+        int duration = random.nextInt(8) + 1 + 20; // 1d8 + 20 turns
+        
+        if(!dungeonFloor.getMonsters().isEmpty()){
+            for (Monster m : dungeonFloor.getMonsters()) {
+                m.reveal(duration);  
+            }
         }
     }
+
 }

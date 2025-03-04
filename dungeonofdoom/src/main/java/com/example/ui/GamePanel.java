@@ -81,7 +81,7 @@ public class GamePanel extends JPanel {
         Player player = gameManager.getPlayer();
 
         // Original 
-        // char[][] originalMap = currentFloor.getOriginalMap();
+        char[][] originalMap = currentFloor.getOriginalMap();
         // for (int y = 0; y < map.length; y++) {
         //     for (int x = 0; x < map[y].length; x++) {
         //         map[y][x] = originalMap[y][x];
@@ -98,7 +98,8 @@ public class GamePanel extends JPanel {
 
         //DRAWING MONSTERS ON THE MAP.
         for (Monster m: currentFloor.getMonsters()){
-            map[m.getY()][m.getX()] = m.getSymbol();
+            if(!m.isDiscovered()) map[m.getY()][m.getX()] = ' ';
+            else map[m.getY()][m.getX()] = m.getSymbol();
         }
 
         // Only draw the player if they're alive

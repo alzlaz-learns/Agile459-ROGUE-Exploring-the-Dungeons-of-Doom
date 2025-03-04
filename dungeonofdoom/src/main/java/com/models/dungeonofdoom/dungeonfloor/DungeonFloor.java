@@ -332,6 +332,7 @@ public class DungeonFloor {
                 }
             }
         }
+
         
         return displayMap;
     }
@@ -680,13 +681,27 @@ public class DungeonFloor {
             for (Point p : corridor.getPath()) {
                 if (p.x == x && p.y == y) {
                     corridor.discover();
-                    map[p.y][p.x] = originalMap[p.y][p.x]; // Reveal corridor
-                    System.out.println("Corridor discovered at: (" + x + ", " + y + ")"); //test print
-                    return; 
+                    map[p.y][p.x] = originalMap[p.y][p.x]; // Reveal corridor                    return; 
                 }
             }
         }
     }
     
+    public void discoverMonsterInRoom(int x, int y){
+        Room room = getRoomAt(x, y);
+        if (room == null){
+            return;
+        }
+
+        for (Monster m: monsters){
+            if(room.contains(m.getX(), m.getY())){
+                m.discover();
+                
+                map[m.getY()][m.getX()] = m.getSymbol();
+                map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+            }
+        }
+    }
+
     
 }

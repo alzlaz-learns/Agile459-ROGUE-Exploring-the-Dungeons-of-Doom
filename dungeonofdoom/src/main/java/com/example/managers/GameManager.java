@@ -36,7 +36,8 @@ public class GameManager {
         this.currentFloor = 0;
         // Place player on the first floor
         dungeonFloors.get(currentFloor).placePlayer(player);
-    }
+        dungeonFloors.get(currentFloor).discoverMonsterInRoom(player.getX(), player.getY());
+    }   
 
     //logic to handle player movement based off of JFramePlayGround
     //separated trap stuff from it
@@ -155,6 +156,7 @@ public class GameManager {
         
         if (currentDungeonFloor.isInsideRoom(newX, newY)) {
             currentDungeonFloor.revealRoomAt(newX, newY);
+            currentDungeonFloor.discoverMonsterInRoom(newX, newY);
         } else {
             currentDungeonFloor.revealCorridorAt(newX, newY);
         }
