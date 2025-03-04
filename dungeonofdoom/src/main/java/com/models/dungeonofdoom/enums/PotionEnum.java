@@ -9,16 +9,16 @@ public enum PotionEnum {
     CONFUSION('?',new Confusion()),
     EXTRA_HEALING('┴',new ExtraHealing()),
     GAIN_STRENGTH('┼',new GainStrength()),
-    HASTE_SELF('±',null),
-    HEALING('+',null),
-    MAGIC_DETECTION('ƒ',null),
-    MONSTER_DETECTION('Ÿ',null),
-    PARALYSIS('÷',null),
-    RAISE_LEVEL('¥',null),
+    HASTE_SELF('±',new Haste()),
+    HEALING('+',new Healing()),
+    MAGIC_DETECTION('ƒ',new MagicDetection()),
+    MONSTER_DETECTION('Ÿ',new MonsterDetection()),
+    PARALYSIS('÷',new Paralysis()),
+    RAISE_LEVEL('¥',new RaiseLevel()),
     RESTORE_STRENGTH('§',null),
     SEE_INVISIBLE('©',null),
-    THIRST_QUENCHING('~',null),
-    OTHER_POTION('┐',null)
+    THIRST_QUENCHING('~',new ThirstQuenching()),
+    OTHER_POTION('┐',new OtherPotion())
     ;
 
     private final char symbol;
