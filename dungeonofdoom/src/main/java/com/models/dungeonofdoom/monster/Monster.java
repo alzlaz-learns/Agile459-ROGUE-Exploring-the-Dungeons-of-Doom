@@ -36,7 +36,7 @@ public abstract class Monster {
     private int hasteTimer;
     private int blindTimer;
     private boolean discovered = false;
-    
+    private int level;
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
@@ -55,6 +55,7 @@ public abstract class Monster {
         
         this.hasteTimer= 0;
         this.blindTimer = 0;
+        this.level = type.getLvl();
     }
 
     private int roll(Pair<Integer, Integer> pair){
@@ -200,7 +201,11 @@ public abstract class Monster {
     }
 
     public int getLevel(){
-        return this.type.getLvl();
+        return this.level;
+    }
+
+    public void increaseLvl(){
+        this.level ++;
     }
 
     public abstract void specialAbility(Player player); 
