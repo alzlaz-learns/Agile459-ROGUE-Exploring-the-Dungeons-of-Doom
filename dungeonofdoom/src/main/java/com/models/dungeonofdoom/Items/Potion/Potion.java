@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.Items.Potion;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
@@ -28,6 +29,11 @@ public class Potion extends Item{
     @Override
     public void effect(Player p) {
         type.getEffect().applyToPlayer(p);
+    }
+
+    // @Override
+    public void effect(Player p, DungeonFloor d) {
+        type.getEffect().applyToPlayer(p, d);
     }
 
     @Override

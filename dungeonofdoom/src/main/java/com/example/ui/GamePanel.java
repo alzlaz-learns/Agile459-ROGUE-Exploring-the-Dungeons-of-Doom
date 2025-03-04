@@ -82,11 +82,11 @@ public class GamePanel extends JPanel {
 
         // Original 
         char[][] originalMap = currentFloor.getOriginalMap();
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[y].length; x++) {
-                map[y][x] = originalMap[y][x];
-            }
-        }
+        // for (int y = 0; y < map.length; y++) {
+        //     for (int x = 0; x < map[y].length; x++) {
+        //         map[y][x] = originalMap[y][x];
+        //     }
+        // }
 
         map[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
@@ -98,7 +98,11 @@ public class GamePanel extends JPanel {
 
         //DRAWING MONSTERS ON THE MAP.
         for (Monster m: currentFloor.getMonsters()){
-            map[m.getY()][m.getX()] = m.getSymbol();
+            if (m.isDiscovered() || player.isRevealed()) {
+                map[m.getY()][m.getX()] = m.getSymbol();
+            } else {
+                map[m.getY()][m.getX()] = ' '; 
+            }
         }
 
         // Only draw the player if they're alive
@@ -123,6 +127,10 @@ public class GamePanel extends JPanel {
                     cell.setText(String.valueOf(c));
                 } else if (c == '░') {
                     cell.setBackground(Color.GREEN);
+                } else if (c == ' ') { // Hide undiscovered areas
+                    cell.setBackground(Color.BLACK);
+                    cell.setForeground(Color.BLACK);
+                    cell.setText(" ");
                 } else {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.WHITE);

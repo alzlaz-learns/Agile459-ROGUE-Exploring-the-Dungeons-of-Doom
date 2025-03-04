@@ -34,6 +34,10 @@ public class Player {
 
     //potion effects
     private int blindTimer;
+    private int hasteTimer;
+    private int faintTimer;
+    private int revealTimer = 0;
+
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -53,8 +57,11 @@ public class Player {
         this.equippedItems = new ArrayList<Integer>();
 
         // potion
+        
         this.blindTimer = 0;
         this.isCursed = false;
+        this.hasteTimer = 0;
+        this.faintTimer = 0;
     }
     
     // Core Utility Methods
@@ -230,11 +237,56 @@ public class Player {
         this.experience += modifier;
     }
 
+    public boolean isBlind(){
+        return this.blindTimer > 0;
+    }
+
     public void applyBlind(int blind){
         this.blindTimer += blind;
     }
 
     public void clearBlind(){
         this.blindTimer = 0;
+    }
+
+    public void decrementBlind(){
+        if (isBlind()){
+            this.blindTimer--;
+        }
+    }
+
+    public boolean isHasted(){
+        return this.hasteTimer > 0;
+    }
+    public void applyHaste(int turns){
+        this.hasteTimer = turns;
+    }
+
+    public void decrementHaste(){
+        if(isHasted()){
+            this.hasteTimer--;
+        }
+    }
+
+    public boolean isFainted(){
+        return this.faintTimer > 0;
+    }
+
+    public void applyFaint(int turns){
+        this.faintTimer = turns; 
+    }
+
+    public boolean isRevealed(){
+        return revealTimer > 0;
+    }
+
+    public void reveal(int i){
+        this.revealTimer += i;
+    }
+
+    public void decrementReveal(){
+        if(isRevealed()){
+            this.revealTimer --;
+        }
     }
 }
