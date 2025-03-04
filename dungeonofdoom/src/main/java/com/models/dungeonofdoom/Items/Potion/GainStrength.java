@@ -1,9 +1,10 @@
 package com.models.dungeonofdoom.Items.Potion;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class GainStrength implements PotionEffect{
+public class GainStrength implements ItemEffect{
 
     @Override
     public void applyToPlayer(Player player) {

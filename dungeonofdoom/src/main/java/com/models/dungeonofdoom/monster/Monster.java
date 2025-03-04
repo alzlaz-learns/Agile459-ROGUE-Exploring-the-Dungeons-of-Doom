@@ -37,6 +37,7 @@ public abstract class Monster {
     private int blindTimer;
     private boolean discovered = false;
     private int level;
+    private int confusedTimer = 0;
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
@@ -214,6 +215,19 @@ public abstract class Monster {
         return aggressive || mean; // Mean monsters are always aggressive
     }
 
+    public boolean isConfused(){
+        return this.confusedTimer > 0;
+    }
+
+    public void applyConfused(int duration){
+        this.confusedTimer = duration;
+    }
+
+    public void decrementConfused(){
+        if(isConfused()){
+            this.confusedTimer --;
+        }
+    }
     public boolean isBlind(){
         return this.blindTimer > 0;
     }

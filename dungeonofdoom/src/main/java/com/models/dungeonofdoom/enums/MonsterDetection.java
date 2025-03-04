@@ -4,11 +4,11 @@ import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.Potion.PotionEffect;
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class MonsterDetection implements PotionEffect{
+public class MonsterDetection implements ItemEffect{
     private final Random random;
 
     public MonsterDetection(){

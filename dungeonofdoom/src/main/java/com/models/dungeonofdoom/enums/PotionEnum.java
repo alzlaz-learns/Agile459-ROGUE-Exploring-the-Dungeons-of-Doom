@@ -1,5 +1,6 @@
 package com.models.dungeonofdoom.enums;
 
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Potion.*;
 
 
@@ -21,9 +22,9 @@ public enum PotionEnum {
     OTHER_POTION(new OtherPotion())
     ;
 
-    private final PotionEffect effect;
+    private final ItemEffect effect;
 
-    PotionEnum(PotionEffect effect) {
+    PotionEnum(ItemEffect effect) {
         this.effect = effect;
     }
     
@@ -31,7 +32,7 @@ public enum PotionEnum {
         this.effect = new NoEffect(); 
     }
 
-    public PotionEffect getEffect() {
+    public ItemEffect getEffect() {
         return effect;
     }
 }

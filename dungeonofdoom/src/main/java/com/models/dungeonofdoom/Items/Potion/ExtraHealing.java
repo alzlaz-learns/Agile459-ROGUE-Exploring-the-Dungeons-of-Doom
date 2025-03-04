@@ -3,9 +3,10 @@ package com.models.dungeonofdoom.Items.Potion;
 import java.util.Random;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class ExtraHealing implements PotionEffect{
+public class ExtraHealing implements ItemEffect{
 
     private final Random random;
     
