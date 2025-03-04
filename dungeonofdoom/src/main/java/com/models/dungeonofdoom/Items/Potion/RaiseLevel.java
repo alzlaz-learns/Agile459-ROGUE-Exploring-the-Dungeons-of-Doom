@@ -3,31 +3,24 @@ package com.models.dungeonofdoom.Items.Potion;
 import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class Poison implements PotionEffect{
+public class RaiseLevel implements PotionEffect{
 
     @Override
     public void applyToPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToPlayer'");
+        player.increaseLvl();
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+        monster.increaseLvl();
+        monster.setMaxHpt(monster.getMaxHpt() + 8);
+        monster.setCurrentHpt(monster.getHpt() + 8);
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        
-        // String res;
-        // if(player.hasRingOfSustain()){
-        //     res = "You feel very sick";
-        // }else{
-        //     res = "You feel momentarily sick";
-        // }
-        // return res;
-        return "";
+       
+        return "You suddenly feel much more skilful";
     }
 
     @Override

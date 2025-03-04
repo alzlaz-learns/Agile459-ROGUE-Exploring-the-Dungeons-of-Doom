@@ -262,12 +262,12 @@ public class GameManager {
     public void changeFloor(boolean goingDown) {
         if (goingDown && currentFloor < dungeonFloors.size() - 1) {
             currentFloor++;
-            player.updateLvl(currentFloor + 1);
+            player.increaseLvl();
             System.out.println(player.getLevel());
             frame.updateStats(player.toString());
         } else if (!goingDown && currentFloor > 0) {
             currentFloor--;
-            player.updateLvl(currentFloor);
+            player.increaseLvl();
             frame.updateStats(player.toString());
         } else {
             // Can't pass 0 or 25

@@ -79,6 +79,10 @@ public class Player {
         this.level = i;
     }
 
+    public void increaseLvl(){
+        this.level ++;
+    }
+
     @Override
     public String toString() {
         return String.format("""
