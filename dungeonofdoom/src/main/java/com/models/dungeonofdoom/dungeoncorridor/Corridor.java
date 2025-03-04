@@ -14,6 +14,7 @@ public class Corridor {
     private final char[][] originalMap;
     private static final char CORRIDOR = 'X';
 
+    private boolean discovered = false;
     public static Corridor createCorridor(ArgsForBfsCorridorsDto bfsArgs) {
         // Create BFS args
         
@@ -37,9 +38,25 @@ public class Corridor {
             Point p = path.get(i);
             // Skip first and last points (doors)
             if (i != 0 && i != path.size() - 1) {
-                map[p.y][p.x] = CORRIDOR;
-                originalMap[p.y][p.x] = CORRIDOR;
+                    // map[p.y][p.x] = CORRIDOR;
+                    map[p.y][p.x] = CORRIDOR;
+                    originalMap[p.y][p.x] = CORRIDOR;
             }
         }
+    }
+
+    public boolean isDiscovered(){
+        return discovered;
+    }
+
+    public void discover() {
+        this.discovered = true;
+        for( Point p: path){
+            map[p.y][p.x] = originalMap[p.y][p.x];
+        }
+    }
+
+    public List<Point> getPath() {
+        return path;
     }
 }

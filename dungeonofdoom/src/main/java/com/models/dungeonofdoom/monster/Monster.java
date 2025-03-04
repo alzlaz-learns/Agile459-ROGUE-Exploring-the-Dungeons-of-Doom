@@ -10,6 +10,7 @@ import com.models.dungeonofdoom.enums.MonsterEnum;
 public abstract class Monster {
     private MonsterEnum type;
     private int hpt;
+    private int maxHpt;
     private int amr;
     protected Random rand;
     private int x;
@@ -31,11 +32,17 @@ public abstract class Monster {
     private boolean greedy;
     private boolean invisible;
 
+    //potion effects
+    private int hasteTimer;
+    private int blindTimer;
+    private boolean discovered = false;
+    
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
         this.type = type;
-        this.hpt = roll(type.getHpt());
+        this.maxHpt = roll(type.getHpt());
+        this.hpt = maxHpt;
         this.amr = type.getAmr();
 
 
@@ -46,6 +53,8 @@ public abstract class Monster {
         this.greedy = flags.contains("G");
         this.invisible = flags.contains("I");
         
+        this.hasteTimer= 0;
+        this.blindTimer = 0;
     }
 
     private int roll(Pair<Integer, Integer> pair){
@@ -87,8 +96,26 @@ public abstract class Monster {
         return type.getSymbol();
     }
 
+    public int getMaxHpt(){
+        return this.maxHpt;
+    }
+
     public int getHpt() {
         return this.hpt;
+    }
+
+    public void setMaxHpt(int i){
+        this.maxHpt = i;
+    }
+
+    public void setCurrentHpt(int i){
+        this.hpt = i;
+    }
+
+    public void heal(int amount) {
+        if (this.hpt < this.maxHpt) {
+            this.hpt = Math.min(this.maxHpt, this.hpt + amount);
+        }
     }
 
     public int getAmr() {
@@ -180,5 +207,47 @@ public abstract class Monster {
     
     public boolean isAggressive() {
         return aggressive || mean; // Mean monsters are always aggressive
+    }
+
+    public boolean isBlind(){
+        return this.blindTimer > 0;
+    }
+    public void applyBlind(int turns){
+        this.blindTimer = turns;
+    }
+
+    public void decrementBlind(){
+        if (isBlind()){
+            this.blindTimer--;
+        }
+    }
+
+    public int getBlindTimer(){
+        return this.blindTimer;
+    }
+
+    public boolean isHasted(){
+        return this.hasteTimer > 0;
+    }
+    public void applyHaste(int turns){
+        this.hasteTimer = turns;
+    }
+
+    public int getHasteTimer(){
+        return this.hasteTimer;
+    }
+
+    public void decrementHaste(){
+        if(isHasted()){
+            this.hasteTimer--;
+        }
+    }
+
+    public boolean isDiscovered(){
+        return discovered;
+    }
+
+    public void discover() {
+        discovered = true;
     }
 }
