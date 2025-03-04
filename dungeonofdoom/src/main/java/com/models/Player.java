@@ -217,6 +217,12 @@ public class Player {
         this.maxStrength += 1;
     }
 
+    
+
+    public int calculateStrengthWithItems(){
+        return 0;
+    }
+
     public void adjustMaxHealth(int modifier){
         this.maxHealth += modifier;
     }
