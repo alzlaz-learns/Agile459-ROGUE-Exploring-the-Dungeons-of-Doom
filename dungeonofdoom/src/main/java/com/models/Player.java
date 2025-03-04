@@ -79,6 +79,10 @@ public class Player {
         this.level = i;
     }
 
+    public void increaseLvl(){
+        this.level ++;
+    }
+
     @Override
     public String toString() {
         return String.format("""
@@ -211,6 +215,12 @@ public class Player {
     public void adjustMaxStrength(){
         //changed to max minimum strength 3 max strength 31
         this.maxStrength += 1;
+    }
+
+    
+
+    public int calculateStrengthWithItems(){
+        return 0;
     }
 
     public void adjustMaxHealth(int modifier){
