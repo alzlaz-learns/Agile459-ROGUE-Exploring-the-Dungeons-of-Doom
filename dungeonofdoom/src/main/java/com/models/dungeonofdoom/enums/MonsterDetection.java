@@ -21,7 +21,8 @@ public class MonsterDetection implements PotionEffect{
     @Override
     public void applyToPlayer(Player player) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToPlayer'");
+        int duration = random.nextInt(8) + 1 + 20; // 1d8 + 20 turns
+        player.reveal(duration);
     }
 
     @Override
@@ -39,16 +40,4 @@ public class MonsterDetection implements PotionEffect{
     public String messageStringMonster(Monster monster) {
         return ""; 
     }
-
-    @Override
-    public void applyToPlayer(Player player, DungeonFloor dungeonFloor) {
-        int duration = random.nextInt(8) + 1 + 20; // 1d8 + 20 turns
-        
-        if(!dungeonFloor.getMonsters().isEmpty()){
-            for (Monster m : dungeonFloor.getMonsters()) {
-                m.reveal(duration);  
-            }
-        }
-    }
-
 }

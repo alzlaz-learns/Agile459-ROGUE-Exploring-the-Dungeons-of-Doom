@@ -98,8 +98,11 @@ public class GamePanel extends JPanel {
 
         //DRAWING MONSTERS ON THE MAP.
         for (Monster m: currentFloor.getMonsters()){
-            if(!m.isDiscovered()) map[m.getY()][m.getX()] = ' ';
-            else map[m.getY()][m.getX()] = m.getSymbol();
+            if (m.isDiscovered() || player.isRevealed()) {
+                map[m.getY()][m.getX()] = m.getSymbol();
+            } else {
+                map[m.getY()][m.getX()] = ' '; 
+            }
         }
 
         // Only draw the player if they're alive

@@ -1,6 +1,7 @@
 package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public abstract class Item {
@@ -17,6 +18,7 @@ public abstract class Item {
 
     public abstract void effect(Player p);
     public abstract void effect(Monster m);
+
 
     public int getX() {
         return x;

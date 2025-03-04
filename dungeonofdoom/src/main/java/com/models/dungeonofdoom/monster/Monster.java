@@ -36,7 +36,7 @@ public abstract class Monster {
     private int hasteTimer;
     private int blindTimer;
     private boolean discovered = false;
-    private int revealTimer = 0;
+    
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
@@ -240,21 +240,6 @@ public abstract class Monster {
     public void decrementHaste(){
         if(isHasted()){
             this.hasteTimer--;
-        }
-    }
-
-    
-    public boolean isRevealed(){
-        return revealTimer > 0;
-    }
-
-    public void reveal(int i){
-        this.revealTimer += i;
-    }
-
-    public void decrementReveal(){
-        if(isRevealed()){
-            this.revealTimer --;
         }
     }
 

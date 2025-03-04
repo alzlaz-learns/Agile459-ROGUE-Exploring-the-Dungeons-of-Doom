@@ -35,6 +35,7 @@ public class Player {
     private int blindTimer;
     private int hasteTimer;
     private int faintTimer;
+    private int revealTimer = 0;
 
     // Constructor
     public Player(String name) {
@@ -261,5 +262,19 @@ public class Player {
 
     public void applyFaint(int turns){
         this.faintTimer = turns; 
+    }
+
+    public boolean isRevealed(){
+        return revealTimer > 0;
+    }
+
+    public void reveal(int i){
+        this.revealTimer += i;
+    }
+
+    public void decrementReveal(){
+        if(isRevealed()){
+            this.revealTimer --;
+        }
     }
 }

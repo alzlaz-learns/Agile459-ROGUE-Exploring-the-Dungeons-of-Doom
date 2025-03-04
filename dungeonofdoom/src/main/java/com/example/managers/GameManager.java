@@ -7,8 +7,11 @@ import java.util.Random;
 
 import com.example.ui.JFrameUI;
 import com.models.Player;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -55,10 +58,17 @@ public class GameManager {
             return; 
         }
 
+        
+
        
 
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
+
+        if(player.isRevealed()){
+            player.decrementReveal();
+            currentDungeonFloor.revealMonstersOnMap();
+        }
 
         int newX = player.getX();
         int newY = player.getY();
@@ -146,6 +156,12 @@ public class GameManager {
                         return;
                     }
                     break;
+                case KeyEvent.VK_1:
+                    //test case for MonsterDetection potion
+                    System.out.println("revealing monsters");
+                    Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
+                    MonsterDetection.effect(player);
+                    break;
                 default:
                     return;
             }
@@ -160,6 +176,8 @@ public class GameManager {
         } else {
             currentDungeonFloor.revealCorridorAt(newX, newY);
         }
+
+        
 
         handleMovement(newX, newY);
 
