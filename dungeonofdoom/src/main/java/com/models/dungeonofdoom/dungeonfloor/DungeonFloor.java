@@ -55,7 +55,7 @@ public class DungeonFloor {
     private static final int MAX_ROOMS = 10;
 
     private List<Room> rooms;
-
+    private List<Corridor> corridors;
     //list of items on a floor
     private List<Item> items;
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
@@ -68,6 +68,7 @@ public class DungeonFloor {
 
         this.rooms = new ArrayList<>();
         this.traps = new ArrayList<>();
+        this.corridors = new ArrayList<>();
 
         this.monsterManager = monsterManager; //this is testing code.
 
@@ -323,6 +324,14 @@ public class DungeonFloor {
                 }
             }
         }
+
+        for (Corridor corridor : corridors) {
+            for (Point p : corridor.getPath()) {
+                if (!corridor.isDiscovered()) {
+                    displayMap[p.y][p.x] = ' '; // Hide the corridor
+                }
+            }
+        }
         
         return displayMap;
     }
@@ -561,6 +570,10 @@ public class DungeonFloor {
     
         ArgsForBfsCorridorsDto bfsArgs = buildArgsForDfs(doorA_x, doorA_y, doorB_x, doorB_y);
         Corridor corridor = Corridor.createCorridor(bfsArgs);
+
+        //added so we have a list of corridors so we can make hidden
+        corridors.add(corridor);
+
         corridor.draw();
     
         // Restore the door markers
@@ -572,8 +585,9 @@ public class DungeonFloor {
     //method to check walkable spaces
     //code was getting redundant so made a method to clean stuff up
     //probably will need to do this eventually for alot of places.
+    // public boolean isWalkable(int x, int y) {
     public boolean isWalkable(int x, int y) {
-        char tile = map[y][x];
+        char tile = originalMap[y][x];
         if (tile == '║' || tile == '═' || tile == '╔' || tile == '╗' || tile == '╚' || tile == '╝' || tile == ' '){
             return false;
         }
@@ -659,4 +673,20 @@ public class DungeonFloor {
             }
         }
     }
+
+    // This method updates the map when a corridor is revealed
+    public void revealCorridorAt(int x, int y) {
+        for (Corridor corridor : corridors) {
+            for (Point p : corridor.getPath()) {
+                if (p.x == x && p.y == y) {
+                    corridor.discover();
+                    map[p.y][p.x] = originalMap[p.y][p.x]; // Reveal corridor
+                    System.out.println("Corridor discovered at: (" + x + ", " + y + ")"); //test print
+                    return; 
+                }
+            }
+        }
+    }
+    
+    
 }

@@ -152,15 +152,22 @@ public class GameManager {
         
         //check if player enters the room to activate
         checkRoomEntry(newX, newY);
+        
+        if (currentDungeonFloor.isInsideRoom(newX, newY)) {
+            currentDungeonFloor.revealRoomAt(newX, newY);
+        } else {
+            currentDungeonFloor.revealCorridorAt(newX, newY);
+        }
 
         handleMovement(newX, newY);
 
-        //check added for when a player enters a room.
-        currentDungeonFloor.revealRoomAt(newX, newY);
+        
     }
 
     private void handleMovement(int newX, int newY) {
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
+
+        
         //check if we can move there and if we can clean up stuff.
         if(!currentDungeonFloor.isWalkable(newX, newY)){
             frame.updateMessage("You cant go there!");
