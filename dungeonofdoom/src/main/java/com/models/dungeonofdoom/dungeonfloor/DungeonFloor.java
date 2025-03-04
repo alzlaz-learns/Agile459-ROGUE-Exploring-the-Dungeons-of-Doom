@@ -12,7 +12,11 @@ import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
 import com.models.dungeonofdoom.Helper.Pair;
+import com.models.dungeonofdoom.Items.AmuletOfYendor;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Spawner.ItemSpawner;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -32,6 +36,9 @@ public class DungeonFloor {
     private final char[][] originalMap;
     private final int level;
     private final Random random;
+
+    private ItemSpawner itemSpawner;
+    private List<Item> items;
 
     MonsterManager monsterManager; //THIS IS TESTING CODE
     public List<Monster> monsters = new CopyOnWriteArrayList<>();
@@ -56,8 +63,7 @@ public class DungeonFloor {
 
     private List<Room> rooms;
     private List<Corridor> corridors;
-    //list of items on a floor
-    private List<Item> items;
+
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
         this.width = width;
@@ -130,6 +136,7 @@ public class DungeonFloor {
         generateTraps();
         //Spawn Monsters
         spawnMonster();
+        spawnItems();
     }
 
     private void generateRooms() {
@@ -643,11 +650,52 @@ public class DungeonFloor {
         return null; // Not inside a room
     }
 
-    //not fully implemented yet just general idea because item spawning hasnt been implemented yet.
-    //and also hidden rooms havent been implemented
-    public void revealItemLocation(Item item){
-        System.out.println("X: " + item.getX() + "Y: " +  item.getY());
+    //ITEM SPAWNER
+    private void spawnItems() {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        // Create an ItemSpawner if it doesn't exist
+        if (itemSpawner == null) {
+            itemSpawner = new ItemSpawner();
+        }
+        
+        // Spawn items
+        List<Item> spawnedItems = itemSpawner.spawnItems(validTiles, level, 10, 15);
+        
+        // Add the items to the dungeon floor
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        items.addAll(spawnedItems);
+        
+        // Mark items on the map with their specific symbols
+        for (Item item : spawnedItems) {
+            Point position = item.getPosition();
+            char itemSymbol = getItemSymbol(item);
+            map[position.y][position.x] = itemSymbol;
+            originalMap[position.y][position.x] = itemSymbol;
+        }
     }
+    
+    // Helper method to get the appropriate symbol for an item
+    private char getItemSymbol(Item item) {
+        if (item instanceof Potion) {
+            return ((Potion) item).getType().getSymbol();
+        } else if (item instanceof Armor) {
+            return ((Armor) item).getArmorType().getSymbol();
+        } else if (item instanceof AmuletOfYendor) {
+            return ','; // Or whatever symbol you want for the Amulet
+        }
+        return '%'; // Default symbol for unknown items
+    }
+    
+    // Add method to reveal item location (used by MagicDetection potion)
+    public void revealItemLocation(Item item) {
+        Point position = item.getPosition();
+        char itemSymbol = getItemSymbol(item);
+        map[position.y][position.x] = itemSymbol;
+    }
+
 
     public List<Item> getItems(){
         return items;

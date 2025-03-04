@@ -41,5 +41,14 @@ public class Potion extends Item{
         type.getEffect().applyToMonster(m);
     }
 
+    public char getSymbol() {
+        return type.getSymbol();
+    }   
 
+    public PotionEnum getType() {
+        return type;
+    }
+
+
+    
 }
