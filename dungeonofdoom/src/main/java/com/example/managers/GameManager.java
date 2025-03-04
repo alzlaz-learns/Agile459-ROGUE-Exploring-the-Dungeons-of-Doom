@@ -154,6 +154,9 @@ public class GameManager {
         checkRoomEntry(newX, newY);
 
         handleMovement(newX, newY);
+
+        //check added for when a player enters a room.
+        currentDungeonFloor.revealRoomAt(newX, newY);
     }
 
     private void handleMovement(int newX, int newY) {

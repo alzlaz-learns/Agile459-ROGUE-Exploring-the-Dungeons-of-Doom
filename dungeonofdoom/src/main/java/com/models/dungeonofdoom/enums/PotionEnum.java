@@ -11,7 +11,7 @@ public enum PotionEnum {
     GAIN_STRENGTH(new GainStrength()),
     HASTE_SELF(new Haste()),
     HEALING(new Healing()),
-    MAGIC_DETECTION,
+    MAGIC_DETECTION(new MagicDetection()),
     MONSTER_DETECTION,
     PARALYSIS,
     RAISE_LEVEL,

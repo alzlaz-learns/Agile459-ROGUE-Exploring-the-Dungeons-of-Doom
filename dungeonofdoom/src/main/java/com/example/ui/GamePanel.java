@@ -81,12 +81,12 @@ public class GamePanel extends JPanel {
         Player player = gameManager.getPlayer();
 
         // Original 
-        char[][] originalMap = currentFloor.getOriginalMap();
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[y].length; x++) {
-                map[y][x] = originalMap[y][x];
-            }
-        }
+        // char[][] originalMap = currentFloor.getOriginalMap();
+        // for (int y = 0; y < map.length; y++) {
+        //     for (int x = 0; x < map[y].length; x++) {
+        //         map[y][x] = originalMap[y][x];
+        //     }
+        // }
 
         map[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
@@ -123,6 +123,10 @@ public class GamePanel extends JPanel {
                     cell.setText(String.valueOf(c));
                 } else if (c == '░') {
                     cell.setBackground(Color.GREEN);
+                } else if (c == ' ') { // Hide undiscovered areas
+                    cell.setBackground(Color.BLACK);
+                    cell.setForeground(Color.BLACK);
+                    cell.setText(" ");
                 } else {
                     cell.setBackground(Color.BLACK);
                     cell.setForeground(Color.WHITE);

@@ -12,6 +12,7 @@ import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
 import com.models.dungeonofdoom.Helper.Pair;
+import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -55,6 +56,8 @@ public class DungeonFloor {
 
     private List<Room> rooms;
 
+    //list of items on a floor
+    private List<Item> items;
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
         this.width = width;
@@ -283,9 +286,8 @@ public class DungeonFloor {
             case 2 -> new TeleportTrap(false, this, rand);
             case 3 -> new SleepTrap(false, rand);
             case 4 -> new ArrowTrap(false, rand);
-            case 5 -> new DartTrap(false, rand); //TODO: Make sure that the functionality of DARTTRAP IS WORKING
+            case 5 -> new DartTrap(false, rand); 
             default -> new BearTrap(false, rand); 
-            // default -> new TeleportTrap(false, this, rand);
         };
     }
     
@@ -299,9 +301,32 @@ public class DungeonFloor {
         return null;
     }
 
+
     public char[][] getMap() {
-        return map;
+        char[][] displayMap = new char[height][width];
+    
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                displayMap[y][x] = map[y][x]; 
+            }
+        }
+    
+        
+        for (Room room : rooms) {
+            if (!room.isDiscovered()) { 
+                for (int row = room.y; row < room.y + room.height; row++) {
+                    for (int col = room.x; col < room.x + room.width; col++) {
+                        
+                            displayMap[row][col] = ' '; 
+                        
+                    }
+                }
+            }
+        }
+        
+        return displayMap;
     }
+    
 
     // Return the initial layout
     public char[][] getOriginalMap() {
@@ -406,29 +431,9 @@ public class DungeonFloor {
 
         // Debug print for confirmation
         System.out.println("Player spawned at: (" + spawnTile.x + ", " + spawnTile.y + ")");
+        //added to have the room that the player spawns in start revealed. 
+        revealRoomAt(player.getX(), player.getY());
     }
-
-
-    // Revised generateCorridors method that computes one door per room connection
-    // private void generateCorridors() {
-    //     if (rooms.isEmpty()) return;
-
-    //     // Sort rooms for a natural connection order.
-    //     rooms.sort((r1, r2) -> {
-    //         if (r1.x == r2.x) return Integer.compare(r1.y, r2.y);
-    //         return Integer.compare(r1.x, r2.x);
-    //     });
-
-    //     // Connect each adjacent room pair.
-    //     for (int i = 0; i < rooms.size() - 1; i++) {
-    //         Room roomA = rooms.get(i);
-    //         Room roomB = rooms.get(i + 1);
-    //         connectRooms(roomA, roomB);
-    //     }
-
-    //     // Optionally, connect any "lonely" rooms.
-    //     connectLonelyRooms();
-    // }
 
 
     // Replace or add a new corridor generation method using Kruskal's algorithm:
@@ -504,34 +509,6 @@ public class DungeonFloor {
             }
         }
     }
-
-
-
-
-    // Revised connectLonelyRooms to also use door endpoints.
-    // private void connectLonelyRooms() {
-    //     Random rand = new Random();
-    //     for (Room room : rooms) {
-    //         boolean hasDoor = false;
-    //         // Check if a door ('d') exists on or immediately outside the room perimeter.
-    //         for (int y = room.y - 1; y <= room.y + room.height; y++) {
-    //             for (int x = room.x - 1; x <= room.x + room.width; x++) {
-    //                 if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == 'd') {
-    //                     hasDoor = true;
-    //                     break;
-    //                 }
-    //             }
-    //             if (hasDoor) break;
-    //         }
-    //         if (!hasDoor) {
-    //             // Pick a random room (other than the current one) and connect.
-    //             Room target = rooms.get(rand.nextInt(rooms.size()));
-    //             if (target != room) {
-    //                 connectRooms(room, target);
-    //             }
-    //         }
-    //     }
-    // }
 
     private void connectRooms(Room roomA, Room roomB) {
         // Compute room centers
@@ -651,5 +628,35 @@ public class DungeonFloor {
         return null; // Not inside a room
     }
 
+    //not fully implemented yet just general idea because item spawning hasnt been implemented yet.
+    //and also hidden rooms havent been implemented
+    public void revealItemLocation(Item item){
+        System.out.println("X: " + item.getX() + "Y: " +  item.getY());
+    }
 
+    public List<Item> getItems(){
+        return items;
+    }
+
+    
+    public void revealRoomAt(int x, int y) {
+        // Find the room the player is in
+        if (isInsideRoom(x, y)) {
+            Room room = getRoomAt(x, y);
+            if (room != null && !room.isDiscovered()) { 
+                room.discover();
+                updateMapForRoom(room);
+                System.out.println("You have discovered a hidden room!");
+            }
+        }
+    }
+    
+    // This method updates the map when a room is revealed
+    private void updateMapForRoom(Room room) {
+        for (int row = room.y + 1; row < room.y + room.height - 1; row++) {
+            for (int col = room.x + 1; col < room.x + room.width - 1; col++) {
+                map[row][col] = originalMap[row][col]; // Restore room tiles from originalMap
+            }
+        }
+    }
 }
