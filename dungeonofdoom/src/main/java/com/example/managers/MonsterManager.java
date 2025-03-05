@@ -89,7 +89,10 @@ public class MonsterManager {
                 monstersToRemove.add(monster);
                 continue;
             }
-            
+            if(monster.getHoldStatus()){
+                continue;
+            }
+
             if (!monster.isActive()) {
                 continue;
             }
@@ -115,6 +118,9 @@ public class MonsterManager {
        
         List<Point> output = BFSMonsterPath.findPath(monster, player, floor);
         int moveMultiplier = monster.isHasted() ? 2 : 1; // Move twice if hasted
+        if (monster.getHoldStatus()) {
+            return; 
+        }
 
         if(monster.isConfused()){
             confusedMovement(moveMultiplier, monster, floor);

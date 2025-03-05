@@ -45,6 +45,10 @@ public class Armor extends Item {
         return isCursed;
     }
 
+    public void removeCurse(){
+        this.isCursed = false;
+    }
+
     public void curseArmor(){
         this.isCursed = true;
         System.out.println("The armor is now cursed. You feel rotten.");

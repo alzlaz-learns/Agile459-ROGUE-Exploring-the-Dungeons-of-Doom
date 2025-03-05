@@ -3,7 +3,8 @@ package com.models;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.player.uday.PlayerPackPlayground;
 
 import lombok.Data;
@@ -37,6 +38,11 @@ public class Player {
     private int hasteTimer;
     private int faintTimer;
     private int revealTimer = 0;
+
+    private Item leftRing;
+    private Item rightRing;
+    private Armor bodyArmor;
+    private Item weapon;
 
     // Constructor
     public Player(String name) {
@@ -229,7 +235,9 @@ public class Player {
         this.maxStrength += 1;
     }
 
-    
+    public int getArmorClass(){
+        return bodyArmor != null ? bodyArmor.getArmorClass() : armor;
+    }
 
     public int calculateStrengthWithItems(){
         return 0;
@@ -298,5 +306,9 @@ public class Player {
         if(isRevealed()){
             this.revealTimer --;
         }
+    }
+
+    public Armor getEquippedArmor(){
+        return this.bodyArmor;
     }
 }

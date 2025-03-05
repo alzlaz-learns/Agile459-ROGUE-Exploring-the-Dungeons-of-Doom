@@ -39,6 +39,9 @@ public abstract class Monster {
     private int level;
     private int confusedTimer = 0;
 
+    //scroll effects
+    private boolean hold = false;
+
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
         this.type = type;
@@ -272,5 +275,17 @@ public abstract class Monster {
 
     public void discover() {
         discovered = true;
+    }
+
+    public void applyHold(){
+        this.hold = true;
+    }
+
+    public void removeHold(){
+        this.hold = false;
+    }
+
+    public boolean getHoldStatus(){
+        return this.hold;
     }
 }
