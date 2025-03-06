@@ -41,6 +41,8 @@ public class TeleportTrap extends AbstractTrap{
 
         System.out.println("Teleporting to: " + newTile.x + "," + newTile.y);
         player.moveTo(newTile.x, newTile.y);
+        df.revealRoomAt(newTile.x, newTile.y);
+        df.revealCorridorAt(newTile.x, newTile.y);
     }
 
 

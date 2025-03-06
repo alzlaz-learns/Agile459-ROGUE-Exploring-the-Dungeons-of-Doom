@@ -165,12 +165,17 @@ public class GameManager {
                     // MonsterDetection.effect(player);
 
 
-                    System.out.println("revealing monsters");
-                    Item MonsterDetection = new Scroll(ScrollEnum.MAGIC_MAPPING);
-                    MonsterDetection.effect(player, currentDungeonFloor);
+                    // System.out.println("revealing monsters");
+                    // Item MonsterDetection = new Scroll(ScrollEnum.MAGIC_MAPPING);
+                    // MonsterDetection.effect(player, currentDungeonFloor);
+
+                    Item TeleportationScroll = new Scroll(ScrollEnum.TELEPORTATION);
+                    TeleportationScroll.effect(player, currentDungeonFloor);
+                    handleMovement(player.getX(), player.getY());
                     break;
                 default:
                     return;
+                    
             }
         }
         
@@ -185,10 +190,10 @@ public class GameManager {
         }
 
         
-
+        System.out.println("X: " + player.getX()+ " Y: " +player.getY());
         handleMovement(newX, newY);
 
-        
+        frame.updateGameScreen();
     }
 
     private void handleMovement(int newX, int newY) {
@@ -209,6 +214,7 @@ public class GameManager {
             // Reset healing counter after combat
             HealingManager.resetNonCombatCounter();
         } else {
+            System.out.println("is walkable");
             // Move player only if the tile is walkable
             player.moveTo(newX, newY);
             checkTrap(newX, newY);
