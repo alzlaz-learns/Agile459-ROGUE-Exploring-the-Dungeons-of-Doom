@@ -363,6 +363,40 @@ public class DungeonFloor {
         return stairY;
     }
 
+    public void spawnSingleMonster() {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            System.out.println("No valid tiles available to spawn a monster.");
+            return;
+        }
+    
+        List<MonsterEnum> validMonsters = new ArrayList<>();
+        for (MonsterEnum monsterType : MonsterEnum.values()) {
+            if (isValidMonsterForFloor(monsterType)) {
+                validMonsters.add(monsterType);
+            }
+        }
+
+        if (validMonsters.isEmpty()) {
+            return;
+        }
+    
+
+        Point spawnTile = validTiles.get(random.nextInt(validTiles.size()));
+    
+
+        MonsterEnum randomMonster = validMonsters.get(random.nextInt(validMonsters.size()));
+        Monster monster = monsterManager.monsterFactory(randomMonster);
+        monster.setPosition(spawnTile.x, spawnTile.y);
+    
+        monsters.add(monster);
+    
+        map[spawnTile.y][spawnTile.x] = monster.getSymbol();
+    
+        System.out.println("A monster has spawned at (" + spawnTile.x + ", " + spawnTile.y + ")");
+    }
+    
 
     public void spawnMonster(){
         List<Point> validTiles = getValidRoomTiles();
