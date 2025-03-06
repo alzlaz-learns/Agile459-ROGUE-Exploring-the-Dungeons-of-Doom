@@ -18,7 +18,7 @@ public enum ScrollEnum {
     REMOVE_CURSE(' '),
     ENCHANT_WEAPON(' '),
     SCARE_MONSTER(' '),
-    NOTHING(' '),
+    NOTHING(' ', new NoEffect()),
     VORPRAL_ENCHANT(' '),
     ;
 

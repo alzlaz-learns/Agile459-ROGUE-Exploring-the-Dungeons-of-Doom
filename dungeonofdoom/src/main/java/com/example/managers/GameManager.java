@@ -171,8 +171,9 @@ public class GameManager {
 
                     Item TeleportationScroll = new Scroll(ScrollEnum.TELEPORTATION);
                     TeleportationScroll.effect(player, currentDungeonFloor);
-                    handleMovement(player.getX(), player.getY());
-                    break;
+                    // handleMovement(player.getX(), player.getY());
+                    return;
+                    // break;
                 default:
                     return;
                     
