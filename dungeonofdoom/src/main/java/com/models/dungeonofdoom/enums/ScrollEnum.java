@@ -12,7 +12,7 @@ public enum ScrollEnum {
     SLEEP(' '),
     CREATE_MONSTER(' '),
     IDENTIFY(' '),
-    MAGIC_MAPPING(' '),
+    MAGIC_MAPPING(' ', new MagicMapping()),
     FOOD_DETECTION(' '),
     TELEPORTATION(' '),
     REMOVE_CURSE(' '),
@@ -37,5 +37,9 @@ public enum ScrollEnum {
 
     public ItemEffect getEffect() {
         return effect;
+    }
+
+    public char getSymbol() {
+        return symbol;
     }
 }

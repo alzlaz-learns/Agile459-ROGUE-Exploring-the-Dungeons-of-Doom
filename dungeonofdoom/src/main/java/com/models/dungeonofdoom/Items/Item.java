@@ -3,6 +3,7 @@ package com.models.dungeonofdoom.Items;
 import lombok.Data;
 import java.awt.Point;
 import com.models.Player;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 @Data
@@ -20,5 +21,9 @@ public abstract class Item {
 
     public abstract void effect(Player p);
     public abstract void effect(Monster m);
+
+    public void effect(Player p, DungeonFloor df){
+        
+    }
 
 }

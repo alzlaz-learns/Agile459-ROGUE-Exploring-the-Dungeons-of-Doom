@@ -9,9 +9,11 @@ import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.PotionEnum;
+import com.models.dungeonofdoom.enums.ScrollEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -158,9 +160,14 @@ public class GameManager {
                     break;
                 case KeyEvent.VK_1:
                     //test case for MonsterDetection potion
+                    // System.out.println("revealing monsters");
+                    // Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
+                    // MonsterDetection.effect(player);
+
+
                     System.out.println("revealing monsters");
-                    Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
-                    MonsterDetection.effect(player);
+                    Item MonsterDetection = new Scroll(ScrollEnum.MAGIC_MAPPING);
+                    MonsterDetection.effect(player, currentDungeonFloor);
                     break;
                 default:
                     return;

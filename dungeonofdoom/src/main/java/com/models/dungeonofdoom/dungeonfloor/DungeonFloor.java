@@ -747,6 +747,17 @@ public class DungeonFloor {
             }
         }
     }
+
+    public void revealMap(){
+        for(Room r: rooms){
+            r.discover();
+            updateMapForRoom(r);
+        }
+        for(Corridor c: corridors){
+            c.discover();
+            
+        }
+    }
     
     // This method updates the map when a room is revealed
     private void updateMapForRoom(Room room) {
