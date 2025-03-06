@@ -2,7 +2,7 @@ package com.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.awt.Point;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.player.uday.PlayerPackPlayground;
@@ -147,6 +147,11 @@ public class Player {
 
     public int getHealth() {
         return currentHealth;
+    }
+
+    public Point getPosition(){
+        Point position = new Point(x, y);
+        return position;
     }
 
 
