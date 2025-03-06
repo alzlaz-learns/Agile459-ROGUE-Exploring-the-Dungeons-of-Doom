@@ -20,6 +20,7 @@ public enum ScrollEnum {
     SCARE_MONSTER(' '),
     NOTHING(' ', new NoEffect()),
     VORPRAL_ENCHANT(' '),
+    AGGRAVATE_MONSTER(' ', new AggravateMonster())
     ;
 
     private final ItemEffect effect;

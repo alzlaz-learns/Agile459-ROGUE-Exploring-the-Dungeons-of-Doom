@@ -169,10 +169,10 @@ public class GameManager {
                     // Item MonsterDetection = new Scroll(ScrollEnum.MAGIC_MAPPING);
                     // MonsterDetection.effect(player, currentDungeonFloor);
 
-                    Item TeleportationScroll = new Scroll(ScrollEnum.TELEPORTATION);
+                    Item TeleportationScroll = new Scroll(ScrollEnum.AGGRAVATE_MONSTER);
                     TeleportationScroll.effect(player, currentDungeonFloor);
                     // handleMovement(player.getX(), player.getY());
-                    return;
+                    
                     // break;
                 default:
                     return;
