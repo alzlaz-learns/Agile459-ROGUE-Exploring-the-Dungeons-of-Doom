@@ -43,7 +43,7 @@ public class ItemSpawner {
             Item item = createRandomItem(level);
             item.setPosition(tile);
             spawnedItems.add(item);
-            System.out.println("Item placed at: (" + tile.x + ", " + tile.y + ")");
+            // System.out.println("Item placed at: (" + tile.x + ", " + tile.y + ")");
         }
 
         return spawnedItems;

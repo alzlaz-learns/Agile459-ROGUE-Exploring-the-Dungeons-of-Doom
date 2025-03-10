@@ -6,33 +6,36 @@ import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Scroll.*;
 
 public enum ScrollEnum {
-    CONFUSE_MONSTER(' ', new ConfusionScroll()),
-    ENCHANT_ARMOR(' ', new EnchantArmor()),
-    HOLD_MONSTER(' ', new HoldMonster()),
-    SLEEP(' ', new SleepScroll()),
-    CREATE_MONSTER(' ', new CreateMonster()),
-    IDENTIFY(' '),
-    MAGIC_MAPPING(' ', new MagicMapping()),
-    FOOD_DETECTION(' '),
-    TELEPORTATION(' ', new TeleportationScroll()),
-    REMOVE_CURSE(' '),
-    ENCHANT_WEAPON(' '),
-    SCARE_MONSTER(' '),
-    NOTHING(' ', new NoEffect()),
-    VORPRAL_ENCHANT(' '),
-    AGGRAVATE_MONSTER(' ', new AggravateMonster())
+    CONFUSE_MONSTER(' ', "Scroll of Confusion",new ConfusionScroll()),
+    ENCHANT_ARMOR(' ',  "Scroll of Enchant Armor",new EnchantArmor()),
+    HOLD_MONSTER(' ', "Scroll of Hold Monster",new HoldMonster()),
+    SLEEP(' ', "Scroll of Sleep",new SleepScroll()),
+    CREATE_MONSTER(' ', "Scroll of Create Monster",new CreateMonster()),
+    IDENTIFY(' ',"Scroll of Identify", new NoEffect()),
+    MAGIC_MAPPING(' ',  "Scroll of Magic Mapping",new MagicMapping()),
+    FOOD_DETECTION(' ', "Scroll of Food Detection", new NoEffect()),
+    TELEPORTATION(' ', "Scroll of Teleportation", new TeleportationScroll()),
+    REMOVE_CURSE(' ', "Scroll of Remove Curse", new NoEffect()),
+    ENCHANT_WEAPON(' ', "Scroll of Enchant Weapon", new NoEffect()),
+    SCARE_MONSTER(' ', "Scroll of Scare Monster", new NoEffect()),
+    NOTHING(' ', "Scroll of Nothing", new NoEffect()),
+    VORPRAL_ENCHANT(' ', "Scroll of Vorpral Enchant", new NoEffect()),
+    AGGRAVATE_MONSTER(' ', "Scroll of Aggravate Monster", new AggravateMonster());
     ;
 
     private final ItemEffect effect;
     private final char symbol;
+    private final String name;
 
-    ScrollEnum(char symbol, ItemEffect effect){
+    ScrollEnum(char symbol,String name, ItemEffect effect){
         this.symbol = symbol;
         this.effect = effect;
+        this.name = name;
     }
 
-    ScrollEnum(char symbol){
-        this.symbol = symbol;
+    ScrollEnum(){
+        this.symbol = ' ';
+        this.name = "No effect";
         this.effect = new NoEffect(); 
     }
 
@@ -43,4 +46,9 @@ public enum ScrollEnum {
     public char getSymbol() {
         return symbol;
     }
+    public String getName(){
+        return this.name;
+    }
+
+    
 }

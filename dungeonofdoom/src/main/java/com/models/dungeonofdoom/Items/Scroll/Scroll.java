@@ -49,4 +49,5 @@ public class Scroll extends Item{
     public ScrollEnum getType() {
         return type;
     }
+
 }

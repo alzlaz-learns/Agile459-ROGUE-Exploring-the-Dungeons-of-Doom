@@ -90,6 +90,15 @@ public class DungeonFloor {
         return null; 
     }
 
+    public void removeItem(Item item) {
+        if(items.contains(item)){
+            items.remove(item);
+            // Get the original tile from originalMap instead of assuming it's a floor
+            char originalTile = originalMap[(int)item.getPosition().getY()][(int)item.getPosition().getX()];
+            map[(int)item.getPosition().getY()][(int)item.getPosition().getX()] = originalTile;
+        }
+    }
+
     public void removeMonster(Monster monster) {
         if(monsters.contains(monster)){
             monsters.remove(monster);
@@ -309,6 +318,16 @@ public class DungeonFloor {
         return null;
     }
 
+    public Item getItemAt(int x, int y){
+        for(Item item: items){
+            if(item.getPosition().getX() == x && item.getPosition().getY() == y){
+
+                return item;
+            }
+        }
+        return null;
+    }
+
 
     public char[][] getMap() {
         char[][] displayMap = new char[height][width];
@@ -437,7 +456,7 @@ public class DungeonFloor {
             monsters.add(monster);
             
             // Update the map
-            map[tile.y][tile.x] = monster.getSymbol();
+            // map[tile.y][tile.x] = monster.getSymbol();
         }
     }
 
@@ -703,12 +722,13 @@ public class DungeonFloor {
         items.addAll(spawnedItems);
         
         // Mark items on the map with their specific symbols
-        for (Item item : spawnedItems) {
-            Point position = item.getPosition();
-            char itemSymbol = getItemSymbol(item);
-            map[position.y][position.x] = itemSymbol;
-            originalMap[position.y][position.x] = itemSymbol;
-        }
+        //unnecessary this was redundant made it harder to handle the displaying moved to gamepanel ui.
+        // for (Item item : spawnedItems) {
+        //     Point position = item.getPosition();
+        //     char itemSymbol = getItemSymbol(item);
+        //     // map[position.y][position.x] = itemSymbol;
+        //     // originalMap[position.y][position.x] = itemSymbol;
+        // }
     }
     
     // Helper method to get the appropriate symbol for an item
@@ -743,7 +763,7 @@ public class DungeonFloor {
             if (room != null && !room.isDiscovered()) { 
                 room.discover();
                 updateMapForRoom(room);
-                System.out.println("You have discovered a hidden room!");
+                
             }
         }
     }

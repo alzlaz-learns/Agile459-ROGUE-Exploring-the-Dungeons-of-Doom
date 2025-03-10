@@ -21,7 +21,7 @@ public class ArrowTrap extends AbstractTrap{
     public String trigger(Player player) {
         this.reveal();
         int hit = rand.nextInt(2); 
-
+        
         if(hit == 1){ 
             int damage = rand.nextInt(6) + 1; // 1d6 damage
 

@@ -24,7 +24,7 @@ public class Pack {
             Item item = pack.get(i);
             // The display name might come from item.getDisplayName() or item.toString() 
             
-            
+            System.out.print(item.getItemName());
         }
         
         return itemDescriptions;

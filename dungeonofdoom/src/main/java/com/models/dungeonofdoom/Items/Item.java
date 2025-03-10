@@ -11,6 +11,7 @@ public abstract class Item {
     private boolean identified;
     private String description; //potion (colors), staves & wands (materials), rings (stone)
     private Point position;
+    private boolean discovered;
     
     public Item(){
         this.identified = false;
@@ -25,5 +26,9 @@ public abstract class Item {
     public void effect(Player p, DungeonFloor df){
         
     }
+
+    public abstract String getItemName();
+
+    public abstract char getSymbol();
 
 }

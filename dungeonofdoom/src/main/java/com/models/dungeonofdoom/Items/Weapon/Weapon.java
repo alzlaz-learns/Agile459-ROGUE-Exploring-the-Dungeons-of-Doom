@@ -30,4 +30,5 @@ public class Weapon extends Item{
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
 
+
 }

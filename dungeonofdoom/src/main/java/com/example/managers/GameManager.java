@@ -191,7 +191,7 @@ public class GameManager {
         }
 
         
-        System.out.println("X: " + player.getX()+ " Y: " +player.getY());
+        // System.out.println("X: " + player.getX()+ " Y: " +player.getY());
         handleMovement(newX, newY);
 
         frame.updateGameScreen();
@@ -215,10 +215,11 @@ public class GameManager {
             // Reset healing counter after combat
             HealingManager.resetNonCombatCounter();
         } else {
-            System.out.println("is walkable");
+            // System.out.println("is walkable");
             // Move player only if the tile is walkable
             player.moveTo(newX, newY);
             checkTrap(newX, newY);
+            checkItem(newX, newY);
             // Process healing for non-combat turn
             HealingManager.processHealing(player, false, frame);
         }
@@ -236,6 +237,18 @@ public class GameManager {
         }
     }
 
+    private void checkItem(int x, int y){
+        Item item = dungeonFloors.get(currentFloor).getItemAt(x, y);
+        if(item != null){
+            dungeonFloors.get(currentFloor).removeItem(item);
+            player.addItem(item);
+            player.printPack();
+            // System.out.println(player.getPack());
+        }
+        
+    }
+
+    
 
     //logic to handle trapLogic based off of JFramePlayGround
     //separated trap stuff from it
@@ -248,11 +261,13 @@ public class GameManager {
             switch (trap.getEffect()) {
                 case FALL -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                     //take player to lower floor
                     changeFloor(true); 
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                 } 
                 case TELEPORT -> {
                     frame.updateMessage(trapMessage);
@@ -268,10 +283,12 @@ public class GameManager {
                 }
             }
             
+            frame.updateGameScreen();
             return;
         }
     }
 
+    
 
     public void changeFloor(boolean goingDown) {
         if (goingDown && currentFloor < dungeonFloors.size() - 1) {

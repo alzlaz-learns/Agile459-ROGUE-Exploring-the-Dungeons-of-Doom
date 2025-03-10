@@ -28,5 +28,6 @@ public class AmuletOfYendor extends Item{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
-    
+
+
 }

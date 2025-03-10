@@ -30,4 +30,5 @@ public class Stick extends Item{
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
 
+
 }

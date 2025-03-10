@@ -82,5 +82,14 @@ public class Armor extends Item {
         // you would set it here
         m.setAmr(this.getArmorClass());
     }
+    
+    @Override
+    public String getItemName(){
+        return this.armorType.getName();
+    }
 
+    @Override
+    public char getSymbol() {
+       return this.armorType.getSymbol();
+    }
 }
