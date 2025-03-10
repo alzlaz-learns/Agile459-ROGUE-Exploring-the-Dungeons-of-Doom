@@ -50,4 +50,10 @@ public class Scroll extends Item{
         return type;
     }
 
+    @Override
+    public String getItemName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemName'");
+    }
+
 }
