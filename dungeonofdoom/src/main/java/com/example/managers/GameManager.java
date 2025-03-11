@@ -42,6 +42,7 @@ public class GameManager {
         // Place player on the first floor
         dungeonFloors.get(currentFloor).placePlayer(player);
         dungeonFloors.get(currentFloor).discoverMonsterInRoom(player.getX(), player.getY());
+        dungeonFloors.get(currentFloor).discoverItemsInRoom(player.getX(), player.getY());
     }   
 
     //logic to handle player movement based off of JFramePlayGround
@@ -186,6 +187,7 @@ public class GameManager {
         if (currentDungeonFloor.isInsideRoom(newX, newY)) {
             currentDungeonFloor.revealRoomAt(newX, newY);
             currentDungeonFloor.discoverMonsterInRoom(newX, newY);
+            currentDungeonFloor.discoverItemsInRoom(newX, newY);
         } else {
             currentDungeonFloor.revealCorridorAt(newX, newY);
         }

@@ -98,9 +98,12 @@ public class GamePanel extends JPanel {
         }
 
         //spawning display items 
-        // for(Item item: currentFloor.getItems()){
-        //     map[(int)item.getPosition().getY()][(int)item.getPosition().getX()] = item.getSymbol();
-        // }
+        for(Item item: currentFloor.getItems()){
+            if(item.isDiscovered()){
+                map[(int)item.getPosition().getY()][(int)item.getPosition().getX()] = item.getSymbol();
+            }
+            
+        }
 
         //DRAWING MONSTERS ON THE MAP.
         for (Monster m: currentFloor.getMonsters()){

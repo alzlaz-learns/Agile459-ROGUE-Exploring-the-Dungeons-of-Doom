@@ -15,6 +15,7 @@ public abstract class Item {
     
     public Item(){
         this.identified = false;
+        this.discovered = false;
     }
 
     public abstract void message(Player p);
@@ -25,6 +26,10 @@ public abstract class Item {
 
     public void effect(Player p, DungeonFloor df){
         
+    }
+
+    public void discover(){
+        this.discovered = true;
     }
 
     public abstract String getItemName();

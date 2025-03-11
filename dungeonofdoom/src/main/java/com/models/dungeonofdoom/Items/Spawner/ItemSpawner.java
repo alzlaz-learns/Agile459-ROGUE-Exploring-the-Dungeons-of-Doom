@@ -9,8 +9,10 @@ import com.models.dungeonofdoom.Items.AmuletOfYendor;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.enums.ArmorEnum;
 import com.models.dungeonofdoom.enums.PotionEnum;
+import com.models.dungeonofdoom.enums.ScrollEnum;
 
 public class ItemSpawner {
     private Random random;
@@ -61,8 +63,15 @@ public class ItemSpawner {
         return switch(itemType){
             case 0 -> createPotion();
             case 1 -> createArmor();
+            case 2 -> createScroll();
             default -> createPotion();
         };
+    }
+
+    private Scroll createScroll(){
+        ScrollEnum[] scrolls = ScrollEnum.values();
+        ScrollEnum scrolltype = scrolls[random.nextInt(scrolls.length)];
+        return new Scroll(scrolltype);
     }
 
     private Potion createPotion(){

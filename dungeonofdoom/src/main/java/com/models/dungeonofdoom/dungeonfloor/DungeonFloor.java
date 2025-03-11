@@ -799,6 +799,20 @@ public class DungeonFloor {
             }
         }
     }
+
+    public void discoverItemsInRoom(int x, int y){
+        Room room = getRoomAt(x, y);
+        if (room == null){
+            return;
+        }
+        for(Item i: items){
+            if(room.contains((int)i.getPosition().getX(), (int)i.getPosition().getY())){
+                i.discover();
+
+
+            }
+        }
+    }
     
     public void discoverMonsterInRoom(int x, int y){
         Room room = getRoomAt(x, y);
@@ -810,8 +824,8 @@ public class DungeonFloor {
             if(room.contains(m.getX(), m.getY())){
                 m.discover();
                 
-                map[m.getY()][m.getX()] = m.getSymbol();
-                map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+                // map[m.getY()][m.getX()] = m.getSymbol();
+                // map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
             }
         }
     }
