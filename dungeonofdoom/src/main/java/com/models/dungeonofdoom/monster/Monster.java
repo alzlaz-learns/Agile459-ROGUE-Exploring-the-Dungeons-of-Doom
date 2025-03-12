@@ -287,6 +287,7 @@ public abstract class Monster {
     public void decrementSlow(){
         if(isSlowed()){
             this.slowTimer--;
+        }
     }
     
     public boolean isDiscovered(){

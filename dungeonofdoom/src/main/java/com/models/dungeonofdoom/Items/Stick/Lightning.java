@@ -114,8 +114,6 @@ public class Lightning implements ItemEffect {
             }
         }
             
-            
-        }
         
         // 80% chance nothing happens (just continues bouncing)
         remainingBounces--;

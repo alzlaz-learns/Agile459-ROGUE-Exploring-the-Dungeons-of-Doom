@@ -145,7 +145,6 @@ public class Player {
             if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.STRIKING) {
                 Striking strikingEffect = new Striking(random);
                 baseDamage += strikingEffect.rollStrikingHit();
-            else if (item instanceof Stick && )
             } else if (item instanceof Weapon) {
                 Weapon weapon = (Weapon) item;
                 baseDamage += weapon.getDamageWielded();
