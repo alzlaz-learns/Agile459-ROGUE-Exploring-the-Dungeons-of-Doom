@@ -4,26 +4,30 @@ import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class ThirstQuenching implements ItemEffect{
+public class RaiseLevel implements ItemEffect{
 
     @Override
     public void applyToPlayer(Player player) {
-        
+        player.increaseLvl();
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        
+        monster.increaseLvl();
+        monster.setMaxHpt(monster.getMaxHpt() + 8);
+        monster.setCurrentHpt(monster.getHpt() + 8);
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        return "This potion tastes extremely dull ";
+       
+        return "You suddenly feel much more skilful";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        return "";
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
     }
 
 }

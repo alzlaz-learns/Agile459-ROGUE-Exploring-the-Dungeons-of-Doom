@@ -89,7 +89,10 @@ public class MonsterManager {
                 monstersToRemove.add(monster);
                 continue;
             }
-            
+            if(monster.getHoldStatus()){
+                continue;
+            }
+
             if (!monster.isActive()) {
                 continue;
             }
@@ -115,6 +118,15 @@ public class MonsterManager {
        
         List<Point> output = BFSMonsterPath.findPath(monster, player, floor);
         int moveMultiplier = monster.isHasted() ? 2 : 1; // Move twice if hasted
+        if (monster.getHoldStatus()) {
+            return; 
+        }
+
+        if(monster.isConfused()){
+            confusedMovement(moveMultiplier, monster, floor);
+            monster.decrementConfused();
+            return;
+        }
 
         if(monster.isBlind()){
             //cant tell what monster does when blind so will do nothing
@@ -127,7 +139,31 @@ public class MonsterManager {
         for (int i = 1; i <= moveMultiplier && i < output.size(); i++) {
             Point move = output.get(i);
             if (!floor.monsterOccupies(move.x, move.y)) {
-                monster.setPosition(move.x, move.y);
+                monster.setPosition(move.x , move.y);
+            }
+        }
+    }
+
+    private void confusedMovement(int moveMultiplier, Monster monster, DungeonFloor floor){
+        for (int i = 0; i < moveMultiplier; i++) {
+            int randomDirection = rand.nextInt(4); 
+
+            int newX = monster.getX();
+            int newY = monster.getY();
+
+            char[][] map = floor.getMap();
+            int rows = map.length;
+            int cols = map[0].length;
+
+            switch (randomDirection) {
+                case 0: if (newY > 0) newY--; break; 
+                case 1: if (newY < rows - 1) newY++; break; 
+                case 2: if (newX > 0) newX--; break; 
+                case 3: if (newX < cols - 1) newX++; break; 
+            }
+
+            if (floor.isWalkable(newX, newY) && !floor.monsterOccupies(newX, newY)) {
+                monster.setPosition(newX, newY);
             }
         }
     }

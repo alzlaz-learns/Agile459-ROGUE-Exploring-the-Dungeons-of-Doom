@@ -5,14 +5,14 @@ import com.models.dungeonofdoom.enums.TrapEffectEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 
 public abstract class AbstractTrap {
-    private boolean hidden;
+    private boolean discovered;
     private int x;
     private int y;
     protected final TrapTypeEnum trapType;
 
     //TODO: TrapTypeEnumPlayground to be changed when appropriate class is created from enum and after some testing.
     public AbstractTrap(boolean hidden, TrapTypeEnum trapType) {
-        this.hidden = hidden;
+        this.discovered = hidden;
         this.trapType = trapType;
     }
 
@@ -30,12 +30,12 @@ public abstract class AbstractTrap {
 
     public abstract String trigger(Player player);
 
-    public boolean isHidden() {
-        return hidden;
+    public boolean isDiscovered() {
+        return discovered;
     }
 
     public void reveal() {
-        this.hidden = false;
+        this.discovered = true;
     }
 
     public int getX() {

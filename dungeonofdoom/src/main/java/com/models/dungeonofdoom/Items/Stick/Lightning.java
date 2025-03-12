@@ -1,38 +1,31 @@
-package com.models.dungeonofdoom.Items.Potion;
+package com.models.dungeonofdoom.Items.Stick;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class GainStrength implements ItemEffect{
+public class Lightning implements ItemEffect {
 
     @Override
     public void applyToPlayer(Player player) {
-        int res = player.getStrength() + 1;
-        
-        if(res > player.getMaxStrength()){
-            player.adjustMaxStrength();
-            player.adjustStrength(1);
-        }else{
-            player.adjustStrength(1);
-        }
+
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
     }
 
     @Override
     public String messageStringPlayer(Player player) {
         // TODO Auto-generated method stub
-        return "You feel stronger. What bulging muscles!";
+        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // never should be called
-        return "";
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
     }
-
 }

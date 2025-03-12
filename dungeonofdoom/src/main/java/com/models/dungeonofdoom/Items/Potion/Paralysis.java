@@ -1,28 +1,26 @@
-package com.models.dungeonofdoom.enums;
+package com.models.dungeonofdoom.Items.Potion;
 
 import java.util.Random;
 
 import com.models.Player;
-import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.ItemEffect;
-import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class MonsterDetection implements ItemEffect{
-    private final Random random;
+public class Paralysis implements ItemEffect{
 
-    public MonsterDetection(){
-        this.random = new Random();
+    private final Random random;
+    
+    public Paralysis(Random random) {
+        this.random = random;
     }
 
-    public MonsterDetection(Random random){
-        this.random = random;
+    public Paralysis() {
+        this.random = new Random();
     }
     @Override
     public void applyToPlayer(Player player) {
-        // TODO Auto-generated method stub
-        int duration = random.nextInt(8) + 1 + 20; // 1d8 + 20 turns
-        player.reveal(duration);
+        int duration = random.nextInt(4) + 1;
+        player.setImmobile(duration);
     }
 
     @Override
@@ -33,11 +31,13 @@ public class MonsterDetection implements ItemEffect{
 
     @Override
     public String messageStringPlayer(Player player) {
-        return "You sense the presence of monsters!";
+        return "You can’t move";    
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        return ""; 
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
     }
+
 }

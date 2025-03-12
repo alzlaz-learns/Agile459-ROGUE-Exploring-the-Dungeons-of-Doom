@@ -1,36 +1,40 @@
 package com.models.dungeonofdoom.enums;
 
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Potion.*;
 
 
 public enum PotionEnum {
     
-    BLINDNESS('¡',new Blindness()),
-    CONFUSION('?',new Confusion()),
-    EXTRA_HEALING('┴',new ExtraHealing()),
-    GAIN_STRENGTH('┼',new GainStrength()),
-    HASTE_SELF('±',null),
-    HEALING('+',null),
-    MAGIC_DETECTION('ƒ',null),
-    MONSTER_DETECTION('Ÿ',null),
-    PARALYSIS('÷',null),
-    RAISE_LEVEL('¥',null),
-    RESTORE_STRENGTH('§',null),
-    SEE_INVISIBLE('©',null),
-    THIRST_QUENCHING('~',null),
-    OTHER_POTION('┐',null)
+    BLINDNESS('¡',"Potion of Blindness",new Blindness()),
+    CONFUSION('?',"Potion of Confusion",new Confusion()),
+    EXTRA_HEALING('┴',"Potion of Extra Healing",new ExtraHealing()),
+    GAIN_STRENGTH('┼',"Potion of Gain Strength",new GainStrength()),
+    HASTE_SELF('±',"Potion of Haste",new Haste()),
+    HEALING('+',"Potion of Healing",new Healing()),
+    MAGIC_DETECTION('ƒ',"Potion of Magic Detection",new MagicDetection()),
+    MONSTER_DETECTION('Ÿ',"Potion of Monster Detection",new MonsterDetection()),
+    PARALYSIS('÷',"Potion of Paralysis",new Paralysis()),
+    RAISE_LEVEL('¥',"Potion of Raise Level",new RaiseLevel()),
+    RESTORE_STRENGTH('§',"Potion of Restore Strength",null),
+    SEE_INVISIBLE('©',"Potion of See Invisible",null),
+    THIRST_QUENCHING('~',"Potion of Thirst Quenching",new ThirstQuenching()),
+    OTHER_POTION('┐',"Potion of Mystery",new OtherPotion())
     ;
 
+    private final ItemEffect effect;
     private final char symbol;
-    private final PotionEffect effect;
+    private final String name;
 
-    PotionEnum(char symbol, PotionEffect effect) {
+    PotionEnum( char symbol, String name, ItemEffect effect) {
         this.symbol = symbol;
         this.effect = effect;
+        this.name = name;
     }
     
-    PotionEnum(char symbol) {
-        this.symbol = symbol;
+    PotionEnum() {
+        this.symbol = '0';
+        this.name = "No effect";
         this.effect = new NoEffect(); 
     }
 
@@ -38,7 +42,11 @@ public enum PotionEnum {
         return symbol;
     }
 
-    public PotionEffect getEffect() {
+    public ItemEffect getEffect() {
         return effect;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }

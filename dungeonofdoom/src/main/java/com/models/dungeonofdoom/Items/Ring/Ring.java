@@ -30,4 +30,16 @@ public class Ring extends Item{
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
 
+    @Override
+    public String getItemName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemName'");
+    }
+
+    @Override
+    public char getSymbol() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSymbol'");
+    }
+
 }

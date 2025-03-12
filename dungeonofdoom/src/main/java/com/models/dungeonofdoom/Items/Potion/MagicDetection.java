@@ -4,10 +4,11 @@ import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class MagicDetection implements PotionEffect{
+public class MagicDetection implements ItemEffect{
     private final Random random;
 
     public MagicDetection(){

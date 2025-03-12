@@ -6,6 +6,7 @@ import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class TeleportAway implements ItemEffect {
+
     private DungeonFloor dungeonFloor;
 
     public TeleportAway(DungeonFloor dungeonFloor) {
@@ -14,7 +15,6 @@ public class TeleportAway implements ItemEffect {
 
     @Override
     public void applyToPlayer(Player player) {
-        // do nothing 
     }
 
     @Override
@@ -30,5 +30,6 @@ public class TeleportAway implements ItemEffect {
     @Override
     public String messageStringMonster(Monster monster) {
         return "The " + monster.getName() + " has been teleported away!";
+
     }
 }

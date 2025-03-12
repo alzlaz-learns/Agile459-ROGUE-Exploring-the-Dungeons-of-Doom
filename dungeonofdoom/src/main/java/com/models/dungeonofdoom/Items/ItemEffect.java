@@ -1,10 +1,10 @@
-package com.models.dungeonofdoom.Items.Potion;
+package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public interface PotionEffect {
+public interface ItemEffect {
     void applyToPlayer(Player player);
     void applyToMonster(Monster monster);
     String messageStringPlayer(Player player);

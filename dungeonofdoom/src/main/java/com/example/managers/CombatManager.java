@@ -76,6 +76,10 @@ public class CombatManager {
         frame.updateMessage("You attack the " + monster.getName() + "!");
         frame.updateGameScreen();
 
+        if(monster.getHoldStatus()){
+            monster.removeHold();
+        }
+
         if (chanceToHit(player.getLevel(), monster.getAmr(), player.getStrength())) {
             int baseDamage = player.calculateDmg();
             int strengthBonus = getDamageModifier(player.getStrength());

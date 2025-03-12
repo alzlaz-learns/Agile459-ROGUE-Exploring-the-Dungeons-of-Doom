@@ -43,13 +43,13 @@ public class BearTrapTest {
 
     @Test
     void testTrapStartsHidden() {
-        assertTrue(bearTrap.isHidden(), "Bear trap should start as hidden.");
+        assertTrue(bearTrap.isDiscovered(), "Bear trap should start as hidden.");
     }
 
     @Test
     void testTrapRevealsWhenTriggered() {
         bearTrap.trigger(player);
-        assertFalse(bearTrap.isHidden(), "Bear trap should be revealed after being triggered.");
+        assertFalse(bearTrap.isDiscovered(), "Bear trap should be revealed after being triggered.");
     }
 
     @Test

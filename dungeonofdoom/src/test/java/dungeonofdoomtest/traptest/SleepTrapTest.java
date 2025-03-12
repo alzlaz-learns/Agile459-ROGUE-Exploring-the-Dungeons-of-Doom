@@ -43,13 +43,13 @@ public class SleepTrapTest {
 
     @Test
     void testTrapStartsHidden() {
-        assertTrue(sleepTrap.isHidden(), "Sleep trap should start as hidden.");
+        assertTrue(sleepTrap.isDiscovered(), "Sleep trap should start as hidden.");
     }
 
     @Test
     void testTrapRevealsWhenTriggered() {
         sleepTrap.trigger(player);
-        assertFalse(sleepTrap.isHidden(), "Sleep trap should be revealed after being triggered.");
+        assertFalse(sleepTrap.isDiscovered(), "Sleep trap should be revealed after being triggered.");
     }
 
     @Test

@@ -2,8 +2,10 @@ package com.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.awt.Point;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Pack;
+import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.player.uday.PlayerPackPlayground;
 
 import lombok.Data;
@@ -26,7 +28,7 @@ public class Player {
     private int y; // Y position
     private int immobile;
     private int confused;
-    private PlayerPackPlayground pack;
+    private Pack pack;
     private List<Integer> equippedItems; //placeHolder <Integer>
     private int maxStrength;
     private int minStrength;
@@ -38,6 +40,12 @@ public class Player {
     private int faintTimer;
     private int revealTimer = 0;
 
+    private Item leftRing;
+    private Item rightRing;
+    private Armor bodyArmor;
+    private Item weapon;
+
+    
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -62,6 +70,8 @@ public class Player {
         this.isCursed = false;
         this.hasteTimer = 0;
         this.faintTimer = 0;
+
+        this.pack = new Pack();
     }
     
     // Core Utility Methods
@@ -79,6 +89,10 @@ public class Player {
 
     public void updateLvl(int i){
         this.level = i;
+    }
+
+    public void increaseLvl(){
+        this.level ++;
     }
 
     @Override
@@ -131,12 +145,19 @@ public class Player {
         return baseDamage + bonusDamage;
     }
 
-    public PlayerPackPlayground getPack() {
-        return pack;
+    public void printPack() {
+        pack.listInventory();
     }
-
+    public void addItem(Item i){
+        pack.addItem(i);
+    }
     public int getHealth() {
         return currentHealth;
+    }
+
+    public Point getPosition(){
+        Point position = new Point(x, y);
+        return position;
     }
 
 
@@ -146,15 +167,15 @@ public class Player {
         }
     }
 
-    public void eatFood() {
-        if (pack.containsItem("Food")) {
-            pack.dropItem(pack.getItem("Food"));
-            hungerCounter = 1300;
-            System.out.println("You eat some food. You feel refreshed.");//tochange later.
-        } else {
-            System.out.println("You have no food to eat.");//tochange later.
-        }
-    }
+    // public void eatFood() {
+    //     if (pack.containsItem("Food")) {
+    //         pack.dropItem(pack.getItem("Food"));
+    //         hungerCounter = 1300;
+    //         System.out.println("You eat some food. You feel refreshed.");//tochange later.
+    //     } else {
+    //         System.out.println("You have no food to eat.");//tochange later.
+    //     }
+    // }
 
     public void updateHunger() {
         hungerCounter--;
@@ -225,6 +246,14 @@ public class Player {
         this.maxStrength += 1;
     }
 
+    public int getArmorClass(){
+        return bodyArmor != null ? bodyArmor.getArmorClass() : armor;
+    }
+
+    public int calculateStrengthWithItems(){
+        return 0;
+    }
+
     public void adjustMaxHealth(int modifier){
         this.maxHealth += modifier;
     }
@@ -288,5 +317,9 @@ public class Player {
         if(isRevealed()){
             this.revealTimer --;
         }
+    }
+
+    public Armor getEquippedArmor(){
+        return this.bodyArmor;
     }
 }

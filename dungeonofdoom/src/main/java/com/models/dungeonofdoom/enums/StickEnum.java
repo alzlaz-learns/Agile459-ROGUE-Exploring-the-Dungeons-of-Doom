@@ -1,5 +1,6 @@
 package com.models.dungeonofdoom.enums;
 
+<<<<<<< HEAD
 import java.util.Random;
 import java.util.function.Function;
 
@@ -35,3 +36,8 @@ public enum StickEnum {
         return effectFactory.apply(dungeonFloor);
     }
 }
+=======
+public class StickEnum {
+    
+}
+>>>>>>> sprintIV_alpha_release

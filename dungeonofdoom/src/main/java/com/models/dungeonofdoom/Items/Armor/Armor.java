@@ -45,6 +45,10 @@ public class Armor extends Item {
         return isCursed;
     }
 
+    public void removeCurse(){
+        this.isCursed = false;
+    }
+
     public void curseArmor(){
         this.isCursed = true;
         System.out.println("The armor is now cursed. You feel rotten.");
@@ -78,5 +82,14 @@ public class Armor extends Item {
         // you would set it here
         m.setAmr(this.getArmorClass());
     }
+    
+    @Override
+    public String getItemName(){
+        return this.armorType.getName();
+    }
 
+    @Override
+    public char getSymbol() {
+       return this.armorType.getSymbol();
+    }
 }

@@ -9,9 +9,11 @@ import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.PotionEnum;
+import com.models.dungeonofdoom.enums.ScrollEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -158,12 +160,23 @@ public class GameManager {
                     break;
                 case KeyEvent.VK_1:
                     //test case for MonsterDetection potion
-                    System.out.println("revealing monsters");
-                    Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
-                    MonsterDetection.effect(player);
-                    break;
+                    // System.out.println("revealing monsters");
+                    // Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
+                    // MonsterDetection.effect(player);
+
+
+                    // System.out.println("revealing monsters");
+                    // Item MonsterDetection = new Scroll(ScrollEnum.MAGIC_MAPPING);
+                    // MonsterDetection.effect(player, currentDungeonFloor);
+
+                    Item TeleportationScroll = new Scroll(ScrollEnum.AGGRAVATE_MONSTER);
+                    TeleportationScroll.effect(player, currentDungeonFloor);
+                    // handleMovement(player.getX(), player.getY());
+                    
+                    // break;
                 default:
                     return;
+                    
             }
         }
         
@@ -178,10 +191,10 @@ public class GameManager {
         }
 
         
-
+        // System.out.println("X: " + player.getX()+ " Y: " +player.getY());
         handleMovement(newX, newY);
 
-        
+        frame.updateGameScreen();
     }
 
     private void handleMovement(int newX, int newY) {
@@ -202,9 +215,11 @@ public class GameManager {
             // Reset healing counter after combat
             HealingManager.resetNonCombatCounter();
         } else {
+            // System.out.println("is walkable");
             // Move player only if the tile is walkable
             player.moveTo(newX, newY);
             checkTrap(newX, newY);
+            checkItem(newX, newY);
             // Process healing for non-combat turn
             HealingManager.processHealing(player, false, frame);
         }
@@ -222,6 +237,18 @@ public class GameManager {
         }
     }
 
+    private void checkItem(int x, int y){
+        Item item = dungeonFloors.get(currentFloor).getItemAt(x, y);
+        if(item != null){
+            dungeonFloors.get(currentFloor).removeItem(item);
+            player.addItem(item);
+            player.printPack();
+            // System.out.println(player.getPack());
+        }
+        
+    }
+
+    
 
     //logic to handle trapLogic based off of JFramePlayGround
     //separated trap stuff from it
@@ -234,11 +261,13 @@ public class GameManager {
             switch (trap.getEffect()) {
                 case FALL -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                     //take player to lower floor
                     changeFloor(true); 
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                 } 
                 case TELEPORT -> {
                     frame.updateMessage(trapMessage);
@@ -254,20 +283,22 @@ public class GameManager {
                 }
             }
             
+            frame.updateGameScreen();
             return;
         }
     }
 
+    
 
     public void changeFloor(boolean goingDown) {
         if (goingDown && currentFloor < dungeonFloors.size() - 1) {
             currentFloor++;
-            player.updateLvl(currentFloor + 1);
+            player.increaseLvl();
             System.out.println(player.getLevel());
             frame.updateStats(player.toString());
         } else if (!goingDown && currentFloor > 0) {
             currentFloor--;
-            player.updateLvl(currentFloor);
+            player.increaseLvl();
             frame.updateStats(player.toString());
         } else {
             // Can't pass 0 or 25

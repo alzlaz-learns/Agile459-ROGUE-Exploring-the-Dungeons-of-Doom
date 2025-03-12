@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 
 import com.example.managers.GameManager;
 import com.models.Player;
+import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
@@ -91,10 +92,15 @@ public class GamePanel extends JPanel {
         map[currentFloor.getStairY()][currentFloor.getStairX()] = '>';
 
         for (AbstractTrap trap : currentFloor.traps) {
-            if (!trap.isHidden()) {
+            if (trap.isDiscovered() == true) {
                 map[trap.getY()][trap.getX()] = '!';
             }
         }
+
+        //spawning display items 
+        // for(Item item: currentFloor.getItems()){
+        //     map[(int)item.getPosition().getY()][(int)item.getPosition().getX()] = item.getSymbol();
+        // }
 
         //DRAWING MONSTERS ON THE MAP.
         for (Monster m: currentFloor.getMonsters()){
