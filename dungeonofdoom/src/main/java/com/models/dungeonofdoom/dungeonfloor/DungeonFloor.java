@@ -652,4 +652,93 @@ public class DungeonFloor {
     }
 
 
+<<<<<<< Updated upstream
+=======
+
+    public List<Item> getItems(){
+        return items;
+    }
+
+    
+    public void revealRoomAt(int x, int y) {
+        // Find the room the player is in
+        if (isInsideRoom(x, y)) {
+            Room room = getRoomAt(x, y);
+            if (room != null && !room.isDiscovered()) { 
+                room.discover();
+                updateMapForRoom(room);
+                System.out.println("You have discovered a hidden room!");
+            }
+        }
+    }
+
+    public void revealMap(){
+        for(Room r: rooms){
+            r.discover();
+            updateMapForRoom(r);
+        }
+        for(Corridor c: corridors){
+            c.discover();
+            
+        }
+    }
+    
+    // This method updates the map when a room is revealed
+    private void updateMapForRoom(Room room) {
+        for (int row = room.y + 1; row < room.y + room.height - 1; row++) {
+            for (int col = room.x + 1; col < room.x + room.width - 1; col++) {
+                map[row][col] = originalMap[row][col]; // Restore room tiles from originalMap
+            }
+        }
+    }
+
+    // This method updates the map when a corridor is revealed
+    public void revealCorridorAt(int x, int y) {
+        for (Corridor corridor : corridors) {
+            for (Point p : corridor.getPath()) {
+                if (p.x == x && p.y == y) {
+                    corridor.discover();
+                    map[p.y][p.x] = originalMap[p.y][p.x]; // Reveal corridor                    return; 
+                }
+            }
+        }
+    }
+    
+    public void discoverMonsterInRoom(int x, int y){
+        Room room = getRoomAt(x, y);
+        if (room == null){
+            return;
+        }
+
+        for (Monster m: monsters){
+            if(room.contains(m.getX(), m.getY())){
+                m.discover();
+                
+                map[m.getY()][m.getX()] = m.getSymbol();
+                map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+            }
+        }
+    }
+
+    public void revealMonstersOnMap(){
+        for (Monster m: monsters){
+            map[m.getY()][m.getX()] = m.getSymbol();
+            map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+        }
+    }
+    
+    public void teleportMonster(Monster monster) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
+        }
+        
+        removeMonster(monster);
+        Point destination = validTiles.get(random.nextInt(validTiles.size()));
+        monster.setPosition(destination.x, destination.y);
+        monsters.add(monster);
+        map[destination.y][destination.x] = monster.getSymbol();
+    }
+>>>>>>> Stashed changes
 }
