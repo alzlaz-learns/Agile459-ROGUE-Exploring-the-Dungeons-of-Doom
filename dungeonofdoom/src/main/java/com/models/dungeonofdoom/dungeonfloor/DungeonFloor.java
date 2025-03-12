@@ -12,6 +12,11 @@ import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
 import com.models.dungeonofdoom.Helper.Pair;
+import com.models.dungeonofdoom.Items.AmuletOfYendor;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Spawner.ItemSpawner;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -31,6 +36,9 @@ public class DungeonFloor {
     private final char[][] originalMap;
     private final int level;
     private final Random random;
+
+    private ItemSpawner itemSpawner;
+    private List<Item> items;
 
     MonsterManager monsterManager; //THIS IS TESTING CODE
     public List<Monster> monsters = new CopyOnWriteArrayList<>();
@@ -54,6 +62,7 @@ public class DungeonFloor {
     private static final int MAX_ROOMS = 10;
 
     private List<Room> rooms;
+    private List<Corridor> corridors;
 
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
@@ -65,6 +74,7 @@ public class DungeonFloor {
 
         this.rooms = new ArrayList<>();
         this.traps = new ArrayList<>();
+        this.corridors = new ArrayList<>();
 
         this.monsterManager = monsterManager; //this is testing code.
 
@@ -126,6 +136,7 @@ public class DungeonFloor {
         generateTraps();
         //Spawn Monsters
         spawnMonster();
+        spawnItems();
     }
 
     private void generateRooms() {
@@ -283,9 +294,8 @@ public class DungeonFloor {
             case 2 -> new TeleportTrap(false, this, rand);
             case 3 -> new SleepTrap(false, rand);
             case 4 -> new ArrowTrap(false, rand);
-            case 5 -> new DartTrap(false, rand); //TODO: Make sure that the functionality of DARTTRAP IS WORKING
+            case 5 -> new DartTrap(false, rand); 
             default -> new BearTrap(false, rand); 
-            // default -> new TeleportTrap(false, this, rand);
         };
     }
     
@@ -299,9 +309,41 @@ public class DungeonFloor {
         return null;
     }
 
+
     public char[][] getMap() {
-        return map;
+        char[][] displayMap = new char[height][width];
+    
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                displayMap[y][x] = map[y][x]; 
+            }
+        }
+    
+        
+        for (Room room : rooms) {
+            if (!room.isDiscovered()) { 
+                for (int row = room.y; row < room.y + room.height; row++) {
+                    for (int col = room.x; col < room.x + room.width; col++) {
+                        
+                            displayMap[row][col] = ' '; 
+                        
+                    }
+                }
+            }
+        }
+
+        for (Corridor corridor : corridors) {
+            for (Point p : corridor.getPath()) {
+                if (!corridor.isDiscovered()) {
+                    displayMap[p.y][p.x] = ' '; // Hide the corridor
+                }
+            }
+        }
+
+        
+        return displayMap;
     }
+    
 
     // Return the initial layout
     public char[][] getOriginalMap() {
@@ -406,29 +448,9 @@ public class DungeonFloor {
 
         // Debug print for confirmation
         System.out.println("Player spawned at: (" + spawnTile.x + ", " + spawnTile.y + ")");
+        //added to have the room that the player spawns in start revealed. 
+        revealRoomAt(player.getX(), player.getY());
     }
-
-
-    // Revised generateCorridors method that computes one door per room connection
-    // private void generateCorridors() {
-    //     if (rooms.isEmpty()) return;
-
-    //     // Sort rooms for a natural connection order.
-    //     rooms.sort((r1, r2) -> {
-    //         if (r1.x == r2.x) return Integer.compare(r1.y, r2.y);
-    //         return Integer.compare(r1.x, r2.x);
-    //     });
-
-    //     // Connect each adjacent room pair.
-    //     for (int i = 0; i < rooms.size() - 1; i++) {
-    //         Room roomA = rooms.get(i);
-    //         Room roomB = rooms.get(i + 1);
-    //         connectRooms(roomA, roomB);
-    //     }
-
-    //     // Optionally, connect any "lonely" rooms.
-    //     connectLonelyRooms();
-    // }
 
 
     // Replace or add a new corridor generation method using Kruskal's algorithm:
@@ -505,34 +527,6 @@ public class DungeonFloor {
         }
     }
 
-
-
-
-    // Revised connectLonelyRooms to also use door endpoints.
-    // private void connectLonelyRooms() {
-    //     Random rand = new Random();
-    //     for (Room room : rooms) {
-    //         boolean hasDoor = false;
-    //         // Check if a door ('d') exists on or immediately outside the room perimeter.
-    //         for (int y = room.y - 1; y <= room.y + room.height; y++) {
-    //             for (int x = room.x - 1; x <= room.x + room.width; x++) {
-    //                 if (x >= 0 && y >= 0 && x < width && y < height && map[y][x] == 'd') {
-    //                     hasDoor = true;
-    //                     break;
-    //                 }
-    //             }
-    //             if (hasDoor) break;
-    //         }
-    //         if (!hasDoor) {
-    //             // Pick a random room (other than the current one) and connect.
-    //             Room target = rooms.get(rand.nextInt(rooms.size()));
-    //             if (target != room) {
-    //                 connectRooms(room, target);
-    //             }
-    //         }
-    //     }
-    // }
-
     private void connectRooms(Room roomA, Room roomB) {
         // Compute room centers
         int centerA_x = roomA.x + roomA.width / 2;
@@ -584,6 +578,10 @@ public class DungeonFloor {
     
         ArgsForBfsCorridorsDto bfsArgs = buildArgsForDfs(doorA_x, doorA_y, doorB_x, doorB_y);
         Corridor corridor = Corridor.createCorridor(bfsArgs);
+
+        //added so we have a list of corridors so we can make hidden
+        corridors.add(corridor);
+
         corridor.draw();
     
         // Restore the door markers
@@ -595,8 +593,9 @@ public class DungeonFloor {
     //method to check walkable spaces
     //code was getting redundant so made a method to clean stuff up
     //probably will need to do this eventually for alot of places.
+    // public boolean isWalkable(int x, int y) {
     public boolean isWalkable(int x, int y) {
-        char tile = map[y][x];
+        char tile = originalMap[y][x];
         if (tile == '║' || tile == '═' || tile == '╔' || tile == '╗' || tile == '╚' || tile == '╝' || tile == ' '){
             return false;
         }
@@ -651,9 +650,51 @@ public class DungeonFloor {
         return null; // Not inside a room
     }
 
-
-<<<<<<< Updated upstream
-=======
+    //ITEM SPAWNER
+    private void spawnItems() {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        // Create an ItemSpawner if it doesn't exist
+        if (itemSpawner == null) {
+            itemSpawner = new ItemSpawner();
+        }
+        
+        // Spawn items
+        List<Item> spawnedItems = itemSpawner.spawnItems(validTiles, level, 10, 15);
+        
+        // Add the items to the dungeon floor
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        items.addAll(spawnedItems);
+        
+        // Mark items on the map with their specific symbols
+        for (Item item : spawnedItems) {
+            Point position = item.getPosition();
+            char itemSymbol = getItemSymbol(item);
+            map[position.y][position.x] = itemSymbol;
+            originalMap[position.y][position.x] = itemSymbol;
+        }
+    }
+    
+    // Helper method to get the appropriate symbol for an item
+    private char getItemSymbol(Item item) {
+        if (item instanceof Potion) {
+            return ((Potion) item).getType().getSymbol();
+        } else if (item instanceof Armor) {
+            return ((Armor) item).getArmorType().getSymbol();
+        } else if (item instanceof AmuletOfYendor) {
+            return ','; // Or whatever symbol you want for the Amulet
+        }
+        return '%'; // Default symbol for unknown items
+    }
+    
+    // Add method to reveal item location (used by MagicDetection potion)
+    public void revealItemLocation(Item item) {
+        Point position = item.getPosition();
+        char itemSymbol = getItemSymbol(item);
+        map[position.y][position.x] = itemSymbol;
+    }
 
     public List<Item> getItems(){
         return items;
@@ -672,6 +713,7 @@ public class DungeonFloor {
         }
     }
 
+
     public void revealMap(){
         for(Room r: rooms){
             r.discover();
@@ -682,6 +724,7 @@ public class DungeonFloor {
             
         }
     }
+
     
     // This method updates the map when a room is revealed
     private void updateMapForRoom(Room room) {
@@ -740,5 +783,6 @@ public class DungeonFloor {
         monsters.add(monster);
         map[destination.y][destination.x] = monster.getSymbol();
     }
->>>>>>> Stashed changes
+
+    
 }

@@ -51,6 +51,63 @@ public class BlindnessTest {
 
     }
 
+    @Test
+    void testDecrementBlindPlayer() {
+        Player player = new Player("TestHero");
+        
+        when(mockRandom.nextBoolean()).thenReturn(false);
+        Blindness blindness = new Blindness(mockRandom);
+        blindness.applyToPlayer(player);
+
+        assertEquals(player.getBlindTimer(), 18);
+
+        player.decrementBlind();
+        assertEquals(player.getBlindTimer(), 17);
+        int threshHold = player.getBlindTimer();
+        for(int i = 0; i < threshHold; i++){
+            player.decrementBlind();
+        }
+        assertEquals(player.getBlindTimer(), 0);
+
+    }
+
+    @Test
+    void testApplyBlindTrueToMonster() {
+        
+        
+        when(mockRandom.nextBoolean()).thenReturn(true);
+        Blindness blindness = new Blindness(mockRandom);
+        blindness.applyToMonster(monster);
+        assertEquals(monster.getBlindTimer(), 22);
+    }
+
+    @Test
+    void testApplyBlindFalseToMonster() {
+        
+        
+        when(mockRandom.nextBoolean()).thenReturn(false);
+        Blindness blindness = new Blindness(mockRandom);
+        blindness.applyToMonster(monster);
+        assertEquals(monster.getBlindTimer(), 18);
+    }
+
+    @Test
+    void testDecrementBlindMonster() {
+        
+        
+        when(mockRandom.nextBoolean()).thenReturn(false);
+        Blindness blindness = new Blindness(mockRandom);
+        blindness.applyToMonster(monster);
+        assertEquals(monster.getBlindTimer(), 18);
+
+        monster.decrementBlind();
+        assertEquals(monster.getBlindTimer(), 17);
+        int threshHold = monster.getBlindTimer();
+        for(int i = 0; i < threshHold; i++){
+            monster.decrementBlind();
+        }
+        assertEquals(monster.getBlindTimer(), 0);
+    }
 
     @Test
     void testBlindPlayerString(){
@@ -65,6 +122,8 @@ public class BlindnessTest {
 
     @Test
     void testBlindMonsterString() {
+
+
         Blindness blindness = new Blindness(mockRandom);
 
         blindness.applyToMonster(monster);

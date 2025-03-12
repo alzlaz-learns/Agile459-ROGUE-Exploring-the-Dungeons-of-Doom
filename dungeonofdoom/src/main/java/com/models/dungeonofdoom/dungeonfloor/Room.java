@@ -3,7 +3,7 @@ package com.models.dungeonofdoom.dungeonfloor;
 // Room class to store room information
 public class Room {
     int x, y, width, height;
-
+    private boolean discovered = false;
     Room(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -19,5 +19,13 @@ public class Room {
     //added for room entry detection
     public boolean contains(int px, int py) {
         return px >= x && px < x + width && py >= y && py < y + height;
+    }
+
+    public boolean isDiscovered(){
+        return discovered;
+    }
+
+    public void discover() {
+        discovered = true;
     }
 }

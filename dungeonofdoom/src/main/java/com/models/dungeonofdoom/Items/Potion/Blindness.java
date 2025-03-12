@@ -28,6 +28,7 @@ public class Blindness implements PotionEffect{
     public void applyToMonster(Monster monster) {
         int duration = randomDuration();
         // need to eventually apply blind status effect to player
+        monster.applyBlind(duration);
     }
 
     @Override

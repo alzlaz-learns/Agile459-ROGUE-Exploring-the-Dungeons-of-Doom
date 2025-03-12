@@ -7,8 +7,11 @@ import java.util.Random;
 
 import com.example.ui.JFrameUI;
 import com.models.Player;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -36,7 +39,8 @@ public class GameManager {
         this.currentFloor = 0;
         // Place player on the first floor
         dungeonFloors.get(currentFloor).placePlayer(player);
-    }
+        dungeonFloors.get(currentFloor).discoverMonsterInRoom(player.getX(), player.getY());
+    }   
 
     //logic to handle player movement based off of JFramePlayGround
     //separated trap stuff from it
@@ -54,15 +58,25 @@ public class GameManager {
             return; 
         }
 
+        
+
        
 
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
 
+        if(player.isRevealed()){
+            player.decrementReveal();
+            currentDungeonFloor.revealMonstersOnMap();
+        }
+
         int newX = player.getX();
         int newY = player.getY();
 
         int keyCode = e.getKeyCode();
+
+        int moveMultiplier = player.isHasted() ? 2 : 1;
+        player.decrementHaste();
 
         if (player.isConfused()) {
             frame.updateMessage("Wait, what's going on? Huh? What? Who?");
@@ -71,10 +85,10 @@ public class GameManager {
             int randomDirection = rand.nextInt(4); 
             
             switch (randomDirection) {
-                case 0: if (newY > 0) newY--; break; 
-                case 1: if (newY < dungeon.length - 1) newY++; break; 
-                case 2: if (newX > 0) newX--; break; 
-                case 3: if (newX < dungeon[0].length - 1) newX++; break; 
+                case 0: if (newY > 0) newY -= moveMultiplier; break; 
+                case 1: if (newY < dungeon.length - 1) newY += moveMultiplier; break; 
+                case 2: if (newX > 0) newX -= moveMultiplier; break; 
+                case 3: if (newX < dungeon[0].length - 1) newX += moveMultiplier; break;
             }
     
             player.confusedDecrease(); // Reduce confusion counter
@@ -82,42 +96,42 @@ public class GameManager {
             switch (keyCode) {
                 case KeyEvent.VK_W: 
                 case KeyEvent.VK_UP: 
-                    if (newY > 0) newY--;
+                    if (newY > 0) newY -= moveMultiplier;
                     break;
                 case KeyEvent.VK_S:           
                 case KeyEvent.VK_DOWN: 
-                    if (newY < dungeon.length - 1) newY++;
+                    if (newY < dungeon.length - 1) newY += moveMultiplier;
                     break;
                 case KeyEvent.VK_A: 
                 case KeyEvent.VK_LEFT: 
-                    if (newX > 0) newX--;
+                    if (newX > 0) newX -= moveMultiplier;
                     break;
                 case KeyEvent.VK_D: 
                 case KeyEvent.VK_RIGHT:
-                    if (newX < dungeon[0].length - 1) newX++;
+                    if (newX < dungeon[0].length - 1) newX += moveMultiplier;
                     break;
                 case KeyEvent.VK_PAGE_UP: 
                     if (newY > 0 && newX < dungeon[0].length - 1) {
-                        newX++; 
-                        newY--;
+                        newX+= moveMultiplier;
+                        newY-= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_PAGE_DOWN: 
                     if (newY < dungeon.length - 1 && newX < dungeon[0].length - 1) {
-                        newX++; 
-                        newY++;
+                        newX+= moveMultiplier;
+                        newY+= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_HOME: 
                     if (newY > 0 && newX > 0) {
-                        newX--; 
-                        newY--;
+                        newX-= moveMultiplier;
+                        newY-= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_END: 
                     if (newY < dungeon.length - 1 && newX > 0) {
-                        newX--; 
-                        newY++;
+                        newX-= moveMultiplier;
+                        newY+= moveMultiplier;
                     }
                     break;
                 case KeyEvent.VK_PERIOD:
@@ -142,6 +156,12 @@ public class GameManager {
                         return;
                     }
                     break;
+                case KeyEvent.VK_1:
+                    //test case for MonsterDetection potion
+                    System.out.println("revealing monsters");
+                    Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
+                    MonsterDetection.effect(player);
+                    break;
                 default:
                     return;
             }
@@ -149,12 +169,25 @@ public class GameManager {
         
         //check if player enters the room to activate
         checkRoomEntry(newX, newY);
+        
+        if (currentDungeonFloor.isInsideRoom(newX, newY)) {
+            currentDungeonFloor.revealRoomAt(newX, newY);
+            currentDungeonFloor.discoverMonsterInRoom(newX, newY);
+        } else {
+            currentDungeonFloor.revealCorridorAt(newX, newY);
+        }
+
+        
 
         handleMovement(newX, newY);
+
+        
     }
 
     private void handleMovement(int newX, int newY) {
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
+
+        
         //check if we can move there and if we can clean up stuff.
         if(!currentDungeonFloor.isWalkable(newX, newY)){
             frame.updateMessage("You cant go there!");
