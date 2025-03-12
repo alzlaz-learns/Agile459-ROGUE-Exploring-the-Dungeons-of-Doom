@@ -5,19 +5,22 @@ import java.util.Random;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.monster.Monster;
-
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.dungeonfloor.Room;
 import com.models.dungeonofdoom.Helper.Pair;
 
 public class Lightning implements ItemEffect {
 
     private Random random;
-    private Pair<Integer, Integer> bounceDuration= new Pair<>(1,4);
+    private Pair<Integer, Integer> bounceDuration = new Pair<>(1,4);
     private int damage = 8; // 1d8 damage
     private boolean isBouncing = false;
     private int remainingBounces = 0;
-
-    public Lightning(Random random) {
+    private DungeonFloor dungeonFloor;
+    
+    public Lightning(Random random, DungeonFloor dungeonFloor) {
         this.random = random;
+        this.dungeonFloor = dungeonFloor;
     }
     
     /**
@@ -29,19 +32,11 @@ public class Lightning implements ItemEffect {
     }
     
     /**
-     * Determines if the bouncing lightning hits something
-     * @return true if lightning hits during bounce (10% chance)
-     */
-    public boolean hitsDuringBounce() {
-        return random.nextInt(10) == 0; // 10% chance to hit while bouncing
-    }
-    
-    /**
      * Starts the bouncing effect after a miss
      */
     public void startBouncing() {
         isBouncing = true;
-        remainingBounces = random.nextInt(bounceDuration.getSecond()) + bounceDuration.getFirst();
+        remainingBounces = random.nextInt(bounceDuration.getB()) + bounceDuration.getA();
     }
     
     /**
@@ -49,23 +44,15 @@ public class Lightning implements ItemEffect {
      * @return true if lightning is bouncing
      */
     public boolean isBouncing() {
-        return isBouncing && remainingBounces > 0;
+        return isBouncing && !hasExpired();
     }
     
     /**
-     * Decrements the bounce counter
-     * @return true if lightning is still bouncing
+     * Checks if the lightning effect has expired
+     * @return true if the effect has expired
      */
-    public boolean continueBouncing() {
-        if (isBouncing) {
-            remainingBounces--;
-            if (remainingBounces <= 0) {
-                isBouncing = false;
-                return false;
-            }
-            return true;
-        }
-        return false;
+    public boolean hasExpired() {
+        return remainingBounces == 0;
     }
     
     /**
@@ -74,6 +61,65 @@ public class Lightning implements ItemEffect {
     public void stopBouncing() {
         isBouncing = false;
         remainingBounces = 0;
+    }
+    
+    /**
+     * Processes the lightning effect for the current turn
+     * @param player The player
+     * @param monster The monster
+     * @return A message describing what happened, or null if nothing happened
+     */
+    public String processTurn(Player player) {
+        if (!isBouncing() || hasExpired()) {
+            return null;
+        }
+
+        
+        // Roll once per turn to determine what happens
+        int playerRoll = random.nextInt(10);
+        
+        // 10% chance to hit player (roll == 0)
+        if (playerRoll == 0) {
+            int dmg = calculateDamage();
+            player.takeDamage(dmg);
+            stopBouncing();
+            return "The bouncing lightning strikes you for " + dmg + " damage!";
+        }
+        
+
+        Room playerRoom = dungeonFloor.getRoomAt(player.getX(), player.getY());
+        
+        if (playerRoom != null) {
+            // Apply drain effect to all monsters in the same room
+            for (Monster monster : dungeonFloor.getMonsters()) {
+                int dmg = calculateDamage();
+                if (playerRoom.contains(monster.getX(), monster.getY())) {
+                    int monsterRoll = random.nextInt(10);
+                    if (monsterRoll == 0) { // 10% chance to hit monster
+                        
+                        monster.takeDmg(dmg);
+                        stopBouncing();
+                        return "The bouncing lightning strikes " + monster.getName() + " for " + dmg + " damage!";
+                    }
+                }
+                if (monster.isDead()) {
+                    player.adjustExperience(monster.getExp());
+                    return "The bouncing lightning strikes " + monster.getName() + 
+                           " for " + dmg + " damage! The " + monster.getName() + 
+                           " has been slain by the bouncing lightning!";
+                } else {
+                    return "The bouncing lightning strikes " + monster.getName() + 
+                           " for " + dmg + " damage!";
+                }
+            }
+        }
+            
+            
+        }
+        
+        // 80% chance nothing happens (just continues bouncing)
+        remainingBounces--;
+        return "The lightning bolt continues to bounce around the room.";
     }
 
     @Override

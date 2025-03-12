@@ -16,7 +16,7 @@ public enum StickEnum {
         3,
         Optional.empty()),
     
-    DRAIN_LIFE('♦', dungeonFloor -> new DrainLife(),
+    DRAIN_LIFE('♦', dungeonFloor -> new DrainLife(dungeonFloor),
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
         Optional.empty()),
@@ -69,7 +69,7 @@ public enum StickEnum {
     TELEPORT_TO('↓', dungeonFloor -> new TeleportTo(),
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
-        Optional.empty()),
+        Optional.empty());  
 
     private final char symbol;
     private final Function<DungeonFloor, ItemEffect> effectFactory;
@@ -95,6 +95,14 @@ public enum StickEnum {
 
     public ItemEffect createEffect(DungeonFloor dungeonFloor) {
         return effectFactory.apply(dungeonFloor);
+    }
+
+    public Optional<Pair<Integer, Integer>> getCharges() {
+        return charges;
+    }
+
+    public int getChargeRollBonus() {
+        return chargeRollBonus;
     }
 
     public Optional<Pair<Integer, Integer>> getDamage() {

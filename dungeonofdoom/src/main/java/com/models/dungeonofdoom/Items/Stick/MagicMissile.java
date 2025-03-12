@@ -8,26 +8,23 @@ public class MagicMissile implements ItemEffect {
 
     @Override
     public void applyToPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToPlayer'");
+        // do nothing 
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+        // do nothing 
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
+        // were only required to do this if they miss
+        return "The missile vanishes in a puff of smoke.";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
     
 }

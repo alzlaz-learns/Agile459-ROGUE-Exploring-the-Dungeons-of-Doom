@@ -824,7 +824,7 @@ public class DungeonFloor {
         }
     }
     
-    public void teleportMonster(Monster monster) {
+    public void teleportMonsterAway(Monster monster) {
         List<Point> validTiles = getValidRoomTiles();
         
         if (validTiles.isEmpty()) {
@@ -836,6 +836,36 @@ public class DungeonFloor {
         monster.setPosition(destination.x, destination.y);
         monsters.add(monster);
         map[destination.y][destination.x] = monster.getSymbol();
+    }
+
+    
+    public void teleportMonsterTo(Monster monster, Point playerLocation) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
+        }
+
+        Point spaceAbove = new Point(playerLocation.x, playerLocation.y - 1);
+        Point spaceBelow = new Point(playerLocation.x, playerLocation.y + 1);
+        Point spaceLeft = new Point(playerLocation.x - 1, playerLocation.y);
+        Point spaceRight = new Point(playerLocation.x + 1, playerLocation.y);
+
+        List<Point> validTilesByPlayer = new ArrayList<>();
+        for (Point p: validTiles){
+            if (p == spaceAbove ||
+             p == spaceBelow ||
+              p == spaceLeft ||
+               p == spaceRight){
+                validTilesByPlayer.add(p);
+            }
+        }
+
+        Point selectedTile = validTilesByPlayer.isEmpty() ? null : validTilesByPlayer.get(random.nextInt(validTilesByPlayer.size()));
+        removeMonster(monster);
+        monster.setPosition(selectedTile.x, selectedTile.y);
+        monsters.add(monster);
+        map[selectedTile.y][selectedTile.x] = monster.getSymbol();
     }
 
     

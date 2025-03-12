@@ -7,10 +7,14 @@ import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.example.ui.JFrameUI;
 import com.models.dungeonofdoom.Items.Stick.Lightning;
+import com.models.dungeonofdoom.Items.Stick.Stick;
+import com.models.dungeonofdoom.enums.StickEnum;
+import com.models.dungeonofdoom.Items.Item;
 
 public class CombatManager {
 
     private static final Random rand = new Random();
+    private static int globalTurnCounter = 0;
 
     private static int getAttackModifier(int strength) {
         if (strength < 8) return -7;
@@ -84,14 +88,11 @@ public class CombatManager {
         boolean hasLightningStaff = false;
         Lightning lightningEffect = null;
         
-        // Check if player has lightning staff equipped
-        // This would need to be adapted to your actual item system
+        // Check equipment
         for (Item item : player.getEquippedItems()) {
-            // Assuming you have a way to identify if an item is a lightning staff
-            // This is a placeholder check - replace with your actual item identification logic
-            if (item == /* lightning staff ID */) {
+            // Check if the item is a Stick with LIGHTNING type
+            if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.LIGHTNING) {
                 hasLightningStaff = true;
-                lightningEffect = new Lightning(rand);
                 break;
             }
         }
@@ -118,12 +119,9 @@ public class CombatManager {
             
             // If player has lightning staff and misses, start the bouncing effect
             if (hasLightningStaff) {
-                lightningEffect.startBouncing();
+                lightningEffect = new Lightning(rand, dungeonFloor);
+                TurnManager.addLightningEffect(lightningEffect); //maybe hacky impl, forgive me 
                 frame.updateMessage(lightningEffect.messageStringPlayer(player));
-                
-                // Store the bouncing lightning effect somewhere to track it between turns
-                // This could be in the DungeonFloor, Player, or a dedicated effects manager
-                dungeonFloor.addBouncingLightning(lightningEffect, player, monster);
             }
             
             frame.updateGameScreen();
@@ -131,6 +129,9 @@ public class CombatManager {
     }
 
     public static void combatOrdering(Player player, Monster monster, DungeonFloor dungeonFloor, JFrameUI frame) {
+        // Increment turn counter at the start of each combat round
+        incrementTurnCounter();
+
         // mean monsters attack first
         if (monster.isMean()) {
             frame.updateMessage("The " + monster.getName() + " is Mean and attacks first!");
@@ -149,5 +150,20 @@ public class CombatManager {
                 monsterAttack(player, monster, frame);
             }
         }
+    }
+
+    /**
+     * Increments the global turn counter
+     */
+    public static void incrementTurnCounter() {
+        globalTurnCounter++;
+    }
+    
+    /**
+     * Gets the current global turn count
+     * @return the current global turn count
+     */
+    public static int getTurnCounter() {
+        return globalTurnCounter;
     }
 }

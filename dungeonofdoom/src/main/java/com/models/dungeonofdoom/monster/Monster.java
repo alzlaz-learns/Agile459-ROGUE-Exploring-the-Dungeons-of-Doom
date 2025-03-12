@@ -33,6 +33,7 @@ public abstract class Monster {
     private boolean invisible;
 
     //potion effects
+    private int slowTimer;
     private int hasteTimer;
     private int blindTimer;
     private boolean discovered = false;
@@ -59,6 +60,7 @@ public abstract class Monster {
         
         this.hasteTimer= 0;
         this.blindTimer = 0;
+        this.slowTimer = 0;
         this.level = type.getLvl();
     }
 
@@ -272,8 +274,21 @@ public abstract class Monster {
         if(isHasted()){
             this.hasteTimer--;
         }
+    }   
+
+    public boolean isSlowed(){
+        return this.slowTimer > 0;
     }
 
+    public void applySlow(int turns){
+        this.slowTimer = turns;
+    }
+
+    public void decrementSlow(){
+        if(isSlowed()){
+            this.slowTimer--;
+    }
+    
     public boolean isDiscovered(){
         return discovered;
     }

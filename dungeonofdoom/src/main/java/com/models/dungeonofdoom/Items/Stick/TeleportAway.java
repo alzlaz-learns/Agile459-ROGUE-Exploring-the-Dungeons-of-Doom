@@ -19,7 +19,7 @@ public class TeleportAway implements ItemEffect {
 
     @Override
     public void applyToMonster(Monster monster) {
-        dungeonFloor.teleportMonster(monster);
+        dungeonFloor.teleportMonsterAway(monster);
     }
 
     @Override
