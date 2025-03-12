@@ -7,7 +7,7 @@ import java.util.function.Function;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Stick.*;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-
+import com.models.Player;
 import com.models.dungeonofdoom.Helper.Pair;
 
 public enum StickEnum {
@@ -36,7 +36,7 @@ public enum StickEnum {
         3,
         Optional.empty()),
 
-    LIGHTNING('☀', dungeonFloor -> new Lightning(new Random()),
+    LIGHTNING('☀', dungeonFloor -> new Lightning(new Random(), dungeonFloor),
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
         Optional.of(new Pair<Integer, Integer>(1,8))),
@@ -51,12 +51,12 @@ public enum StickEnum {
         3,
         Optional.empty()),
 
-    SLOW_MONSTER('☼', dungeonFloor -> new SlowMonster(),
+    SLOW_MONSTER('☼', dungeonFloor -> new SlowMonster(new Random()),
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
         Optional.empty()),
 
-    STRIKING('♪', dungeonFloor -> new Striking(), 
+    STRIKING('♪', dungeonFloor -> new Striking(new Random()), 
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
         Optional.of(new Pair<Integer, Integer>(2,8))),
@@ -66,7 +66,7 @@ public enum StickEnum {
         3,
         Optional.empty()),
 
-    TELEPORT_TO('↓', dungeonFloor -> new TeleportTo(),
+    TELEPORT_TO('↓', dungeonFloor -> new TeleportTo(dungeonFloor, null),
         Optional.of(new Pair<Integer, Integer>(1,5)),
         3,
         Optional.empty());  
@@ -87,6 +87,10 @@ public enum StickEnum {
         this.charges = charges;
         this.chargeRollBonus = chargeRollBonus;
         this.damage = damage;
+    }
+
+    public List<StickEnum> getValidDamageSticks() {
+        return Arrays.asList(LIGHTNING,FIRE,MAGIC_MISSILE);
     }
 
     public char getSymbol() {

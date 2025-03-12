@@ -9,6 +9,8 @@ import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Stick.Stick;
 import com.models.dungeonofdoom.Items.Weapon.Weapon;
 import com.models.dungeonofdoom.enums.StickEnum;
+import com.models.dungeonofdoom.Items.Stick.Striking;
+import java.util.Random;
 import com.player.uday.PlayerPackPlayground;
 
 import lombok.Data;
@@ -48,6 +50,8 @@ public class Player {
     private Armor bodyArmor;
     private Item weapon;
 
+    private Random random;
+
     
     // Constructor
     public Player(String name) {
@@ -75,6 +79,7 @@ public class Player {
         this.faintTimer = 0;
 
         this.pack = new Pack();
+        this.random = new Random();
     }
     
     // Core Utility Methods
@@ -138,8 +143,13 @@ public class Player {
         for (Item item : equippedItems) {
             // Handle bonus damage based on item type
             if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.STRIKING) {
-                
-            }
+                Striking strikingEffect = new Striking(random);
+                baseDamage += strikingEffect.rollStrikingHit();
+            else if (item instanceof Stick && )
+            } else if (item instanceof Weapon) {
+                Weapon weapon = (Weapon) item;
+                baseDamage += weapon.getDamageWielded();
+            } 
             // Add more item types as needed
             bonusDamage += 0;   // don't what to do here yet, setting up some basics
         }
