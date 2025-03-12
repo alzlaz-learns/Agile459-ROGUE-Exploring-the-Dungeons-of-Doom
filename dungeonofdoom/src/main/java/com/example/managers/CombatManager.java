@@ -6,6 +6,7 @@ import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.example.ui.JFrameUI;
+import com.models.dungeonofdoom.Items.Stick.Lightning;
 
 public class CombatManager {
 
@@ -80,6 +81,21 @@ public class CombatManager {
             monster.removeHold();
         }
 
+        boolean hasLightningStaff = false;
+        Lightning lightningEffect = null;
+        
+        // Check if player has lightning staff equipped
+        // This would need to be adapted to your actual item system
+        for (Item item : player.getEquippedItems()) {
+            // Assuming you have a way to identify if an item is a lightning staff
+            // This is a placeholder check - replace with your actual item identification logic
+            if (item == /* lightning staff ID */) {
+                hasLightningStaff = true;
+                lightningEffect = new Lightning(rand);
+                break;
+            }
+        }
+
         if (chanceToHit(player.getLevel(), monster.getAmr(), player.getStrength())) {
             int baseDamage = player.calculateDmg();
             int strengthBonus = getDamageModifier(player.getStrength());
@@ -99,6 +115,17 @@ public class CombatManager {
             }
         } else {
             frame.updateMessage("Your attack misses!");
+            
+            // If player has lightning staff and misses, start the bouncing effect
+            if (hasLightningStaff) {
+                lightningEffect.startBouncing();
+                frame.updateMessage(lightningEffect.messageStringPlayer(player));
+                
+                // Store the bouncing lightning effect somewhere to track it between turns
+                // This could be in the DungeonFloor, Player, or a dedicated effects manager
+                dungeonFloor.addBouncingLightning(lightningEffect, player, monster);
+            }
+            
             frame.updateGameScreen();
         }
     }

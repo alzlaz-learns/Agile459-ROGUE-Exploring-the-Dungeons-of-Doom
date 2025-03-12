@@ -152,6 +152,7 @@ public abstract class Monster {
     }
 
     //not sure how to deal with this one yet.
+    //too lazy to do it now -D, using for cancellation logic atm
     public boolean isInvisible() {
         return invisible;
     }
@@ -197,6 +198,10 @@ public abstract class Monster {
 
     public int getY() {
         return y;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
     }
 
     public void setPosition(int x, int y) {

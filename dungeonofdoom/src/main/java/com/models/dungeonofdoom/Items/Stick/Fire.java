@@ -8,26 +8,23 @@ public class Fire implements ItemEffect{
 
     @Override
     public void applyToPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToPlayer'");
+        // do nothing
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+        // This method should delegate to the CombatManager or use similar hit chance logic
+        throw new UnsupportedOperationException("Fire stick effect should be implemented in CombatManager");
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
+        return "";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
     
 }

@@ -22,6 +22,7 @@ public class Light implements ItemEffect {
             return;
         } else {
             // will have to discuss this with alex, I am tired
+            // this is supposed to light up a dark room but we light rooms as we enter them
         }
     }
 

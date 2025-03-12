@@ -29,7 +29,7 @@ public class Player {
     private int immobile;
     private int confused;
     private Pack pack;
-    private List<Integer> equippedItems; //placeHolder <Integer>
+    private List<Item> equippedItems; 
     private int maxStrength;
     private int minStrength;
     private boolean isCursed;
@@ -141,7 +141,8 @@ public class Player {
         if (baseDamage == 0) {
             baseDamage = 1;
         }
-        
+
+    
         return baseDamage + bonusDamage;
     }
 

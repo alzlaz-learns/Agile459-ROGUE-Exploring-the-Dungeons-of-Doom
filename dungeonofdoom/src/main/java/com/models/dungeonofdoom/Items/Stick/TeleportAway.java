@@ -24,12 +24,12 @@ public class TeleportAway implements ItemEffect {
 
     @Override
     public String messageStringPlayer(Player player) {
-        return "You wave the stick and the monster vanishes!";
+        return "";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        return "The " + monster.getName() + " has been teleported away!";
+        return "";
 
     }
 }
