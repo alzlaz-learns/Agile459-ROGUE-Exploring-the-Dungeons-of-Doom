@@ -32,7 +32,9 @@ public class GamePanel extends JPanel {
     private GameManager gameManager;
     private JLabel[][] gridLabels;
 
-    public GamePanel(GameManager gameManager) {
+  
+
+    public GamePanel(GameManager gameManager, JFrameUI frame) {
         //set the gamePanel area
         this.setPreferredSize(new Dimension(screenWidthScaled, screenHeightScaled));
         this.setBackground(Color.BLACK);
@@ -63,16 +65,28 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                //for trouble shooting weird weird focus problem.
-                // System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                gameManager.handleMovement(e);
-                updateDungeonView();
+                if (e.getKeyCode() == KeyEvent.VK_I) { // Press 'I' to open inventory
+                    frame.showInventoryScreen();
+                }else{
+                    //for trouble shooting weird weird focus problem.
+                    // System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+                    gameManager.handleMovement(e);
+                    updateDungeonView();
+                }
             }
         });
 
         
 
         updateDungeonView();
+    }
+
+    public int getscreenWidthScaled(){
+        return screenWidthScaled;
+    }
+
+    public int getscreenHeightScaled(){
+        return screenHeightScaled;
     }
 
     public void updateDungeonView() {

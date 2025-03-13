@@ -23,11 +23,15 @@ public class Pack {
         for (int i = 0; i < pack.size(); i++) {
             Item item = pack.get(i);
             // The display name might come from item.getDisplayName() or item.toString() 
-            
+            itemDescriptions.add(item.getItemName());
             System.out.print(item.getItemName());
         }
         
         return itemDescriptions;
+    }
+
+    public boolean isEmpty(){
+        return pack.size() == 0;
     }
 
     public Item selectiveInventory(int index) {

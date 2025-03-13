@@ -144,6 +144,9 @@ public class Player {
         
         return baseDamage + bonusDamage;
     }
+    public Pack getPack() {
+        return pack;
+    }
 
     public void printPack() {
         pack.listInventory();

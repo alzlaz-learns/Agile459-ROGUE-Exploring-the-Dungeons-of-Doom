@@ -1,12 +1,14 @@
 package com.example.ui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JFrame;
-
+import javax.swing.JPanel;
 
 import java.awt.event.MouseEvent;
+
 
 import com.example.managers.GameManager;
 
@@ -17,12 +19,21 @@ public class JFrameUI {
     private AbstractTextBars statArea;
     private GamePanel gamePanel;
     private GameManager gameManager;
+    private InventoryScreen inventoryScreen;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
     public JFrameUI(){
         this.window = new JFrame();
         this.messageArea = new MessageArea(); 
         this.gameManager = new GameManager(this);
-        this.gamePanel = new GamePanel(gameManager);
+        this.gamePanel = new GamePanel(gameManager, this);
+        this.inventoryScreen = new InventoryScreen(this, gameManager.getPlayer());
+
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+        mainPanel.add(gamePanel, "GAME_SCREEN");
+        mainPanel.add(inventoryScreen, "INVENTORY_SCREEN");
         
         /*
             ive come across an a truely goofy inconsistency that i dont understand why
@@ -46,11 +57,25 @@ public class JFrameUI {
         
     }
 
+    public void showGameScreen() {
+        cardLayout.show(mainPanel, "GAME_SCREEN");
+        gamePanel.requestFocusInWindow();
+    }
+
+    public void showInventoryScreen() {
+        inventoryScreen.updateInventory(); // Update inventory display before showing
+        cardLayout.show(mainPanel, "INVENTORY_SCREEN");
+        inventoryScreen.requestFocusInWindow();
+    }
+
+    
+
     public void generateLayout() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Rogue: Dungeon of Doom");
     
+        window.setLayout(new BorderLayout());
         //Message Area at the top
         window.add(messageArea, BorderLayout.NORTH);
 
@@ -61,7 +86,7 @@ public class JFrameUI {
 
 
         // // Game play area in the center
-        window.add(gamePanel, BorderLayout.CENTER);
+        window.add(mainPanel, BorderLayout.CENTER);
     
         window.pack();
         window.setLocationRelativeTo(null);
