@@ -7,11 +7,7 @@ import com.models.dungeonofdoom.monster.Monster;
 
 public class MagicMapping implements ItemEffect {
 
-    @Override
-    public void applyToPlayer(Player player) {
-        // This will be overridden to require DungeonFloor
-    }
-
+   
     @Override
     public void applyToPlayer(Player player, DungeonFloor floor) {
         floor.revealMap(); // Calls a method in DungeonFloor to reveal the layout

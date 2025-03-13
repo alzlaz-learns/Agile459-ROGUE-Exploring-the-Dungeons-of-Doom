@@ -6,12 +6,15 @@ import java.awt.Point;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Pack;
 import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.Items.Ring.Ring;
+
 import com.models.dungeonofdoom.Items.Stick.Stick;
 import com.models.dungeonofdoom.Items.Weapon.Weapon;
+import com.models.dungeonofdoom.enums.RingEnum;
 import com.models.dungeonofdoom.enums.StickEnum;
 import com.models.dungeonofdoom.Items.Stick.Striking;
 import java.util.Random;
-import com.player.uday.PlayerPackPlayground;
+
 
 import lombok.Data;
 
@@ -121,6 +124,11 @@ public class Player {
         if (this.currentHealth <= 0) {
             die();
         }
+    }
+
+    public boolean hasRingOfSustain(){
+        return (leftRing != null && leftRing.getItemName().equals(RingEnum.SUSTAIN_STRENGTH.getName())) ||
+           (rightRing != null && rightRing.getItemName().equals(RingEnum.SUSTAIN_STRENGTH.getName()));
     }
 
     public void die() {
@@ -258,8 +266,13 @@ public class Player {
 
     //making this so minimum is always one
     public void adjustStrength(int modifier){
+        int oldStrength = this.strength;
+
         //changed to max minimum strength 3 max strength 31
-        this.strength = Math.min(getMaxStrength(), Math.max(getMinStrength(), this.strength + modifier));
+        this.strength = Math.min(getMaxStrength(), Math.max(getMinStrength(), this.strength + modifier)); //TO DO I dont think i did this correct for when substracting strength?
+        
+        System.out.println("Strength changed: " + oldStrength + " → " + this.strength + " (Modifier: " + modifier + ")");
+    
     }
     public void adjustMaxStrength(){
         //changed to max minimum strength 3 max strength 31
@@ -345,5 +358,21 @@ public class Player {
 
     public Armor getEquippedArmor(){
         return this.bodyArmor;
+    }
+    public String equipRing(Item ring) {
+        if (!(ring instanceof Ring)) {
+            System.out.println("You can only equip rings!"); 
+            return "You can only equip rings!";
+        }
+
+        if (leftRing == null) {
+            leftRing = ring;
+        } else if (rightRing == null) {
+            rightRing = ring;
+        } else {
+            return "You are already wearing two rings.";
+        }
+
+        return "You equipped " + ring.getItemName();
     }
 }

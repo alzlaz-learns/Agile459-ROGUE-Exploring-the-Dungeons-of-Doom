@@ -7,11 +7,7 @@ import com.models.dungeonofdoom.monster.Monster;
 
 public class CreateMonster implements ItemEffect{
 
-    @Override
-    public void applyToPlayer(Player player) {
-        
-    }
-
+    
     @Override
     public void applyToPlayer(Player player, DungeonFloor floor) {
         floor.spawnSingleMonster();

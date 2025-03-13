@@ -18,7 +18,7 @@ public class TeleportTo implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         // do nothing 
     }
 

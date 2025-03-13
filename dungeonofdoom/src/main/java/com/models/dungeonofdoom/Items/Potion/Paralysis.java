@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class Paralysis implements ItemEffect{
@@ -18,7 +19,7 @@ public class Paralysis implements ItemEffect{
         this.random = new Random();
     }
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor d) {
         int duration = random.nextInt(4) + 1;
         player.setImmobile(duration);
     }

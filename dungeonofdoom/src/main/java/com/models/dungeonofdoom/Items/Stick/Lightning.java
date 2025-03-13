@@ -121,7 +121,7 @@ public class Lightning implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         // This is called when lightning bounces back and hits the player
         int dmg = calculateDamage();
         player.takeDamage(dmg);

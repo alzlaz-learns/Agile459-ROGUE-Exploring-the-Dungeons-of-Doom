@@ -3,6 +3,7 @@ package com.models.dungeonofdoom.Items.Stick;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.enums.StickEnum;
 
@@ -59,9 +60,12 @@ public class Stick extends Item {
     }
 
     @Override
-    public void message(Player p) {
+    public String message(Player p) {
         System.out.println("You wave the " + getItemName() + 
                 ". It has " + charges + " charges remaining.");
+
+        return "You wave the " + getItemName() + 
+                ". It has " + charges + " charges remaining.";
     }
 
     @Override
@@ -71,9 +75,9 @@ public class Stick extends Item {
     }
 
     @Override
-    public void effect(Player p) {
+    public void effect(Player p, DungeonFloor df) {
         if (effect != null && charges > 0) {
-            effect.applyToPlayer(p);
+            effect.applyToPlayer(p, df);
             decrementCharges();
         }
     }

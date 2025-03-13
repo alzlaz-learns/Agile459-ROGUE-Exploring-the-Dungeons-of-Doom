@@ -1,14 +1,15 @@
 package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class AmuletOfYendor extends Item{
 
     @Override
-    public void message(Player p) {
+    public String  message(Player p) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'message'");
+        return "";
     }
 
     @Override
@@ -18,7 +19,7 @@ public class AmuletOfYendor extends Item{
     }
 
     @Override
-    public void effect(Player p) {
+    public void effect(Player p, DungeonFloor df) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }

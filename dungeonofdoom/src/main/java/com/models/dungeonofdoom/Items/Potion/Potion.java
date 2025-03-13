@@ -13,12 +13,14 @@ public class Potion extends Item{
     public Potion(PotionEnum type) {
         super();
         this.type = type;
+        this.setSingleUse();
     }
 
     @Override
-    public void message(Player p) {
+    public String message(Player p) {
         String msg = type.getEffect().messageStringPlayer(p);
         System.out.println(msg);
+        return msg;
     }
 
     @Override
@@ -27,15 +29,11 @@ public class Potion extends Item{
         System.out.println(msg);}
 
     @Override
-    public void effect(Player p) {
-        type.getEffect().applyToPlayer(p);
-    }
-
-    // @Override
     public void effect(Player p, DungeonFloor d) {
         type.getEffect().applyToPlayer(p, d);
     }
 
+  
     @Override
     public void effect(Monster m) {
         type.getEffect().applyToMonster(m);

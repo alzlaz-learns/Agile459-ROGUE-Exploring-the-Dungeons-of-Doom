@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.Blindness;
 import com.models.dungeonofdoom.Items.Potion.Haste;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.GeneralMonster;
 import com.models.dungeonofdoom.monster.Monster;
@@ -20,7 +21,7 @@ import com.models.dungeonofdoom.monster.Monster;
 public class HasteTest {
     private Random mockRandom;
     private Monster monster;
-
+    private DungeonFloor df;
     @BeforeEach
     void setUp(){
         mockRandom = mock(Random.class);
@@ -35,7 +36,7 @@ public class HasteTest {
         
         when(mockRandom.nextInt(4)).thenReturn(3);
         Haste haste = new Haste(mockRandom);
-        haste.applyToPlayer(player);
+        haste.applyToPlayer(player, df);
         assertEquals(player.getHasteTimer(), 4);
     }
 
@@ -45,8 +46,8 @@ public class HasteTest {
         
         when(mockRandom.nextInt(4)).thenReturn(3);
         Haste haste = new Haste(mockRandom);
-        haste.applyToPlayer(player);
-        haste.applyToPlayer(player);
+        haste.applyToPlayer(player, df);
+        haste.applyToPlayer(player, df);
         assertTrue(player.isFainted());
     }
 
@@ -84,7 +85,7 @@ public class HasteTest {
         
         when(mockRandom.nextInt(4)).thenReturn(3);
         Haste haste = new Haste(mockRandom);
-        haste.applyToPlayer(player);
+        haste.applyToPlayer(player, df);
 
         assertEquals(player.getHasteTimer(), 4);
 

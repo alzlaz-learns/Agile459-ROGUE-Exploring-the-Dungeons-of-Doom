@@ -65,14 +65,12 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_I) { // Press 'I' to open inventory
-                    frame.showInventoryScreen();
-                }else{
-                    //for trouble shooting weird weird focus problem.
-                    // System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                    gameManager.handleMovement(e);
-                    updateDungeonView();
-                }
+                
+                //for trouble shooting weird weird focus problem.
+                // System.out.println("Key pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+                gameManager.handleMovement(e);
+                updateDungeonView();
+                
             }
         });
 

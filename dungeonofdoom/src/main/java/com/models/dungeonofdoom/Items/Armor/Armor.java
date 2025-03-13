@@ -4,6 +4,7 @@ import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.enums.ArmorEnum;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 public class Armor extends Item {
 
@@ -54,10 +55,12 @@ public class Armor extends Item {
     }
 
     @Override
-    public void message(Player p) {
-        System.out.println("You put on the " + armorType.getName() + 
+    public String message(Player p) {
+        String msg = ("You put on the " + armorType.getName() + 
         "and your armor class is now " +
          armorType.getArmorClass() + ".");
+
+         return msg;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class Armor extends Item {
     }
 
     @Override
-    public void effect(Player p) {
+    public void effect(Player p, DungeonFloor d) {
         // Set the player's armor class based on this armor
         p.setArmor(this.getArmorClass());
     }

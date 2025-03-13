@@ -7,10 +7,7 @@ import com.models.dungeonofdoom.monster.Monster;
 
 public class HoldMonster implements ItemEffect{
 
-    @Override
-    public void applyToPlayer(Player player) {
-       
-    }
+    
 
     @Override
     public void applyToMonster(Monster monster) {
@@ -27,6 +24,7 @@ public class HoldMonster implements ItemEffect{
         return "";
     }
 
+    @Override
     public void applyToPlayer(Player player, DungeonFloor floor) {
         
         int playerX = player.getX();

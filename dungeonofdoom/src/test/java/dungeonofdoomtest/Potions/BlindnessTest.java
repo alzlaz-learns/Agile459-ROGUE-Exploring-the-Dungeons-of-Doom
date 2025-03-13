@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.Blindness;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.GeneralMonster;
 import com.models.dungeonofdoom.monster.Monster;
@@ -20,6 +21,7 @@ public class BlindnessTest {
 
     private Random mockRandom;
     private Monster monster;
+    private DungeonFloor mockDungeon;
 
     @BeforeEach
     void setUp(){
@@ -35,7 +37,7 @@ public class BlindnessTest {
         
         when(mockRandom.nextBoolean()).thenReturn(true);
         Blindness blindness = new Blindness(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, mockDungeon);
         assertEquals(player.getBlindTimer(), 22);
     }
 
@@ -45,7 +47,7 @@ public class BlindnessTest {
         
         when(mockRandom.nextBoolean()).thenReturn(false);
         Blindness blindness = new Blindness(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, mockDungeon);
 
         assertEquals(player.getBlindTimer(), 18);
 
@@ -57,7 +59,7 @@ public class BlindnessTest {
         
         when(mockRandom.nextBoolean()).thenReturn(false);
         Blindness blindness = new Blindness(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, mockDungeon);
 
         assertEquals(player.getBlindTimer(), 18);
 
@@ -114,7 +116,7 @@ public class BlindnessTest {
         Player player = new Player("TestHero");
 
         Blindness blindness = new Blindness(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, mockDungeon);
 
         String msg = blindness.messageStringPlayer(player);
         assertEquals("A cloak of darkness falls around you", msg);

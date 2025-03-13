@@ -16,20 +16,16 @@ public class Scroll extends Item{
     }
 
     @Override
-    public void message(Player p) {
+    public String  message(Player p) {
         String msg = type.getEffect().messageStringPlayer(p);
         System.out.println(msg);
+        return msg;
     }
 
     @Override
     public void message(Monster m) {
         String msg = type.getEffect().messageStringMonster(m);
         System.out.println(msg);
-    }
-
-    @Override
-    public void effect(Player p) {
-        type.getEffect().applyToPlayer(p);
     }
 
     public void effect(Player p, DungeonFloor d) {

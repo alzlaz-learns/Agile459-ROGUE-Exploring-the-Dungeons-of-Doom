@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 import com.models.dungeonofdoom.Helper.Pair;
@@ -18,7 +19,7 @@ public class SlowMonster implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         // do nothing 
     }
 

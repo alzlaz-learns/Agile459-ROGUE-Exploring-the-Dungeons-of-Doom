@@ -12,24 +12,32 @@ public abstract class Item {
     private String description; //potion (colors), staves & wands (materials), rings (stone)
     private Point position;
     private boolean discovered;
+    private boolean singleUse;
     
     public Item(){
         this.identified = false;
         this.discovered = false;
+        this.singleUse = false;
     }
 
-    public abstract void message(Player p);
+    public abstract String message(Player p);
     public abstract void message(Monster m);
 
-    public abstract void effect(Player p);
+    public abstract void effect(Player p, DungeonFloor dungeonFloor);
     public abstract void effect(Monster m);
 
-    public void effect(Player p, DungeonFloor df){
-        
-    }
+    
 
     public void discover(){
         this.discovered = true;
+    }
+
+    public boolean isSingleUse(){
+        return true;
+    }
+
+    public void setSingleUse(){
+        this.singleUse = true;
     }
 
     public abstract String getItemName();

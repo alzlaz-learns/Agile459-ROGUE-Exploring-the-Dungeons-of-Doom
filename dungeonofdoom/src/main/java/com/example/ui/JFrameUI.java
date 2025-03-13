@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 
 
 import com.example.managers.GameManager;
+import com.models.Player;
+import com.models.dungeonofdoom.enums.ItemOptions;
 
 public class JFrameUI {
 
@@ -28,7 +30,7 @@ public class JFrameUI {
         this.messageArea = new MessageArea(); 
         this.gameManager = new GameManager(this);
         this.gamePanel = new GamePanel(gameManager, this);
-        this.inventoryScreen = new InventoryScreen(this, gameManager.getPlayer());
+        this.inventoryScreen = new InventoryScreen(this);
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
@@ -62,8 +64,8 @@ public class JFrameUI {
         gamePanel.requestFocusInWindow();
     }
 
-    public void showInventoryScreen() {
-        inventoryScreen.updateInventory(); // Update inventory display before showing
+    public void showInventoryScreen(Player p, ItemOptions filter) { //To add an enum for what kind of items to show
+        inventoryScreen.updateInventory(p, filter); // Update inventory display before showing
         cardLayout.show(mainPanel, "INVENTORY_SCREEN");
         inventoryScreen.requestFocusInWindow();
     }

@@ -18,11 +18,6 @@ public class AggravateMonster implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
-        throw new UnsupportedOperationException("This scroll requires a dungeon floor context.");
-    }
-
-    @Override
     public void applyToMonster(Monster monster) {
         throw new UnsupportedOperationException("Monsters cannot use this scroll.");
     }

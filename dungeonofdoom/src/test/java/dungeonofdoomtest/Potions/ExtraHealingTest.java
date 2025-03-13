@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.ExtraHealing;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.GeneralMonster;
 import com.models.dungeonofdoom.monster.Monster;
@@ -20,6 +21,7 @@ public class ExtraHealingTest {
     private Random mockRandom;
     private Player player;
     private Monster monster;
+    private DungeonFloor df;
 
     @BeforeEach
     void setUp() {
@@ -37,7 +39,7 @@ public class ExtraHealingTest {
         when(mockRandom.nextInt(8)).thenReturn(0,0,0);  
 
         ExtraHealing extraHealing = new ExtraHealing(mockRandom);
-        extraHealing.applyToPlayer(player);
+        extraHealing.applyToPlayer(player, df);
 
         assertEquals(53, player.getCurrentHealth());
     }
@@ -50,7 +52,8 @@ public class ExtraHealingTest {
         when(mockRandom.nextInt(8)).thenReturn(0, 0);  
 
         ExtraHealing extraHealing = new ExtraHealing(mockRandom);
-        extraHealing.applyToPlayer(player);
+        extraHealing.applyToPlayer(player, df);
+
 
         
         assertEquals(102, player.getMaxHealth());

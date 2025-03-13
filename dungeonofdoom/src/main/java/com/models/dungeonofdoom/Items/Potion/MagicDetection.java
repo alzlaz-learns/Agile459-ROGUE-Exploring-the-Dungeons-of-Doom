@@ -19,15 +19,16 @@ public class MagicDetection implements ItemEffect{
         this.random = random;
     }
     @Override
-    public void applyToPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToPlayer'");
+    public void applyToPlayer(Player player, DungeonFloor dungeonFloor) {
+        for(Item i: dungeonFloor.getItems()){
+            // dungeonFloor.revealItemLocation(i);
+            i.discover();
+        }
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+       
     }
 
     @Override
@@ -39,12 +40,5 @@ public class MagicDetection implements ItemEffect{
     public String messageStringMonster(Monster monster) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
-    }
-
-    @Override
-    public void applyToPlayer(Player player, DungeonFloor dungeonFloor){
-        for(Item i: dungeonFloor.getItems()){
-            dungeonFloor.revealItemLocation(i);
-        }
     }
 }

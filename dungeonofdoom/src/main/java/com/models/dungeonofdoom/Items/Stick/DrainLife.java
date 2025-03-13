@@ -16,7 +16,7 @@ public class DrainLife implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         player.setCurrentHealth(player.getCurrentHealth() / 2);
         drainAmount = player.getCurrentHealth();
         

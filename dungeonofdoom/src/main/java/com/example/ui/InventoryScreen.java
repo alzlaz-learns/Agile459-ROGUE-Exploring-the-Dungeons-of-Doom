@@ -1,17 +1,11 @@
 package com.example.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.awt.*;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -19,55 +13,80 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.enums.ItemOptions;
 
-import com.models.dungeonofdoom.Items.Pack;
-
-
-public class InventoryScreen extends JPanel  {
+public class InventoryScreen extends JPanel {
     private JFrameUI frame;
-    private Player player;
-    private DefaultListModel<String> listModel;
-    private JList<String> itemList;
+    
 
-    public InventoryScreen(JFrameUI frame, Player player) {
+    private JPanel inventoryPanel; // Panel for items
+    private JLabel title;
+    
+
+    public InventoryScreen(JFrameUI frame) {
         this.frame = frame;
-        this.player = player;
-        setLayout(new BorderLayout());
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
-        this.setFont(getFont());
-
-        JLabel title = new JLabel("Inventory", SwingConstants.CENTER);
-        title.setFont(new Font("Monospaced", Font.BOLD, 16));
-
-        listModel = new DefaultListModel<>();
-        itemList = new JList<>(listModel);
         
+        setLayout(new BorderLayout());
+        setBackground(Color.BLACK);
+        setDoubleBuffered(true);
+
+        title = new JLabel("Inventory", SwingConstants.CENTER);
+        title.setFont(new Font("Monospaced", Font.BOLD, 16));
+        title.setForeground(Color.WHITE);
+
+        inventoryPanel = new JPanel(new GridLayout(12, 2, 10, 10)); // 12 rows, 2 columns
+        inventoryPanel.setBackground(Color.BLACK);
+
         setFocusable(true);
         requestFocusInWindow();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) { // Press SPACE to exit inventory
-                    frame.showGameScreen(); 
+                    frame.showGameScreen();
                 }
             }
         });
+
         add(title, BorderLayout.NORTH);
-        
+        add(inventoryPanel, BorderLayout.CENTER);
     }
 
-    public void updateInventory() {
-    listModel.clear(); // Clear the previous inventory list
+
     
-    List<String> items = player.getPack().listInventory();
-    
-    if (items.isEmpty()) {
-        listModel.addElement("empty");
-    } else {
-        for (String item : items){
-            listModel.addElement(item); 
+
+    public void updateInventory(Player player, ItemOptions filter) {
+        inventoryPanel.removeAll(); // Clear previous items
+
+        List<Item> items = player.getPack().getItemsByType(filter);
+        
+        int maxItems = 23;
+       
+            
+        if (items.isEmpty()) {
+            JLabel emptyLabel = new JLabel("empty", SwingConstants.CENTER);
+            emptyLabel.setForeground(Color.WHITE);
+            emptyLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+            inventoryPanel.add(emptyLabel);
+        } else {
+            for (int i = 0; i < maxItems; i++) {
+                String selectionLetter = " " + ((char)('a' + i));
+                if (i < items.size()) {
+                    JLabel itemLabel = new JLabel(selectionLetter + ") " + items.get(i).getItemName(), SwingConstants.CENTER);
+                    itemLabel.setForeground(Color.WHITE);
+                    itemLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+                    inventoryPanel.add(itemLabel);
+                } else {
+                    inventoryPanel.add(new JLabel("")); // Fill empty grid slots for alignment
+                }
+            }
         }
+
+        revalidate();
+        repaint(); // Refresh the panel
     }
-}
+            
+
 }

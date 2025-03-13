@@ -19,10 +19,6 @@ public class ConfusionScroll implements ItemEffect{
         this.random = new Random();
     }
 
-    @Override
-    public void applyToPlayer(Player player) {
-        
-    }
 
     @Override
     public void applyToMonster(Monster monster) {
@@ -39,6 +35,7 @@ public class ConfusionScroll implements ItemEffect{
         return "The monster looks confused!";
     }
 
+    @Override
     public void applyToPlayer(Player player, DungeonFloor floor) {
         int duration = random.nextInt(8) + 1 + 20; 
 

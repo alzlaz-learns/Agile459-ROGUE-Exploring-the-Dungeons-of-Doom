@@ -14,7 +14,7 @@ public class TeleportAway implements ItemEffect {
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
     }
 
     @Override

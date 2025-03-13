@@ -3,12 +3,13 @@ package com.models.dungeonofdoom.Items.Scroll;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class EnchantArmor implements ItemEffect{
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         Armor armor = player.getEquippedArmor();
         if (armor == null) {
             return;

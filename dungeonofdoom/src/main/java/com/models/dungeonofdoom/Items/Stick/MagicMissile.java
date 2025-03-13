@@ -2,12 +2,13 @@ package com.models.dungeonofdoom.Items.Stick;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class MagicMissile implements ItemEffect {
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         // do nothing 
     }
 

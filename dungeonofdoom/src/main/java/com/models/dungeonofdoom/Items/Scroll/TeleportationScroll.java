@@ -19,10 +19,7 @@ public class TeleportationScroll implements ItemEffect{
     public TeleportationScroll(Random rand){
         this.rand = rand;
     }
-    @Override
-    public void applyToPlayer(Player player) {
-       
-    }
+    
 
     @Override
     public void applyToPlayer(Player player, DungeonFloor df) {

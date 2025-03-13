@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.Blindness;
 import com.models.dungeonofdoom.Items.Potion.RaiseLevel;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.monster.GeneralMonster;
 import com.models.dungeonofdoom.monster.Monster;
@@ -20,7 +21,7 @@ public class RaiseLevelTest {
 
     private Random mockRandom;
     private Monster monster;
-
+    private DungeonFloor df;
     @BeforeEach
     void setUp(){
         mockRandom = mock(Random.class);
@@ -39,7 +40,7 @@ public class RaiseLevelTest {
         
         RaiseLevel r = new RaiseLevel();
         assertEquals(1, player.getLevel());
-        r.applyToPlayer(player);
+        r.applyToPlayer(player, df);
         assertEquals(2, player.getLevel());
 
     }

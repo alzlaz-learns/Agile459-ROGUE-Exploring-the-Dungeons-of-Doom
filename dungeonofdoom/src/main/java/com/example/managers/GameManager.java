@@ -8,10 +8,10 @@ import java.util.Random;
 import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-
+import com.models.dungeonofdoom.Items.Ring.Ring;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -21,9 +21,11 @@ public class GameManager {
     private List<DungeonFloor> dungeonFloors;
     private int currentFloor;
     private JFrameUI frame;
-
+    
     private MonsterManager monsterManager;
     
+    private boolean processing = false;
+    private ItemOptions currentProcessingOption = null;
 
     public GameManager(JFrameUI frame) {
         this.frame = frame;
@@ -59,10 +61,12 @@ public class GameManager {
             return; 
         }
 
+        if (processing){
+            processInput(e.getKeyChar());
+            return;
+        }
         
-
-       
-
+        
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
 
@@ -95,19 +99,28 @@ public class GameManager {
             player.confusedDecrease(); // Reduce confusion counter
         } else{
             switch (keyCode) {
-                case KeyEvent.VK_W: 
+                case KeyEvent.VK_I:
+                    frame.showInventoryScreen(player, ItemOptions.ALL);
+                    return;
+                case KeyEvent.VK_Q:
+                    handleInput(ItemOptions.QUAFFABLE);
+                    return;
+                case KeyEvent.VK_P:
+                    handleInput(ItemOptions.PUTTABLE);
+                    return;
+                case KeyEvent.VK_K: 
                 case KeyEvent.VK_UP: 
                     if (newY > 0) newY -= moveMultiplier;
                     break;
-                case KeyEvent.VK_S:           
+                case KeyEvent.VK_J:           
                 case KeyEvent.VK_DOWN: 
                     if (newY < dungeon.length - 1) newY += moveMultiplier;
                     break;
-                case KeyEvent.VK_A: 
+                case KeyEvent.VK_H: 
                 case KeyEvent.VK_LEFT: 
                     if (newX > 0) newX -= moveMultiplier;
                     break;
-                case KeyEvent.VK_D: 
+                case KeyEvent.VK_L: 
                 case KeyEvent.VK_RIGHT:
                     if (newX < dungeon[0].length - 1) newX += moveMultiplier;
                     break;
@@ -182,6 +195,43 @@ public class GameManager {
 
         frame.updateGameScreen();
     }
+    
+    public void processInput(char input){
+        if(input == KeyEvent.VK_ESCAPE){
+            processing = false;
+            currentProcessingOption = null; 
+            return;
+        }
+        if(input == '*'){
+            frame.showInventoryScreen(player, currentProcessingOption);
+        }
+
+        List<Item> availableItems = player.getPack().getItemsByType(currentProcessingOption);
+        input = Character.toLowerCase(input);
+        int index = input - 'a';
+
+        if (index >= 0 && index < availableItems.size()) {
+            // Item selectedItem = availableItems.get(index);
+            if (currentProcessingOption == ItemOptions.WEARABLE) {
+                String equipMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
+                frame.updateMessage(equipMessage);
+            } 
+            
+            else if (currentProcessingOption == ItemOptions.QUAFFABLE){
+                player.getPack().useItem(index, player, dungeonFloors.get(currentFloor)); 
+            }
+            
+            processing = false; 
+        }
+    }
+
+    
+    private void handleInput(ItemOptions option){
+        currentProcessingOption = option;
+        String result =  String.format("Which object do you want to %s? (* for list)", option.getName());
+        frame.updateMessage(result);
+        processing = true;
+    }
 
     private void handleMovement(int newX, int newY) {
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
@@ -228,7 +278,7 @@ public class GameManager {
         if(item != null){
             dungeonFloors.get(currentFloor).removeItem(item);
             player.addItem(item);
-            player.printPack();
+            // player.printPack();
             // System.out.println(player.getPack());
         }
         

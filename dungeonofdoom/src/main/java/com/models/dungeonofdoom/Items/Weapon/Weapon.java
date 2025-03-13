@@ -3,6 +3,7 @@ package com.models.dungeonofdoom.Items.Weapon;
 import com.models.Player;
 import com.models.dungeonofdoom.enums.WeaponEnum;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.Helper.Pair;
 import java.util.Random;
@@ -62,8 +63,9 @@ public class Weapon extends Item {
     }
 
     @Override
-    public void message(Player p) {
+    public String message(Player p) {
         System.out.println("You wield the " + weaponType.getName() + ".");
+        return "You wield the " + weaponType.getName() + ".";
     }
 
     @Override
@@ -72,7 +74,7 @@ public class Weapon extends Item {
     }
 
     @Override
-    public void effect(Player p) {
+    public void effect(Player p, DungeonFloor df) {
         // no effect 
     }
 
