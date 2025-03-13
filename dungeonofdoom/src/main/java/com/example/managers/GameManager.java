@@ -199,7 +199,7 @@ public class GameManager {
             CombatManager.combatOrdering(player, monster, currentDungeonFloor, frame);
             frame.updateGameScreen();
             // Reset healing counter after combat
-            HealingManager.resetNonCombatCounter();
+            TurnManager.resetNonCombatCounter();
         } else {
 
             // Move player only if the tile is walkable
@@ -207,7 +207,7 @@ public class GameManager {
             checkTrap(newX, newY);
             checkItem(newX, newY);
             // Process healing for non-combat turn
-            HealingManager.processHealing(player, false, frame);
+            TurnManager.processNonCombatTurn(player, frame);
         }
 
 

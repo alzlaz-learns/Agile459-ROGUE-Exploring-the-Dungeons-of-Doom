@@ -750,7 +750,6 @@ public class DungeonFloor {
         map[position.y][position.x] = itemSymbol;
     }
 
-
     public List<Item> getItems(){
         return items;
     }
@@ -768,6 +767,7 @@ public class DungeonFloor {
         }
     }
 
+
     public void revealMap(){
         for(Room r: rooms){
             r.discover();
@@ -778,6 +778,7 @@ public class DungeonFloor {
             
         }
     }
+
     
     // This method updates the map when a room is revealed
     private void updateMapForRoom(Room room) {
@@ -836,5 +837,50 @@ public class DungeonFloor {
             map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
         }
     }
+    
+    public void teleportMonsterAway(Monster monster) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
+        }
+        
+        removeMonster(monster);
+        Point destination = validTiles.get(random.nextInt(validTiles.size()));
+        monster.setPosition(destination.x, destination.y);
+        monsters.add(monster);
+        map[destination.y][destination.x] = monster.getSymbol();
+    }
+
+    
+    public void teleportMonsterTo(Monster monster, Point playerLocation) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
+        }
+
+        Point spaceAbove = new Point(playerLocation.x, playerLocation.y - 1);
+        Point spaceBelow = new Point(playerLocation.x, playerLocation.y + 1);
+        Point spaceLeft = new Point(playerLocation.x - 1, playerLocation.y);
+        Point spaceRight = new Point(playerLocation.x + 1, playerLocation.y);
+
+        List<Point> validTilesByPlayer = new ArrayList<>();
+        for (Point p: validTiles){
+            if (p == spaceAbove ||
+             p == spaceBelow ||
+              p == spaceLeft ||
+               p == spaceRight){
+                validTilesByPlayer.add(p);
+            }
+        }
+
+        Point selectedTile = validTilesByPlayer.isEmpty() ? null : validTilesByPlayer.get(random.nextInt(validTilesByPlayer.size()));
+        removeMonster(monster);
+        monster.setPosition(selectedTile.x, selectedTile.y);
+        monsters.add(monster);
+        map[selectedTile.y][selectedTile.x] = monster.getSymbol();
+    }
+
     
 }

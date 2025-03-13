@@ -33,7 +33,6 @@ public class Armor extends Item {
 
     public void enchantArmor(){
         this.isEnchanted = true;
-        System.out.println("The armor glows with a strange energy.");
         armorClass = armorType.getArmorClass() - 1;
     }
 
@@ -51,7 +50,6 @@ public class Armor extends Item {
 
     public void curseArmor(){
         this.isCursed = true;
-        System.out.println("The armor is now cursed. You feel rotten.");
         armorClass = armorType.getArmorClass() + 1;
     }
 

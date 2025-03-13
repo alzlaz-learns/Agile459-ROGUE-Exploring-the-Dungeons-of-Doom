@@ -2,9 +2,16 @@ package com.models.dungeonofdoom.Items.Stick;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class TeleportAway implements ItemEffect {
+
+    private DungeonFloor dungeonFloor;
+
+    public TeleportAway(DungeonFloor dungeonFloor) {
+        this.dungeonFloor = dungeonFloor;
+    }
 
     @Override
     public void applyToPlayer(Player player) {
@@ -12,19 +19,17 @@ public class TeleportAway implements ItemEffect {
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
+        dungeonFloor.teleportMonsterAway(monster);
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
+        return "";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
+
     }
 }

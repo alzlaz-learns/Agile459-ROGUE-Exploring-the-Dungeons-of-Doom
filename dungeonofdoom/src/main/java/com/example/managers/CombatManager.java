@@ -6,10 +6,15 @@ import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.example.ui.JFrameUI;
+import com.models.dungeonofdoom.Items.Stick.Lightning;
+import com.models.dungeonofdoom.Items.Stick.Stick;
+import com.models.dungeonofdoom.enums.StickEnum;
+import com.models.dungeonofdoom.Items.Item;
 
 public class CombatManager {
 
     private static final Random rand = new Random();
+    private static int globalTurnCounter = 0;
 
     private static int getAttackModifier(int strength) {
         if (strength < 8) return -7;
@@ -80,6 +85,18 @@ public class CombatManager {
             monster.removeHold();
         }
 
+        boolean hasLightningStaff = false;
+        Lightning lightningEffect = null;
+        
+        // Check equipment
+        for (Item item : player.getEquippedItems()) {
+            // Check if the item is a Stick with LIGHTNING type
+            if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.LIGHTNING) {
+                hasLightningStaff = true;
+                break;
+            }
+        }
+
         if (chanceToHit(player.getLevel(), monster.getAmr(), player.getStrength())) {
             int baseDamage = player.calculateDmg();
             int strengthBonus = getDamageModifier(player.getStrength());
@@ -99,11 +116,22 @@ public class CombatManager {
             }
         } else {
             frame.updateMessage("Your attack misses!");
+            
+            // If player has lightning staff and misses, start the bouncing effect
+            if (hasLightningStaff) {
+                lightningEffect = new Lightning(rand, dungeonFloor);
+                TurnManager.addLightningEffect(lightningEffect); //maybe hacky impl, forgive me 
+                frame.updateMessage(lightningEffect.messageStringPlayer(player));
+            }
+            
             frame.updateGameScreen();
         }
     }
 
     public static void combatOrdering(Player player, Monster monster, DungeonFloor dungeonFloor, JFrameUI frame) {
+        // Increment turn counter at the start of each combat round
+        incrementTurnCounter();
+
         // mean monsters attack first
         if (monster.isMean()) {
             frame.updateMessage("The " + monster.getName() + " is Mean and attacks first!");
@@ -122,5 +150,20 @@ public class CombatManager {
                 monsterAttack(player, monster, frame);
             }
         }
+    }
+
+    /**
+     * Increments the global turn counter
+     */
+    public static void incrementTurnCounter() {
+        globalTurnCounter++;
+    }
+    
+    /**
+     * Gets the current global turn count
+     * @return the current global turn count
+     */
+    public static int getTurnCounter() {
+        return globalTurnCounter;
     }
 }

@@ -6,6 +6,11 @@ import java.awt.Point;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Pack;
 import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.Items.Stick.Stick;
+import com.models.dungeonofdoom.Items.Weapon.Weapon;
+import com.models.dungeonofdoom.enums.StickEnum;
+import com.models.dungeonofdoom.Items.Stick.Striking;
+import java.util.Random;
 import com.player.uday.PlayerPackPlayground;
 
 import lombok.Data;
@@ -29,7 +34,7 @@ public class Player {
     private int immobile;
     private int confused;
     private Pack pack;
-    private List<Integer> equippedItems; //placeHolder <Integer>
+    private List<Item> equippedItems;
     private int maxStrength;
     private int minStrength;
     private boolean isCursed;
@@ -44,6 +49,8 @@ public class Player {
     private Item rightRing;
     private Armor bodyArmor;
     private Item weapon;
+
+    private Random random;
 
     
     // Constructor
@@ -62,7 +69,7 @@ public class Player {
         this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
         this.immobile = 0;
         this.confused = 0;
-        this.equippedItems = new ArrayList<Integer>();
+        this.equippedItems = new ArrayList<Item>();
 
         // potion
         
@@ -72,6 +79,7 @@ public class Player {
         this.faintTimer = 0;
 
         this.pack = new Pack();
+        this.random = new Random();
     }
     
     // Core Utility Methods
@@ -132,16 +140,25 @@ public class Player {
         
         // For now, we're using placeholder integers for items
         // This should be updated when proper item system is implemented
-        for (Integer item : equippedItems) {
-            baseDamage += item; // Base damage from weapon
-            bonusDamage += 0;   // Bonus damage from magical enhancements
+        for (Item item : equippedItems) {
+            // Handle bonus damage based on item type
+            if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.STRIKING) {
+                Striking strikingEffect = new Striking(random);
+                baseDamage += strikingEffect.rollStrikingHit();
+            } else if (item instanceof Weapon) {
+                Weapon weapon = (Weapon) item;
+                baseDamage += weapon.getDamageWielded();
+            } 
+            // Add more item types as needed
+            bonusDamage += 0;   // don't what to do here yet, setting up some basics
         }
         
         // If no weapon equipped, use minimum damage
         if (baseDamage == 0) {
             baseDamage = 1;
         }
-        
+
+    
         return baseDamage + bonusDamage;
     }
     public Pack getPack() {
@@ -251,6 +268,10 @@ public class Player {
 
     public int getArmorClass(){
         return bodyArmor != null ? bodyArmor.getArmorClass() : armor;
+    }
+
+    public List<Item> getEquippedItems() {
+        return equippedItems;
     }
 
     public int calculateStrengthWithItems(){
