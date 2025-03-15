@@ -400,12 +400,22 @@ public class Player {
             return "You can only equip Armors!";
         }
 
-        if(this.bodyArmor != null) return "Must reomve current armor first";
+        if(this.bodyArmor != null) return "Must remove current armor first";
     
+
     
         bodyArmor = (Armor) w;
         w.equip();
 
         return w.message(this);
+    }
+
+    public String unEquipArmor(){
+        String name = bodyArmor.getItemName();
+        if(bodyArmor.isCursed()) return "The armor is cursed cant remove!";
+        bodyArmor.unEquip();
+        this.bodyArmor = null;
+
+        return "Removed: " + name;
     }
 }

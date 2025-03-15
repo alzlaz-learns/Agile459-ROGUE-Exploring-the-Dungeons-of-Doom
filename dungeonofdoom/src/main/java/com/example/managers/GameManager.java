@@ -104,6 +104,12 @@ public class GameManager {
             player.confusedDecrease(); // Reduce confusion counter
         } else{
             switch (keyCode) {
+                case KeyEvent.VK_T:
+                    if(e.isShiftDown()) {
+                        String res = player.unEquipArmor();
+                        frame.updateMessage(res);
+                    }
+                    return; 
                 case KeyEvent.VK_W:
                     if(e.isShiftDown()){
                         handleInput(ItemOptions.WEARABLE);
