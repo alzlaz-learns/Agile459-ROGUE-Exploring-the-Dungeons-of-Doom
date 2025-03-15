@@ -50,7 +50,7 @@ public class Potion extends Item{
     
     @Override
     public String getItemName(){
-        return type.getName();
+        return isIdentified() ? "Potion of " + type.getName() : "Potion of " + type.getScramble();
     }
     
 }

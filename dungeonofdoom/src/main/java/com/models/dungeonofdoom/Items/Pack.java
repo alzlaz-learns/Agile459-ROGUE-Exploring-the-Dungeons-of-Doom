@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Items.Ring.Ring;
+import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.Items.Weapon.Weapon;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ItemOptions;
@@ -66,8 +68,7 @@ public class Pack {
         droppedItem.setPosition(tile);
         List<Item> dungeonItems = d.getItems();
         dungeonItems.add(droppedItem);
-        //TODO 
-        System.out.println("Dropped: " + droppedItem.getItemName() );
+        
         
     }
    
@@ -96,6 +97,37 @@ public class Pack {
         }
 
         return res;
+    }
+
+    public Pair<Item, String> readItem(int index, Player p){
+        if (index < 0 || index >= pack.size()) {
+            System.out.println("Invalid index. No item was read.");
+            return new Pair<>(null, "Nothing to use!");
+        }
+        Item i = pack.get(index);
+        if( !(i instanceof Scroll)) return new Pair<>(null, "Not a viable selection!");
+        
+        if(i.isSingleUse() ){
+            pack.remove(index);
+        }
+
+        return new Pair<>(i, i.message(p));
+    }
+
+    public String identifyItem(int index, Player p){
+        if (index < 0 || index >= pack.size()) {
+            System.out.println("Invalid index. No item was dropped.");
+            return "Nothing to use!";
+        }
+
+        Item i = pack.get(index);
+        System.out.println(i.getItemName());
+        i.identify();
+        System.out.println(i.isIdentified());
+        p.addToIdentified(i);
+
+        return "You identified " + i.getItemName();
+        
     }
 
     public String useItem(int index, Player p, DungeonFloor d){
@@ -137,6 +169,9 @@ public class Pack {
                 return i instanceof Weapon;
             case WEARABLE:
                 return i instanceof Armor;
+            case READABLE:
+                return i instanceof Scroll;
+            case IDENTIFIABLE: //waterfalling for now
             case ALL:
                 return true;
             default:

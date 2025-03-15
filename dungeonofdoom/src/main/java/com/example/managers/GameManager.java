@@ -7,10 +7,14 @@ import java.util.Random;
 
 import com.example.ui.JFrameUI;
 import com.models.Player;
+import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Scroll.Identify;
+import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ItemOptions;
+import com.models.dungeonofdoom.enums.ScrollEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -119,7 +123,8 @@ public class GameManager {
                     } else{
                         handleInput(ItemOptions.WIELDABLE);
                     }
-                    
+                case KeyEvent.VK_R:
+                    handleInput(ItemOptions.READABLE);                    
                     return;
                 case KeyEvent.VK_I:
                     frame.showInventoryScreen(player, ItemOptions.ALL);
@@ -253,6 +258,22 @@ public class GameManager {
             }else if (currentProcessingOption == ItemOptions.ALL){
                 player.getPack().dropObject(index, player, dungeonFloors.get(currentFloor));
                 // frame.updateMessage();
+            }else if (currentProcessingOption == ItemOptions.READABLE){
+
+                Pair<Item, String> selected = player.getPack().readItem(index, player);
+
+                Item i = selected.getA();
+                // If the player selects an Identify Scroll
+                if ( i instanceof Scroll && ((Scroll) i).getType() == ScrollEnum.IDENTIFY) {
+                    frame.updateMessage(selected.getB());
+                    processing = true;
+                    currentProcessingOption = ItemOptions.IDENTIFIABLE; //maybe if i have time i will on showing only un identified items. 
+                    return;
+                }
+            } else if (currentProcessingOption == ItemOptions.IDENTIFIABLE) {
+                // Player is selecting an item to identify
+                String identifyMessage = player.getPack().identifyItem(index, player);
+                frame.updateMessage(identifyMessage);
             }
             
             processing = false; 
@@ -307,13 +328,13 @@ public class GameManager {
         }
     }
 
+    //when a player walks over an item it  they pick it up it adds to the player pack and returns a string that is called by updateMessage and displays what was picked up
     private void checkItem(int x, int y){
         Item item = dungeonFloors.get(currentFloor).getItemAt(x, y);
         if(item != null){
             dungeonFloors.get(currentFloor).removeItem(item);
-            player.addItem(item);
-            // player.printPack();
-            // System.out.println(player.getPack());
+            String res = player.addItem(item);
+            frame.updateMessage("you picked up a: " + res);
         }
         
     }

@@ -7,6 +7,7 @@ public enum ItemOptions {
     WIELDABLE("Wield"),
     CONSUMABLE("Eat"),
     PUTTABLE("Put On"),
+    IDENTIFIABLE("Identify"), 
     ALL(" "),
     ;
 

@@ -1,11 +1,13 @@
 package com.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.awt.Point;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.Pack;
 import com.models.dungeonofdoom.Items.Armor.Armor;
+
 import com.models.dungeonofdoom.Items.Ring.Ring;
 
 import com.models.dungeonofdoom.Items.Stick.Stick;
@@ -14,7 +16,7 @@ import com.models.dungeonofdoom.enums.RingEnum;
 import com.models.dungeonofdoom.enums.StickEnum;
 import com.models.dungeonofdoom.Items.Stick.Striking;
 import java.util.Random;
-
+import java.util.Set;
 
 import lombok.Data;
 
@@ -47,7 +49,7 @@ public class Player {
     private int hasteTimer;
     private int faintTimer;
     private int revealTimer = 0;
-
+    private final Set<String> identified;
     private Item leftRing;
     private Item rightRing;
     private Armor bodyArmor;
@@ -80,10 +82,25 @@ public class Player {
         this.isCursed = false;
         this.hasteTimer = 0;
         this.faintTimer = 0;
-
+        identified = new HashSet<>();
+    
         this.pack = new Pack();
         this.random = new Random();
     }
+
+    public boolean isIdentified(Item i) {
+        return identified.contains(i.getItemName());
+    }
+
+
+    public void addToIdentified(Item i) {
+        System.out.println("in players addTOIdentified");
+        System.out.println(i.getItemName());
+        this.identified.add(i.getItemName());
+    }
+
+    
+    
     
     // Core Utility Methods
     public boolean isAlive() {
@@ -178,8 +195,11 @@ public class Player {
     public void printPack() {
         pack.listInventory();
     }
-    public void addItem(Item i){
+
+    //changing to return string name so 
+    public String addItem(Item i){
         pack.addItem(i);
+        return i.getItemName();
     }
     public int getHealth() {
         return currentHealth;

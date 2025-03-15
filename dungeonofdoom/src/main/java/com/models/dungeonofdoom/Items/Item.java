@@ -52,6 +52,14 @@ public abstract class Item {
         this.singleUse = true;
     }
 
+    public void identify(){
+        this.identified = true;
+    }
+
+    public boolean isItemIdentified(){
+        return identified;
+    }
+
     public abstract String getItemName();
 
     public abstract char getSymbol();

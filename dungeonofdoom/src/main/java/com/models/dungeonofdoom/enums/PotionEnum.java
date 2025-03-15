@@ -1,5 +1,6 @@
 package com.models.dungeonofdoom.enums;
 
+import com.models.dungeonofdoom.Helper.Scrambler;
 import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Potion.*;
 
@@ -10,7 +11,7 @@ public enum PotionEnum {
     // CONFUSION('?',"Potion of Confusion",new Confusion()),
     // EXTRA_HEALING('┴',"Potion of Extra Healing",new ExtraHealing()),
     // GAIN_STRENGTH('┼',"Potion of Gain Strength",new GainStrength()),
-    HASTE_SELF('±',"Potion of Haste",new Haste()),
+    HASTE_SELF('±',"Haste",new Haste()),
     // HEALING('+',"Potion of Healing",new Healing()),
     // POISON('ƒ',"Potion of Poison",new Poison()),
     // MAGIC_DETECTION('ƒ',"Potion of Magic Detection",new MagicDetection()),
@@ -26,17 +27,21 @@ public enum PotionEnum {
     private final ItemEffect effect;
     private final char symbol;
     private final String name;
+    private final String scramble;
 
     PotionEnum( char symbol, String name, ItemEffect effect) {
         this.symbol = symbol;
         this.effect = effect;
         this.name = name;
+        this. scramble = Scrambler.scrambleString(name);
     }
     
     PotionEnum() {
         this.symbol = '0';
         this.name = "No effect";
-        this.effect = new NoEffect(); 
+        this.effect = new NoEffect();
+        this.scramble = Scrambler.scrambleString(name);
+    
     }
 
     public char getSymbol() {
@@ -49,5 +54,9 @@ public enum PotionEnum {
 
     public String getName(){
         return this.name;
+    }
+
+    public String getScramble(){
+        return this.scramble;
     }
 }

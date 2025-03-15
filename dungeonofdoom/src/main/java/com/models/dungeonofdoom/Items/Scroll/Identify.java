@@ -5,29 +5,28 @@ import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class AggravateMonster implements ItemEffect {
+public class Identify implements ItemEffect{
 
     @Override
-    public void applyToPlayer(Player player, DungeonFloor floor) {
-    
-        for (Monster monster : floor.getMonsters()) {
-            monster.setAggressive(true); // Set all monsters to chase the player
-            monster.activate();
-        }
+    public void applyToPlayer(Player player, DungeonFloor dungeonFloor) {
+       
     }
 
     @Override
     public void applyToMonster(Monster monster) {
-        throw new UnsupportedOperationException("Monsters cannot use this scroll.");
+       System.out.println("This is just going to be done by player because of index selection.");
     }
 
     @Override
     public String messageStringPlayer(Player player) {
-        return "You hear a high-pitched humming noise...";
+        // TODO Auto-generated method stub
+        return "This scroll is an identify scroll ";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
-        return "";
+        // TODO Auto-generated method stub
+       return "";
     }
+
 }
