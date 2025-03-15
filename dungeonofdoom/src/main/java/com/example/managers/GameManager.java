@@ -105,7 +105,12 @@ public class GameManager {
         } else{
             switch (keyCode) {
                 case KeyEvent.VK_W:
-                    handleInput(ItemOptions.WIELDABLE);
+                    if(e.isShiftDown()){
+                        handleInput(ItemOptions.WEARABLE);
+                    } else{
+                        handleInput(ItemOptions.WIELDABLE);
+                    }
+                    
                     return;
                 case KeyEvent.VK_I:
                     frame.showInventoryScreen(player, ItemOptions.ALL);
@@ -233,6 +238,9 @@ public class GameManager {
             else if (currentProcessingOption == ItemOptions.WIELDABLE){
                 String wieldMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
                 frame.updateMessage(wieldMessage);
+            } else if (currentProcessingOption == ItemOptions.WEARABLE){
+                String wearMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
+                frame.updateMessage(wearMessage);
             }
             
             processing = false; 

@@ -65,10 +65,10 @@ public class ItemSpawner {
         int itemType = random.nextInt(2);
 
         return switch(itemType){
-            case 0 -> createWeapon();
+            case 0 -> createArmor();
             // case 1 -> createArmor();
             // case 2 -> createScroll();
-            default -> createWeapon();
+            default -> createArmor();
         };
     }
 

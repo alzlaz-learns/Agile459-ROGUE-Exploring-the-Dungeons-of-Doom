@@ -395,4 +395,17 @@ public class Player {
         return w.message(this);
     }
     
+    public String equipArmor(Item w){
+        if (!(w instanceof Armor)) {
+            return "You can only equip Armors!";
+        }
+
+        if(this.bodyArmor != null) return "Must reomve current armor first";
+    
+    
+        bodyArmor = (Armor) w;
+        w.equip();
+
+        return w.message(this);
+    }
 }

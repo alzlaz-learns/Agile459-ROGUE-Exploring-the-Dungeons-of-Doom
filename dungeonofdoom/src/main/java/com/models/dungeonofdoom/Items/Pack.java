@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Items.Ring.Ring;
 import com.models.dungeonofdoom.Items.Weapon.Weapon;
@@ -83,6 +84,10 @@ public class Pack {
             res = p.equipWeapon(i);
         }
 
+        if(i instanceof Armor){
+            res = p.equipArmor(i);
+        }
+
         return res;
     }
 
@@ -123,6 +128,8 @@ public class Pack {
                 return i instanceof Ring;
             case WIELDABLE:
                 return i instanceof Weapon;
+            case WEARABLE:
+                return i instanceof Armor;
             case ALL:
                 return true;
             default:
