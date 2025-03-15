@@ -388,12 +388,6 @@ public class Player {
             return "You can only equip weapons!";
         }
     
-      
-    
-        if (weapon != null) {
-            
-            return "You already have a weapon equipped. Unequip first.";
-        }
     
         weapon = (Weapon) w;
         w.equip();
