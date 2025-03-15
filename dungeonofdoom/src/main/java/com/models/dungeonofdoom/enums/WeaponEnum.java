@@ -10,11 +10,11 @@ public enum WeaponEnum {
     LONGSWORD("Longsword", 'L', "S", 
     new Pair<>(3, 4), new Pair<>(1, 2), null),
 
-    // BOW("Bow", 'B', "S",
-    //  new Pair<>(1, 1), new Pair<>(1, 1), null),
+    BOW("Bow", 'B', "S",
+     new Pair<>(1, 1), new Pair<>(1, 1), null),
 
-    // ARROW("Arrow", 'A', "B",
-    //  new Pair<>(1, 1), new Pair<>(2, 3), "Bow"),
+    ARROW("Arrow", 'A', "B",
+     new Pair<>(1, 1), new Pair<>(2, 3), "Bow"),
 
     DAGGER("Dagger", 'D', "S",
      new Pair<>(1, 6), null, null),
@@ -22,14 +22,14 @@ public enum WeaponEnum {
     TWO_HANDED_SWORD("Two-Handed Sword", 'T', "S",
      new Pair<>(4, 4), new Pair<>(1, 2), null),
 
-    // DART("Dart", 'd', "B",
-    //  new Pair<>(1, 1), null, null),
+    DART("Dart", 'd', "B",
+     new Pair<>(1, 1), null, null),
 
-    // CROSSBOW("Crossbow", 'C', "S",
-    //  new Pair<>(1, 1), new Pair<>(1, 1), null),
+    CROSSBOW("Crossbow", 'C', "S",
+     new Pair<>(1, 1), new Pair<>(1, 1), null),
 
-    // CROSSBOW_BOLT("Crossbow Bolt", 'c', "B",
-    //  new Pair<>(1, 2), new Pair<>(2, 5), "Crossbow"),
+    CROSSBOW_BOLT("Crossbow Bolt", 'c', "B",
+     new Pair<>(1, 2), new Pair<>(2, 5), "Crossbow"),
 
     SPEAR("Spear", 'S', "S",
      new Pair<>(2, 3), new Pair<>(1, 6), null);

@@ -29,6 +29,8 @@ import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
+import lombok.Data;
+
 public class DungeonFloor {
     private final int width;
     private final int height;
@@ -64,6 +66,7 @@ public class DungeonFloor {
     private List<Room> rooms;
     private List<Corridor> corridors;
 
+    
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
         this.width = width;

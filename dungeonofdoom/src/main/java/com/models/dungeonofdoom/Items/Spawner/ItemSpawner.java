@@ -39,7 +39,7 @@ public class ItemSpawner {
         List<Point> availableTiles = new ArrayList<>(validTiles);
 
         int itemCount = random.nextInt(maxItems - minItems + 1) + minItems;
-        System.out.println("Spawning " + itemCount + " items on level " + level);
+        // System.out.println("Spawning " + itemCount + " items on level " + level);
 
         for(int i = 0; i < itemCount && !availableTiles.isEmpty(); i++){
 

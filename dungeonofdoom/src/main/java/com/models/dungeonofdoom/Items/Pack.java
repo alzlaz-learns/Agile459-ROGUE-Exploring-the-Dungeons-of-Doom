@@ -1,5 +1,6 @@
 package com.models.dungeonofdoom.Items;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class Pack {
         return pack.get(index);
     }
 
-    public void dropObject(int index) {
+    public void dropObject(int index,  Player p, DungeonFloor d) {
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return;
@@ -59,11 +60,17 @@ public class Pack {
         
         
         Item droppedItem = pack.remove(index);
+        int xPos = (int) p.getPosition().getX();
+        int yPos = (int) p.getPosition().getY();
+        Point tile = new Point(xPos,yPos);
+        droppedItem.setPosition(tile);
+        List<Item> dungeonItems = d.getItems();
+        dungeonItems.add(droppedItem);
         //TODO 
-        System.out.println("Dropped: " );
+        System.out.println("Dropped: " + droppedItem.getItemName() );
         
     }
-
+   
     public String equipItem(int index, Player p, DungeonFloor d){
         
         if (index < 0 || index >= pack.size()) {

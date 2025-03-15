@@ -134,6 +134,7 @@ public class CombatManager {
         }
     }
 
+    // a little buggy i think will consider fixing this later it is making the player auto retaliate every single time.
     public static void combatOrdering(Player player, Monster monster, DungeonFloor dungeonFloor, JFrameUI frame) {
         // Increment turn counter at the start of each combat round
         incrementTurnCounter();

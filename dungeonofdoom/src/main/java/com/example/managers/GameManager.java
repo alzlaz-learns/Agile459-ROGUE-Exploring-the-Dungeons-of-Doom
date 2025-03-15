@@ -104,6 +104,9 @@ public class GameManager {
             player.confusedDecrease(); // Reduce confusion counter
         } else{
             switch (keyCode) {
+                case KeyEvent.VK_D:
+                    handleInput(ItemOptions.ALL);
+                    return;
                 case KeyEvent.VK_T:
                     if(e.isShiftDown()) {
                         String res = player.unEquipArmor();
@@ -247,6 +250,9 @@ public class GameManager {
             } else if (currentProcessingOption == ItemOptions.WEARABLE){
                 String wearMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
                 frame.updateMessage(wearMessage);
+            }else if (currentProcessingOption == ItemOptions.ALL){
+                player.getPack().dropObject(index, player, dungeonFloors.get(currentFloor));
+                // frame.updateMessage();
             }
             
             processing = false; 
