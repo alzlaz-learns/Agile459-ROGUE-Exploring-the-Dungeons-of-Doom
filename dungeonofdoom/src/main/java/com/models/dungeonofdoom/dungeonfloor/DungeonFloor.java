@@ -833,12 +833,12 @@ public class DungeonFloor {
         }
     }
 
-    public void revealMonstersOnMap(){
-        for (Monster m: monsters){
-            map[m.getY()][m.getX()] = m.getSymbol();
-            map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
-        }
-    }
+    // public void revealMonstersOnMap(){
+    //     for (Monster m: monsters){
+    //         map[m.getY()][m.getX()] = m.getSymbol();
+    //         map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+    //     }
+    // }
     
     public void teleportMonsterAway(Monster monster) {
         List<Point> validTiles = getValidRoomTiles();

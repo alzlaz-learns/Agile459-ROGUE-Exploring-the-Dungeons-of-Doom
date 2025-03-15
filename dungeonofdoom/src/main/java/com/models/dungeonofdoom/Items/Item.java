@@ -13,11 +13,13 @@ public abstract class Item {
     private Point position;
     private boolean discovered;
     private boolean singleUse;
+    private boolean equipped;
     
     public Item(){
         this.identified = false;
         this.discovered = false;
         this.singleUse = false;
+        this.equipped = false;
     }
 
     public abstract String message(Player p);
@@ -26,7 +28,17 @@ public abstract class Item {
     public abstract void effect(Player p, DungeonFloor dungeonFloor);
     public abstract void effect(Monster m);
 
+    public void equip(){
+        this.equipped = true;
+    }
+
+    public void unEquip(){
+        this.equipped = false;
+    }
     
+    public boolean isEquipped(){
+        return this.equipped;
+    }
 
     public void discover(){
         this.discovered = true;

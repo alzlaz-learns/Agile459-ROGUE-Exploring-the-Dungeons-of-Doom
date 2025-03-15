@@ -74,7 +74,12 @@ public class InventoryScreen extends JPanel {
             for (int i = 0; i < maxItems; i++) {
                 String selectionLetter = " " + ((char)('a' + i));
                 if (i < items.size()) {
-                    JLabel itemLabel = new JLabel(selectionLetter + ") " + items.get(i).getItemName(), SwingConstants.CENTER);
+                    JLabel itemLabel;
+                    if (items.get(i).isEquipped()) {
+                        itemLabel = new JLabel(selectionLetter + ") " + items.get(i).getItemName() + " (E)", SwingConstants.CENTER);
+                    } else {
+                        itemLabel = new JLabel(selectionLetter + ") " + items.get(i).getItemName(), SwingConstants.CENTER);
+                    }
                     itemLabel.setForeground(Color.WHITE);
                     itemLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
                     inventoryPanel.add(itemLabel);

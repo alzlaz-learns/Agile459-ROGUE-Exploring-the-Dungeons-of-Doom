@@ -72,8 +72,14 @@ public class GameManager {
 
         if(player.isRevealed()){
             player.decrementReveal();
-            currentDungeonFloor.revealMonstersOnMap();
+            // currentDungeonFloor.revealMonstersOnMap();
         }
+
+        if(player.isBlind()){
+            player.decrementBlind();
+
+        }
+
 
         int newX = player.getX();
         int newY = player.getY();
@@ -212,7 +218,7 @@ public class GameManager {
 
         if (index >= 0 && index < availableItems.size()) {
             // Item selectedItem = availableItems.get(index);
-            if (currentProcessingOption == ItemOptions.WEARABLE) {
+            if (currentProcessingOption == ItemOptions.PUTTABLE) {
                 String equipMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
                 frame.updateMessage(equipMessage);
             } 

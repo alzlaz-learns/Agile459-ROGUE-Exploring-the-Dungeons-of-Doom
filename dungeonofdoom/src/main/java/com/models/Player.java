@@ -360,19 +360,27 @@ public class Player {
         return this.bodyArmor;
     }
     public String equipRing(Item ring) {
+        System.out.println("equipRing() called with: " + ring.getItemName());
+    
         if (!(ring instanceof Ring)) {
-            System.out.println("You can only equip rings!"); 
+            System.out.println("Not a ring!"); 
             return "You can only equip rings!";
         }
-
+    
         if (leftRing == null) {
             leftRing = ring;
+            System.out.println("Ring equipped on left hand.");
         } else if (rightRing == null) {
             rightRing = ring;
+            System.out.println("Ring equipped on right hand.");
         } else {
+            System.out.println("Both ring slots full!");
             return "You are already wearing two rings.";
         }
-
+    
+        ring.equip();
+        System.out.println("Final Equipped Status: " + ring.isEquipped());
         return "You equipped " + ring.getItemName();
     }
+    
 }

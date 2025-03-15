@@ -66,7 +66,7 @@ public class ItemSpawner {
             case 0 -> createPotion();
             // case 1 -> createArmor();
             // case 2 -> createScroll();
-            default -> createRing();
+            default -> createPotion();
         };
     }
 

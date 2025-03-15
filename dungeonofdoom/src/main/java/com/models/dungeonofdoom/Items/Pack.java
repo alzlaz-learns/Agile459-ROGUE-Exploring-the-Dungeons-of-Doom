@@ -63,6 +63,7 @@ public class Pack {
     }
 
     public String equipItem(int index, Player p, DungeonFloor d){
+        System.out.println("calling equipItem");
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return "Nothing to use!";
