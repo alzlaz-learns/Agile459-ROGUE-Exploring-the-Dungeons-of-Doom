@@ -51,7 +51,7 @@ public class Player {
     private Item leftRing;
     private Item rightRing;
     private Armor bodyArmor;
-    private Item weapon;
+    private Weapon weapon;
 
     private Random random;
 
@@ -381,6 +381,24 @@ public class Player {
         ring.equip();
         System.out.println("Final Equipped Status: " + ring.isEquipped());
         return "You equipped " + ring.getItemName();
+    }
+
+    public String equipWeapon(Item w){
+        if (!(w instanceof Weapon)) {
+            return "You can only equip weapons!";
+        }
+    
+      
+    
+        if (weapon != null) {
+            
+            return "You already have a weapon equipped. Unequip first.";
+        }
+    
+        weapon = (Weapon) w;
+        w.equip();
+
+        return w.message(this);
     }
     
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Items.Ring.Ring;
+import com.models.dungeonofdoom.Items.Weapon.Weapon;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ItemOptions;
 
@@ -63,24 +64,30 @@ public class Pack {
     }
 
     public String equipItem(int index, Player p, DungeonFloor d){
-        System.out.println("calling equipItem");
+        
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return "Nothing to use!";
         }
-
+        
         Item i = pack.get(index);
         String res = "";
         if(i instanceof Ring){
-            System.out.println("Instance of ring");
-            res = p.equipRing(i);
-            System.out.println(res);
+            p.equipRing(i);
+            res = i.message(p);
+        }
+
+        if(i instanceof Weapon){
+            
+            
+            res = p.equipWeapon(i);
         }
 
         return res;
     }
 
     public String useItem(int index, Player p, DungeonFloor d){
+        
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return "Nothing to use!";
@@ -114,6 +121,8 @@ public class Pack {
                 return i instanceof Potion;
             case PUTTABLE:
                 return i instanceof Ring;
+            case WIELDABLE:
+                return i instanceof Weapon;
             case ALL:
                 return true;
             default:

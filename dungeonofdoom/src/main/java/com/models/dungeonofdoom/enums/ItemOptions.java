@@ -4,7 +4,7 @@ public enum ItemOptions {
     WEARABLE("Wear"),
     QUAFFABLE("Quaff"),
     READABLE("Read"),
-    WIELD("Wield"),
+    WIELDABLE("Wield"),
     CONSUMABLE("Eat"),
     PUTTABLE("Put On"),
     ALL(" "),

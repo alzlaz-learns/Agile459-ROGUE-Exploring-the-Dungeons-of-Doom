@@ -11,10 +11,12 @@ import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Items.Ring.Ring;
 import com.models.dungeonofdoom.Items.Scroll.Scroll;
+import com.models.dungeonofdoom.Items.Weapon.Weapon;
 import com.models.dungeonofdoom.enums.ArmorEnum;
 import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.enums.RingEnum;
 import com.models.dungeonofdoom.enums.ScrollEnum;
+import com.models.dungeonofdoom.enums.WeaponEnum;
 
 public class ItemSpawner {
     private Random random;
@@ -63,11 +65,19 @@ public class ItemSpawner {
         int itemType = random.nextInt(2);
 
         return switch(itemType){
-            case 0 -> createPotion();
+            case 0 -> createWeapon();
             // case 1 -> createArmor();
             // case 2 -> createScroll();
-            default -> createPotion();
+            default -> createWeapon();
         };
+    }
+
+    private Item createWeapon(){
+        WeaponEnum[] weapons = WeaponEnum.values();
+        WeaponEnum weaponType = weapons[random.nextInt(weapons.length)];
+        Weapon newWeapon = new Weapon(weaponType, random);
+        return newWeapon;
+
     }
 
     private Item createRing(){

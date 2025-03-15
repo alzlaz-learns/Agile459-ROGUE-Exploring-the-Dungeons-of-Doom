@@ -2,19 +2,19 @@ package com.example.ui;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.awt.*;
-import javax.swing.DefaultListModel;
+
 import javax.swing.JLabel;
-import javax.swing.JList;
+
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+
 import javax.swing.SwingConstants;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.Potion.Potion;
+
 import com.models.dungeonofdoom.enums.ItemOptions;
 
 public class InventoryScreen extends JPanel {

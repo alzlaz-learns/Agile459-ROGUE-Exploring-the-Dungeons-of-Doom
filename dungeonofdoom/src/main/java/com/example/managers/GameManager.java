@@ -8,7 +8,6 @@ import java.util.Random;
 import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.Ring.Ring;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ItemOptions;
@@ -105,6 +104,9 @@ public class GameManager {
             player.confusedDecrease(); // Reduce confusion counter
         } else{
             switch (keyCode) {
+                case KeyEvent.VK_W:
+                    handleInput(ItemOptions.WIELDABLE);
+                    return;
                 case KeyEvent.VK_I:
                     frame.showInventoryScreen(player, ItemOptions.ALL);
                     return;
@@ -203,6 +205,7 @@ public class GameManager {
     }
     
     public void processInput(char input){
+        //escapes the input loop
         if(input == KeyEvent.VK_ESCAPE){
             processing = false;
             currentProcessingOption = null; 
@@ -225,6 +228,11 @@ public class GameManager {
             
             else if (currentProcessingOption == ItemOptions.QUAFFABLE){
                 player.getPack().useItem(index, player, dungeonFloors.get(currentFloor)); 
+            }
+
+            else if (currentProcessingOption == ItemOptions.WIELDABLE){
+                String wieldMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
+                frame.updateMessage(wieldMessage);
             }
             
             processing = false; 
