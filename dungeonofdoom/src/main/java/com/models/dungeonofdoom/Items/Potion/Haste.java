@@ -43,13 +43,19 @@ public class Haste implements ItemEffect{
     public String messageStringPlayer(Player player) {
         // TODO Auto-generated method stub
         //im considering another way of handling strings.
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
+        if(player.isHasted()){
+            //player faints for  1d8
+            
+            return "You feel yourself moving much faster";
+        }
+
+        return "You faint from exhaustion";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
 
     private int randomDuration(int i){

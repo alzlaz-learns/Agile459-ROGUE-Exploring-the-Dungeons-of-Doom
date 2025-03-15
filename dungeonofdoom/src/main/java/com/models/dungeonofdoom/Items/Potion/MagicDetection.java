@@ -39,6 +39,6 @@ public class MagicDetection implements ItemEffect{
     @Override
     public String messageStringMonster(Monster monster) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+       return "";
     }
 }

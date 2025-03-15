@@ -6,11 +6,11 @@ import com.models.dungeonofdoom.Items.Potion.*;
 
 public enum PotionEnum {
     
-    BLINDNESS('¡',"Potion of Blindness",new Blindness()),
+    // BLINDNESS('¡',"Potion of Blindness",new Blindness()),
     // CONFUSION('?',"Potion of Confusion",new Confusion()),
     // EXTRA_HEALING('┴',"Potion of Extra Healing",new ExtraHealing()),
     // GAIN_STRENGTH('┼',"Potion of Gain Strength",new GainStrength()),
-    // HASTE_SELF('±',"Potion of Haste",new Haste()),
+    HASTE_SELF('±',"Potion of Haste",new Haste()),
     // HEALING('+',"Potion of Healing",new Healing()),
     // POISON('ƒ',"Potion of Poison",new Poison()),
     // MAGIC_DETECTION('ƒ',"Potion of Magic Detection",new MagicDetection()),

@@ -27,8 +27,6 @@ public class MonsterDetection implements ItemEffect{
 
     @Override
     public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
     }
 
     @Override
