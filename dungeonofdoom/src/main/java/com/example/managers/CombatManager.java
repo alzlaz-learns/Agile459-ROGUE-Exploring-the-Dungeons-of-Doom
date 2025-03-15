@@ -99,10 +99,16 @@ public class CombatManager {
 
         if (chanceToHit(player.getLevel(), monster.getAmr(), player.getStrength())) {
             int baseDamage = player.calculateDmg();
+            
             int strengthBonus = getDamageModifier(player.getStrength());
             // Player's equipment bonuses are handled in calculateDmg()
-            int totalDamage = Math.max(1, baseDamage + strengthBonus);
+            int totalDamage = Math.max(1, baseDamage + Math.max(0, strengthBonus));
+            // System.out.println("base damage taken: " + baseDamage);
+            // System.out.println("Strength bonus: " + strengthBonus);
+            // System.out.println("Total damage: " + totalDamage);
 
+            // System.out.println("Monster hp before calculation: " + monster.getHpt());
+            
             monster.takeDmg(totalDamage);
             frame.updateMessage("You hit the " + monster.getName() + " for " + totalDamage + " damage!");
             frame.updateGameScreen();

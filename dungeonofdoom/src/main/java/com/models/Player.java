@@ -51,7 +51,7 @@ public class Player {
     private Item leftRing;
     private Item rightRing;
     private Armor bodyArmor;
-    private Weapon weapon;
+    private Item equppedWeapon;
 
     private Random random;
 
@@ -148,25 +148,27 @@ public class Player {
         
         // For now, we're using placeholder integers for items
         // This should be updated when proper item system is implemented
-        for (Item item : equippedItems) {
+        
             // Handle bonus damage based on item type
-            if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.STRIKING) {
-                Striking strikingEffect = new Striking(random);
-                baseDamage += strikingEffect.rollStrikingHit();
-            } else if (item instanceof Weapon) {
-                Weapon weapon = (Weapon) item;
-                baseDamage += weapon.getDamageWielded();
-            } 
-            // Add more item types as needed
-            bonusDamage += 0;   // don't what to do here yet, setting up some basics
-        }
+        
+        if (equppedWeapon instanceof Stick && ((Stick) equppedWeapon).getStickType() == StickEnum.STRIKING) {
+            Striking strikingEffect = new Striking(random);
+            baseDamage += strikingEffect.rollStrikingHit();
+        } else if (equppedWeapon instanceof Weapon) {
+            System.out.println("calculating weapon");
+            Weapon weapon = (Weapon) equppedWeapon;
+            baseDamage += weapon.getDamageWielded();
+        } 
+        // Add more item types as needed
+        bonusDamage += 0;   // don't what to do here yet, setting up some basics
+    
         
         // If no weapon equipped, use minimum damage
         if (baseDamage == 0) {
             baseDamage = 1;
         }
 
-    
+        System.out.println("dealing: " +  baseDamage + bonusDamage);
         return baseDamage + bonusDamage;
     }
     public Pack getPack() {
@@ -389,7 +391,7 @@ public class Player {
         }
     
     
-        weapon = (Weapon) w;
+        equppedWeapon = (Weapon) w;
         w.equip();
 
         return w.message(this);
