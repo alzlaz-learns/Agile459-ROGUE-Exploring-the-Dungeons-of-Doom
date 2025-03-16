@@ -3,6 +3,7 @@ package com.models.dungeonofdoom.Items.Weapon;
 import com.models.Player;
 import com.models.dungeonofdoom.enums.WeaponEnum;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.Helper.Pair;
@@ -91,5 +92,10 @@ public class Weapon extends Item {
     @Override
     public char getSymbol() {
         return this.weaponType.getSymbol();
+    }
+
+    @Override
+    public ItemOptions getItemOption() {
+        return ItemOptions.WIELDABLE;
     }
 }
