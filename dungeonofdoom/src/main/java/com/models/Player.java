@@ -417,15 +417,16 @@ public class Player {
     }
 
     public String equipWeapon(Item w){
-        if (!(w instanceof Weapon)) {
-            return "You can only equip weapons!";
+        if ((w instanceof Weapon)) {
+            equippedWeapon = (Weapon) w;
+            w.equip();
+            return w.message(this);
+        } else if (w instanceof Stick) {
+            equippedWeapon = (Stick) w;
+            w.equip();
+            return w.message(this);
         }
-    
-    
-        equippedWeapon = (Weapon) w;
-        w.equip();
-
-        return w.message(this);
+        return "Fool! You've Doomed Us All!";
     }
     
     public String equipArmor(Item w){
