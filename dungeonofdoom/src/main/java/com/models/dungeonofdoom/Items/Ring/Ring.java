@@ -2,8 +2,8 @@ package com.models.dungeonofdoom.Items.Ring;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-
 import com.models.dungeonofdoom.enums.RingEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
@@ -51,6 +51,10 @@ public class Ring extends Item{
     public char getSymbol() {
         // TODO Auto-generated method stub
         return type.getSymbol();
+    }
+    @Override
+    public ItemOptions getItemOption() {
+        return ItemOptions.PUTTABLE;
     }
 
 }

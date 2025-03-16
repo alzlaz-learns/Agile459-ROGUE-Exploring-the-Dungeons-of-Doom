@@ -89,12 +89,10 @@ public class CombatManager {
         Lightning lightningEffect = null;
         
         // Check equipment
-        for (Item item : player.getEquippedItems()) {
-            // Check if the item is a Stick with LIGHTNING type
-            if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.LIGHTNING) {
-                hasLightningStaff = true;
-                break;
-            }
+        Item item = player.getEquippedWeapon();
+        // Check if the item is a Stick with LIGHTNING type
+        if (item instanceof Stick && ((Stick) item).getStickType() == StickEnum.LIGHTNING) {
+            hasLightningStaff = true;
         }
 
         if (chanceToHit(player.getLevel(), monster.getAmr(), player.getStrength())) {

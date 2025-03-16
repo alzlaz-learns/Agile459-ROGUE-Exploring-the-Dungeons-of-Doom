@@ -4,6 +4,7 @@ import lombok.Data;
 import java.awt.Point;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 @Data
@@ -27,6 +28,35 @@ public abstract class Item {
 
     public abstract void effect(Player p, DungeonFloor dungeonFloor);
     public abstract void effect(Monster m);
+
+    public abstract ItemOptions getItemOption();
+    
+    public String performAction(Player p, DungeonFloor df) {
+        // Default implementation - subclasses can override
+        effect(p, df);
+        switch (getItemOption()) {
+            case WIELDABLE:
+                equip();
+                return p.equipWeapon(this);
+            case WEARABLE:
+                equip();
+                return p.equipArmor(this);
+            case PUTTABLE:
+                equip();
+                return p.equipRing(this);
+            case QUAFFABLE:
+            case READABLE:
+                // I am ignoring identify scrolls for now
+                effect(p, df);
+                return message(p);
+            case CONSUMABLE:
+                effect(p, df);
+                return message(p);
+            case ALL:
+            default:
+                return "Nothing happens.";
+        }
+    }
 
     public void equip(){
         this.equipped = true;

@@ -7,15 +7,19 @@ import java.util.Random;
 
 import com.models.dungeonofdoom.Items.AmuletOfYendor;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.ItemEffect;
 import com.models.dungeonofdoom.Items.Armor.Armor;
 import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Items.Ring.Ring;
 import com.models.dungeonofdoom.Items.Scroll.Scroll;
+import com.models.dungeonofdoom.Items.Stick.Stick;
 import com.models.dungeonofdoom.Items.Weapon.Weapon;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ArmorEnum;
 import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.enums.RingEnum;
 import com.models.dungeonofdoom.enums.ScrollEnum;
+import com.models.dungeonofdoom.enums.StickEnum;
 import com.models.dungeonofdoom.enums.WeaponEnum;
 
 public class ItemSpawner {
@@ -34,9 +38,11 @@ public class ItemSpawner {
      * @param maxItems Maximum number of items to spawn
      * @return List of spawned items with their positions set
      */
-    public List<Item> spawnItems(List<Point> validTiles, int level, int minItems, int maxItems){
+    public List<Item> spawnItems(DungeonFloor dungeonFloor){
+        int minItems = 10;
+        int maxItems = 15;
         List<Item> spawnedItems = new ArrayList<>();
-        List<Point> availableTiles = new ArrayList<>(validTiles);
+        List<Point> availableTiles = new ArrayList<>(dungeonFloor.getValidRoomTiles());
 
         int itemCount = random.nextInt(maxItems - minItems + 1) + minItems;
         // System.out.println("Spawning " + itemCount + " items on level " + level);
@@ -46,7 +52,7 @@ public class ItemSpawner {
             int index = random.nextInt(availableTiles.size());
             Point tile = availableTiles.remove(index);
 
-            Item item = createRandomItem(level);
+            Item item = createRandomItem(dungeonFloor);
             item.setPosition(tile);
             spawnedItems.add(item);
             // System.out.println("Item placed at: (" + tile.x + ", " + tile.y + ")");
@@ -56,19 +62,21 @@ public class ItemSpawner {
     }
     
 
-    private Item createRandomItem(int dungeonLevel){
+    private Item createRandomItem(DungeonFloor dungeonFloor){
 
-        if (dungeonLevel > 20 && random.nextInt(100) < 5){
+        if (dungeonFloor.getLevel() > 20 && random.nextInt(100) < 5){
             return new AmuletOfYendor();
         }
 
-        int itemType = random.nextInt(2);
+        int itemType = random.nextInt(5);
 
         return switch(itemType){
             case 0 -> createPotion();
-            case 1 -> createScroll();
-            // case 2 -> createArmor();
-            default -> createScroll();
+            case 1 -> createScroll(); 
+            case 2 -> createWeapon();
+            case 3 -> createArmor();
+            case 4 -> createStick(dungeonFloor);
+            default -> createWeapon();
         };
     }
 
@@ -116,6 +124,13 @@ public class ItemSpawner {
         }
 
         return new Armor(armorType);
+    }
+
+    private Stick createStick(DungeonFloor dungeonFloor){
+        System.out.println("Creating stick");
+        StickEnum[] sticks = StickEnum.values();
+        StickEnum stickType = sticks[random.nextInt(sticks.length)];
+        return new Stick(stickType, stickType.createEffectForSpawning(dungeonFloor, random));
     }
     
 }

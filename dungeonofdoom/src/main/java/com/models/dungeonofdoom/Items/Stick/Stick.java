@@ -3,6 +3,7 @@ package com.models.dungeonofdoom.Items.Stick;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
 import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.enums.StickEnum;
@@ -100,5 +101,10 @@ public class Stick extends Item {
     @Override
     public char getSymbol() {
         return stickType != null ? stickType.getSymbol() : '?';
+    }
+
+    @Override
+    public ItemOptions getItemOption() {
+        return ItemOptions.WIELDABLE;
     }
 }

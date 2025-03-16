@@ -53,9 +53,20 @@ public class Player {
     private Item leftRing;
     private Item rightRing;
     private Armor bodyArmor;
-    private Item equppedWeapon;
-
+    private Item equippedWeapon;
     private Random random;
+ 
+
+
+ 
+
+
+ 
+
+    
+ 
+
+    
 
     
     // Constructor
@@ -168,12 +179,12 @@ public class Player {
         
             // Handle bonus damage based on item type
         
-        if (equppedWeapon instanceof Stick && ((Stick) equppedWeapon).getStickType() == StickEnum.STRIKING) {
+        if (equippedWeapon instanceof Stick && ((Stick) equippedWeapon).getStickType() == StickEnum.STRIKING) {
             Striking strikingEffect = new Striking(random);
             baseDamage += strikingEffect.rollStrikingHit();
-        } else if (equppedWeapon instanceof Weapon) {
+        } else if (equippedWeapon instanceof Weapon) {
             System.out.println("calculating weapon");
-            Weapon weapon = (Weapon) equppedWeapon;
+            Weapon weapon = (Weapon) equippedWeapon;
             baseDamage += weapon.getDamageWielded();
         } 
         // Add more item types as needed
@@ -411,7 +422,7 @@ public class Player {
         }
     
     
-        equppedWeapon = (Weapon) w;
+        equippedWeapon = (Weapon) w;
         w.equip();
 
         return w.message(this);
@@ -439,5 +450,40 @@ public class Player {
         this.bodyArmor = null;
 
         return "Removed: " + name;
+    }
+
+
+    // equipped stack getters and setters
+ 
+    public Item getLeftRing() {
+        return leftRing;
+    }
+
+    public void setLeftRing(Item leftRing) {
+        this.leftRing = leftRing;
+    }
+
+    public Item getRightRing() {
+        return rightRing;
+    }
+
+    public void setRightRing(Item rightRing) {
+        this.rightRing = rightRing;
+    }
+
+    public Armor getBodyArmor() {
+        return bodyArmor;
+    }
+
+    public void setBodyArmor(Armor bodyArmor) {
+        this.bodyArmor = bodyArmor;
+    }
+
+    public Item getEquippedWeapon() {
+        return equippedWeapon;
+    }
+
+    public void setEquippedWeapon(Item equippedWeapon) {
+        this.equippedWeapon = equippedWeapon;
     }
 }

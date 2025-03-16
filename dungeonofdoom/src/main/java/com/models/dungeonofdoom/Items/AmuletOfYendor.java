@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class AmuletOfYendor extends Item{
@@ -40,6 +41,13 @@ public class AmuletOfYendor extends Item{
     public char getSymbol() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getSymbol'");
+    }
+
+
+    @Override
+    public ItemOptions getItemOption() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemOption'");
     }
 
     
