@@ -708,7 +708,6 @@ public class DungeonFloor {
 
     //ITEM SPAWNER
     private void spawnItems() {
-        List<Point> validTiles = getValidRoomTiles();
         
         // Create an ItemSpawner if it doesn't exist
         if (itemSpawner == null) {
@@ -716,7 +715,7 @@ public class DungeonFloor {
         }
         
         // Spawn items
-        List<Item> spawnedItems = itemSpawner.spawnItems(validTiles, level, 10, 15);
+        List<Item> spawnedItems = itemSpawner.spawnItems(this);
         
         // Add the items to the dungeon floor
         if (items == null) {
