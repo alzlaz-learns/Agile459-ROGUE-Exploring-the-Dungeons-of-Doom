@@ -42,6 +42,13 @@ public class AmuletOfYendor extends Item{
         throw new UnsupportedOperationException("Unimplemented method 'getSymbol'");
     }
 
+
+    @Override
+    public ItemOptions getItemOption() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemOption'");
+    }
+
     
 
 }
