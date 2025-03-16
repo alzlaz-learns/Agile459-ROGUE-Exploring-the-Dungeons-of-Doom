@@ -7,14 +7,10 @@ import java.util.Random;
 
 import com.example.ui.JFrameUI;
 import com.models.Player;
-import com.models.dungeonofdoom.Helper.Pair;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.Scroll.Identify;
-import com.models.dungeonofdoom.Items.Scroll.Scroll;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ItemOptions;
-import com.models.dungeonofdoom.enums.ScrollEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -65,7 +61,7 @@ public class GameManager {
         }
 
         if (processing){
-            processInput(e.getKeyChar());
+            processInput(e);
             return;
         }
         
@@ -123,11 +119,12 @@ public class GameManager {
                     } else{
                         handleInput(ItemOptions.WIELDABLE);
                     }
+                    return;
                 case KeyEvent.VK_R:
                     handleInput(ItemOptions.READABLE);                    
                     return;
                 case KeyEvent.VK_I:
-                    frame.showInventoryScreen(player, ItemOptions.ALL);
+                    frame.showInventoryScreen(player);
                     return;
                 case KeyEvent.VK_Q:
                     handleInput(ItemOptions.QUAFFABLE);
@@ -223,15 +220,25 @@ public class GameManager {
         frame.updateGameScreen();
     }
     
-    public void processInput(char input){
+    public void processInput(KeyEvent e) {
+        char input = e.getKeyChar();
+        int keyCode = e.getKeyCode();
+
         //escapes the input loop
-        if(input == KeyEvent.VK_ESCAPE){
+        if(keyCode == KeyEvent.VK_ESCAPE){
             processing = false;
             currentProcessingOption = null; 
+            frame.updateMessage("N3v3r mind, where to now?");
             return;
         }
+
         if(input == '*'){
-            frame.showInventoryScreen(player, currentProcessingOption);
+            if (currentProcessingOption != null){
+                frame.showInventoryScreen(player, currentProcessingOption);
+            } else {
+                frame.showInventoryScreen(player);
+            }
+            return;
         }
 
         List<Item> availableItems = player.getPack().getItemsByType(currentProcessingOption);
@@ -240,47 +247,39 @@ public class GameManager {
 
         if (index >= 0 && index < availableItems.size()) {
             // Item selectedItem = availableItems.get(index);
-            if (currentProcessingOption == ItemOptions.PUTTABLE) {
-                String equipMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
-                frame.updateMessage(equipMessage);
-            } 
-            
-            else if (currentProcessingOption == ItemOptions.QUAFFABLE){
-                player.getPack().useItem(index, player, dungeonFloors.get(currentFloor)); 
-            }
+            String resultMessage = "";
 
-            else if (currentProcessingOption == ItemOptions.WIELDABLE){
-                String wieldMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
-                frame.updateMessage(wieldMessage);
-            } else if (currentProcessingOption == ItemOptions.WEARABLE){
-                String wearMessage = player.getPack().equipItem(index, player, dungeonFloors.get(currentFloor));
-                frame.updateMessage(wearMessage);
-            }else if (currentProcessingOption == ItemOptions.ALL){
-                player.getPack().dropObject(index, player, dungeonFloors.get(currentFloor));
-                // frame.updateMessage();
-            }else if (currentProcessingOption == ItemOptions.READABLE){
-
-                Pair<Item, String> selected = player.getPack().readItem(index, player);
-
-                Item i = selected.getA();
-                // If the player selects an Identify Scroll
-                if ( i instanceof Scroll && ((Scroll) i).getType() == ScrollEnum.IDENTIFY) {
-                    frame.updateMessage(selected.getB());
-                    processing = true;
-                    currentProcessingOption = ItemOptions.IDENTIFIABLE; //maybe if i have time i will on showing only un identified items. 
-                    return;
-                }
-            } else if (currentProcessingOption == ItemOptions.IDENTIFIABLE) {
+            if (currentProcessingOption == ItemOptions.IDENTIFIABLE) {
                 // Player is selecting an item to identify
-                String identifyMessage = player.getPack().identifyItem(index, player);
-                frame.updateMessage(identifyMessage);
+                resultMessage = player.getPack().identifyItem(index, player);
+                // frame.updateMessage();
+            // forgive me for this
+            // }else if (currentProcessingOption == ItemOptions.READABLE){
+
+            //     Pair<Item, String> selected = player.getPack().readItem(index, player);
+
+            //     Item i = selected.getA();
+            //     // If the player selects an Identify Scroll
+            //     if ( i instanceof Scroll && ((Scroll) i).getType() == ScrollEnum.IDENTIFY) {
+            //         frame.updateMessage(selected.getB());
+            //         processing = true;
+            //         currentProcessingOption = ItemOptions.IDENTIFIABLE; //maybe if i have time i will on showing only un identified items. 
+            //         return;
+            //     }
+            } else {
+                // Use unified method for everything else
+                resultMessage = player.getPack().useItem(index, player, dungeonFloors.get(currentFloor));
             }
             
-            processing = false; 
+            if (!resultMessage.isEmpty()) {
+                frame.updateMessage(resultMessage);
+            }
+            
+            processing = false;
+            currentProcessingOption = null;
         }
     }
 
-    
     private void handleInput(ItemOptions option){
         currentProcessingOption = option;
         String result =  String.format("Which object do you want to %s? (* for list)", option.getName());
@@ -420,5 +419,41 @@ public class GameManager {
 
     public DungeonFloor getCurrentFloor() {
         return dungeonFloors.get(currentFloor);
+    }
+
+    public void processInventorySelection(KeyEvent e) {
+        // Set the current processing option based on the inventory filter
+        char input = Character.toLowerCase(e.getKeyChar());
+        int index = input - 'a';
+
+        // Get all items from the player's pack (using the ALL filter for central inventory)
+        List<Item> availableItems = player.getPack().getItemsByType(ItemOptions.ALL);
+
+        if (index >= 0 && index < availableItems.size()) {
+            // Retrieve the selected item
+            Item selectedItem = availableItems.get(index);
+
+            // Call the item's performAction(), which internally uses its own getItemOption() to decide the behavior
+            String resultMessage = selectedItem.performAction(player, dungeonFloors.get(currentFloor));
+            frame.updateMessage(resultMessage);
+        } else {
+            frame.updateMessage("Invalid selection.");
+        }
+
+        // Reset processing state
+        processing = false;
+        currentProcessingOption = null;
+    }
+
+    public void dropItem(int index) {
+        // Decide if you want to drop from the "ALL" filter or a specific filter
+        List<Item> items = player.getPack().getItemsByType(ItemOptions.ALL);
+
+        if (index >= 0 && index < items.size()) {
+            player.getPack().dropObject(index, player, dungeonFloors.get(currentFloor));
+            frame.updateMessage("Dropped " + items.get(index).getItemName());
+        } else {
+            frame.updateMessage("Invalid selection.");
+        }
     }
 }
