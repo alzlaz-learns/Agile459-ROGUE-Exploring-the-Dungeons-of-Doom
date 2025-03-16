@@ -4,6 +4,7 @@ import lombok.Data;
 import java.awt.Point;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.Items.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 @Data
@@ -27,6 +28,9 @@ public abstract class Item {
 
     public abstract void effect(Player p, DungeonFloor dungeonFloor);
     public abstract void effect(Monster m);
+
+    public abstract ItemOptions getItemOption();
+
 
     public void equip(){
         this.equipped = true;
