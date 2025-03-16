@@ -2,7 +2,7 @@ package com.models.dungeonofdoom.Items.Potion;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.ItemOptions;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.PotionEnum;
 import com.models.dungeonofdoom.monster.Monster;

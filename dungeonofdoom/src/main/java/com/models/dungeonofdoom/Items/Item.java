@@ -4,7 +4,7 @@ import lombok.Data;
 import java.awt.Point;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-import com.models.dungeonofdoom.Items.ItemOptions;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 @Data

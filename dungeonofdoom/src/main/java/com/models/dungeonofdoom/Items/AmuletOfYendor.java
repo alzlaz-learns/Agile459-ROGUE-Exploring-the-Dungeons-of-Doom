@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class AmuletOfYendor extends Item{
