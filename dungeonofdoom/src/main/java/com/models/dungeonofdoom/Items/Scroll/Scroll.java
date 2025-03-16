@@ -2,6 +2,7 @@ package com.models.dungeonofdoom.Items.Scroll;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.enums.ScrollEnum;
 import com.models.dungeonofdoom.monster.Monster;
@@ -48,6 +49,11 @@ public class Scroll extends Item{
     @Override
     public String getItemName() {
         return type.getName();
+    }
+
+    @Override
+    public ItemOptions getItemOption() {
+        return ItemOptions.READABLE;
     }
 
 }
