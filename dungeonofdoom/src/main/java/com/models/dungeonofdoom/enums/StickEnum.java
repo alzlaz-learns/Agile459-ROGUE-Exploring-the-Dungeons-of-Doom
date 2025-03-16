@@ -114,5 +114,20 @@ public enum StickEnum {
     public Optional<Pair<Integer, Integer>> getDamage() {
         return damage;
     }
+
+
+    public ItemEffect createEffectForSpawning(DungeonFloor dungeonFloor, Random random) {
+        // Handle each type of effect based on its requirements
+        return switch(this) {
+            case CANCELLATION, FIRE, HASTE_MONSTER, LIGHT, MAGIC_MISSILE -> effectFactory.apply(null);
+            case POLYMORPH -> new Polymorph(random);
+            case SLOW_MONSTER -> new SlowMonster(random);
+            case STRIKING -> new Striking(random);
+            case LIGHTNING -> new Lightning(random, dungeonFloor);
+            case DRAIN_LIFE, TELEPORT_AWAY -> dungeonFloor != null ? effectFactory.apply(dungeonFloor) : null;
+            case TELEPORT_TO -> dungeonFloor != null ? new TeleportTo(dungeonFloor, null) : null;
+            default -> null;
+        };
+    }
 }
 
