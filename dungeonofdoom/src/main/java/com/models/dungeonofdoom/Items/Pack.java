@@ -73,22 +73,20 @@ public class Pack {
     }
    
     public String equipItem(int index, Player p, DungeonFloor d){
-        
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return "Nothing to use!";
         }
-        
+
         Item i = pack.get(index);
         String res = "";
+
         if(i instanceof Ring){
             p.equipRing(i);
             res = i.message(p);
         }
 
         if(i instanceof Weapon){
-            
-            
             res = p.equipWeapon(i);
         }
 
@@ -104,6 +102,7 @@ public class Pack {
             System.out.println("Invalid index. No item was read.");
             return new Pair<>(null, "Nothing to use!");
         }
+
         Item i = pack.get(index);
         if( !(i instanceof Scroll)) return new Pair<>(null, "Not a viable selection!");
         
@@ -127,11 +126,9 @@ public class Pack {
         p.addToIdentified(i);
 
         return "You identified " + i.getItemName();
-        
     }
 
     public String useItem(int index, Player p, DungeonFloor d){
-        
         if (index < 0 || index >= pack.size()) {
             System.out.println("Invalid index. No item was dropped.");
             return "Nothing to use!";
@@ -142,13 +139,15 @@ public class Pack {
             pack.remove(index);
         }
 
-        i.effect(p, d);
-        
-        return i.message(p);
-        
+        String result = i.performAction(p, d);
+        return result;
     }
 
     public List<Item>  getItemsByType(ItemOptions option){
+        if(option == ItemOptions.ALL){
+            return new ArrayList<>(pack);
+        }
+
         List<Item> filteredItems = new ArrayList<>();
         for(Item i: pack){
             if(matchesFilter(i, option)){
