@@ -127,7 +127,6 @@ public class ItemSpawner {
     }
 
     private Stick createStick(DungeonFloor dungeonFloor){
-        System.out.println("Creating stick");
         StickEnum[] sticks = StickEnum.values();
         StickEnum stickType = sticks[random.nextInt(sticks.length)];
         return new Stick(stickType, stickType.createEffectForSpawning(dungeonFloor, random));
