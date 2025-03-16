@@ -4,6 +4,7 @@ import com.models.Player;
 import com.models.dungeonofdoom.monster.Monster;
 import com.models.dungeonofdoom.enums.ArmorEnum;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.ItemOptions;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 public class Armor extends Item {
@@ -92,5 +93,10 @@ public class Armor extends Item {
     @Override
     public char getSymbol() {
        return this.armorType.getSymbol();
+    }
+
+    @Override
+    public ItemOptions getItemOption() {
+        return ItemOptions.WEARABLE;
     }
 }
