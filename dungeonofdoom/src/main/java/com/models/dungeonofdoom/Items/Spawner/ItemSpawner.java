@@ -68,7 +68,7 @@ public class ItemSpawner {
             return new AmuletOfYendor();
         }
 
-        int itemType = random.nextInt(2);
+        int itemType = random.nextInt(5);
 
         return switch(itemType){
             case 0 -> createPotion();
