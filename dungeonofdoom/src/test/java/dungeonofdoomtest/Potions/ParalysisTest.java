@@ -13,11 +13,12 @@ import org.junit.jupiter.api.Test;
 import com.models.Player;
 
 import com.models.dungeonofdoom.Items.Potion.Paralysis;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 
 public class ParalysisTest {
     private Random mockRandom;
-
+    private DungeonFloor df;
     @BeforeEach
     void setUp(){
         mockRandom = mock(Random.class);
@@ -29,7 +30,7 @@ public class ParalysisTest {
         
         when(mockRandom.nextInt(4)).thenReturn(3);
         Paralysis blindness = new Paralysis(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, df);
         assertTrue(player.isImmobile());
         assertEquals(4, player.getImmobile());
     }
@@ -40,7 +41,7 @@ public class ParalysisTest {
         
         when(mockRandom.nextInt(4)).thenReturn(3);
         Paralysis blindness = new Paralysis(mockRandom);
-        blindness.applyToPlayer(player);
+        blindness.applyToPlayer(player, df);
         assertEquals("You can’t move", blindness.messageStringPlayer(player));
     }
 

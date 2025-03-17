@@ -24,13 +24,13 @@ public class TrapDoorTest {
 
     @Test
     void testTrapStartsHidden() {
-        assertTrue(trapDoor.isHidden(), "trap should start as hidden.");
+        assertTrue(trapDoor.isDiscovered(), "trap should start as hidden.");
     }
 
     @Test
     void testTrapRevealsWhenTriggered() {
         trapDoor.trigger(player);
-        assertFalse(trapDoor.isHidden(), "should be revealed after being triggered");
+        assertFalse(trapDoor.isDiscovered(), "should be revealed after being triggered");
     }
 
     @Test

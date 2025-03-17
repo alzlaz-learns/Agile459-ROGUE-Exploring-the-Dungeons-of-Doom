@@ -1,0 +1,21 @@
+package com.models.dungeonofdoom.enums;
+
+public enum ItemOptions {
+    WEARABLE("Wear"),
+    QUAFFABLE("Quaff"),
+    READABLE("Read"),
+    WIELDABLE("Wield"),
+    CONSUMABLE("Eat"),
+    PUTTABLE("Put On"),
+    IDENTIFIABLE("Identify"), 
+    ALL(" "),
+    ;
+
+    private final String command;
+
+    private ItemOptions(String command){
+        this.command = command;
+    }
+
+    public String getName(){return this.command;}
+}

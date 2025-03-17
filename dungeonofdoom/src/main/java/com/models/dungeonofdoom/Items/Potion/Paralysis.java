@@ -3,9 +3,11 @@ package com.models.dungeonofdoom.Items.Potion;
 import java.util.Random;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class Paralysis implements PotionEffect{
+public class Paralysis implements ItemEffect{
 
     private final Random random;
     
@@ -17,16 +19,14 @@ public class Paralysis implements PotionEffect{
         this.random = new Random();
     }
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor d) {
         int duration = random.nextInt(4) + 1;
         player.setImmobile(duration);
     }
 
     @Override
-    public void applyToMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyToMonster'");
-    }
+    public void applyToMonster(Monster monster) {}
+        
 
     @Override
     public String messageStringPlayer(Player player) {
@@ -35,8 +35,7 @@ public class Paralysis implements PotionEffect{
 
     @Override
     public String messageStringMonster(Monster monster) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
 
 }

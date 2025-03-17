@@ -33,10 +33,15 @@ public abstract class Monster {
     private boolean invisible;
 
     //potion effects
+    private int slowTimer;
     private int hasteTimer;
     private int blindTimer;
     private boolean discovered = false;
     private int level;
+    private int confusedTimer = 0;
+
+    //scroll effects
+    private boolean hold = false;
 
     public Monster(MonsterEnum type, Random rand){
         this.rand = rand;
@@ -55,6 +60,7 @@ public abstract class Monster {
         
         this.hasteTimer= 0;
         this.blindTimer = 0;
+        this.slowTimer = 0;
         this.level = type.getLvl();
     }
 
@@ -123,6 +129,10 @@ public abstract class Monster {
         return this.amr;
     }
 
+    public void setAmr(int amr){
+        this.amr = amr;
+    }
+
     public int getExp() {
         return type.getExp();
     }
@@ -144,6 +154,7 @@ public abstract class Monster {
     }
 
     //not sure how to deal with this one yet.
+    //too lazy to do it now -D, using for cancellation logic atm
     public boolean isInvisible() {
         return invisible;
     }
@@ -191,6 +202,10 @@ public abstract class Monster {
         return y;
     }
 
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+    }
+
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
@@ -214,6 +229,19 @@ public abstract class Monster {
         return aggressive || mean; // Mean monsters are always aggressive
     }
 
+    public boolean isConfused(){
+        return this.confusedTimer > 0;
+    }
+
+    public void applyConfused(int duration){
+        this.confusedTimer = duration;
+    }
+
+    public void decrementConfused(){
+        if(isConfused()){
+            this.confusedTimer --;
+        }
+    }
     public boolean isBlind(){
         return this.blindTimer > 0;
     }
@@ -246,13 +274,39 @@ public abstract class Monster {
         if(isHasted()){
             this.hasteTimer--;
         }
+    }   
+
+    public boolean isSlowed(){
+        return this.slowTimer > 0;
     }
 
+    public void applySlow(int turns){
+        this.slowTimer = turns;
+    }
+
+    public void decrementSlow(){
+        if(isSlowed()){
+            this.slowTimer--;
+        }
+    }
+    
     public boolean isDiscovered(){
         return discovered;
     }
 
     public void discover() {
         discovered = true;
+    }
+
+    public void applyHold(){
+        this.hold = true;
+    }
+
+    public void removeHold(){
+        this.hold = false;
+    }
+
+    public boolean getHoldStatus(){
+        return this.hold;
     }
 }

@@ -1,12 +1,14 @@
 package com.models.dungeonofdoom.Items.Potion;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class RaiseLevel implements PotionEffect{
+public class RaiseLevel implements ItemEffect{
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor df) {
         player.increaseLvl();
     }
 
@@ -26,7 +28,7 @@ public class RaiseLevel implements PotionEffect{
     @Override
     public String messageStringMonster(Monster monster) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
 
 }

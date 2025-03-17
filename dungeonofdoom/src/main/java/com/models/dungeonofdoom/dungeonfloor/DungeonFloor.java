@@ -12,7 +12,11 @@ import com.example.managers.MonsterManager;
 import com.models.Player;
 import com.models.dungeonofdoom.dungeoncorridor.ArgsForBfsCorridorsDto;
 import com.models.dungeonofdoom.Helper.Pair;
+import com.models.dungeonofdoom.Items.AmuletOfYendor;
 import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Armor.Armor;
+import com.models.dungeonofdoom.Items.Potion.Potion;
+import com.models.dungeonofdoom.Items.Spawner.ItemSpawner;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.Traps.ArrowTrap;
 import com.models.dungeonofdoom.Traps.BearTrap;
@@ -25,6 +29,8 @@ import com.models.dungeonofdoom.enums.MonsterEnum;
 import com.models.dungeonofdoom.enums.TrapTypeEnum;
 import com.models.dungeonofdoom.monster.Monster;
 
+import lombok.Data;
+
 public class DungeonFloor {
     private final int width;
     private final int height;
@@ -32,6 +38,9 @@ public class DungeonFloor {
     private final char[][] originalMap;
     private final int level;
     private final Random random;
+
+    private ItemSpawner itemSpawner;
+    private List<Item> items;
 
     MonsterManager monsterManager; //THIS IS TESTING CODE
     public List<Monster> monsters = new CopyOnWriteArrayList<>();
@@ -56,8 +65,8 @@ public class DungeonFloor {
 
     private List<Room> rooms;
     private List<Corridor> corridors;
-    //list of items on a floor
-    private List<Item> items;
+
+    
     public DungeonFloor(int level, int width, int height, MonsterManager monsterManager) {
         this.level = level;
         this.width = width;
@@ -82,6 +91,15 @@ public class DungeonFloor {
             }
         }
         return null; 
+    }
+
+    public void removeItem(Item item) {
+        if(items.contains(item)){
+            items.remove(item);
+            // Get the original tile from originalMap instead of assuming it's a floor
+            char originalTile = originalMap[(int)item.getPosition().getY()][(int)item.getPosition().getX()];
+            map[(int)item.getPosition().getY()][(int)item.getPosition().getX()] = originalTile;
+        }
     }
 
     public void removeMonster(Monster monster) {
@@ -130,6 +148,7 @@ public class DungeonFloor {
         generateTraps();
         //Spawn Monsters
         spawnMonster();
+        spawnItems();
     }
 
     private void generateRooms() {
@@ -302,6 +321,16 @@ public class DungeonFloor {
         return null;
     }
 
+    public Item getItemAt(int x, int y){
+        for(Item item: items){
+            if(item.getPosition().getX() == x && item.getPosition().getY() == y){
+
+                return item;
+            }
+        }
+        return null;
+    }
+
 
     public char[][] getMap() {
         char[][] displayMap = new char[height][width];
@@ -356,6 +385,40 @@ public class DungeonFloor {
         return stairY;
     }
 
+    public void spawnSingleMonster() {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            System.out.println("No valid tiles available to spawn a monster.");
+            return;
+        }
+    
+        List<MonsterEnum> validMonsters = new ArrayList<>();
+        for (MonsterEnum monsterType : MonsterEnum.values()) {
+            if (isValidMonsterForFloor(monsterType)) {
+                validMonsters.add(monsterType);
+            }
+        }
+
+        if (validMonsters.isEmpty()) {
+            return;
+        }
+    
+
+        Point spawnTile = validTiles.get(random.nextInt(validTiles.size()));
+    
+
+        MonsterEnum randomMonster = validMonsters.get(random.nextInt(validMonsters.size()));
+        Monster monster = monsterManager.monsterFactory(randomMonster);
+        monster.setPosition(spawnTile.x, spawnTile.y);
+    
+        monsters.add(monster);
+    
+        map[spawnTile.y][spawnTile.x] = monster.getSymbol();
+    
+        System.out.println("A monster has spawned at (" + spawnTile.x + ", " + spawnTile.y + ")");
+    }
+    
 
     public void spawnMonster(){
         List<Point> validTiles = getValidRoomTiles();
@@ -396,7 +459,7 @@ public class DungeonFloor {
             monsters.add(monster);
             
             // Update the map
-            map[tile.y][tile.x] = monster.getSymbol();
+            // map[tile.y][tile.x] = monster.getSymbol();
         }
     }
 
@@ -643,10 +706,50 @@ public class DungeonFloor {
         return null; // Not inside a room
     }
 
-    //not fully implemented yet just general idea because item spawning hasnt been implemented yet.
-    //and also hidden rooms havent been implemented
-    public void revealItemLocation(Item item){
-        System.out.println("X: " + item.getX() + "Y: " +  item.getY());
+    //ITEM SPAWNER
+    private void spawnItems() {
+        
+        // Create an ItemSpawner if it doesn't exist
+        if (itemSpawner == null) {
+            itemSpawner = new ItemSpawner();
+        }
+        
+        // Spawn items
+        List<Item> spawnedItems = itemSpawner.spawnItems(this);
+        
+        // Add the items to the dungeon floor
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        items.addAll(spawnedItems);
+        
+        // Mark items on the map with their specific symbols
+        //unnecessary this was redundant made it harder to handle the displaying moved to gamepanel ui.
+        // for (Item item : spawnedItems) {
+        //     Point position = item.getPosition();
+        //     char itemSymbol = getItemSymbol(item);
+        //     // map[position.y][position.x] = itemSymbol;
+        //     // originalMap[position.y][position.x] = itemSymbol;
+        // }
+    }
+    
+    // Helper method to get the appropriate symbol for an item
+    private char getItemSymbol(Item item) {
+        if (item instanceof Potion) {
+            return ((Potion) item).getType().getSymbol();
+        } else if (item instanceof Armor) {
+            return ((Armor) item).getArmorType().getSymbol();
+        } else if (item instanceof AmuletOfYendor) {
+            return ','; // Or whatever symbol you want for the Amulet
+        }
+        return '%'; // Default symbol for unknown items
+    }
+    
+    // Add method to reveal item location (used by MagicDetection potion)
+    public void revealItemLocation(Item item) {
+        Point position = item.getPosition();
+        char itemSymbol = getItemSymbol(item);
+        map[position.y][position.x] = itemSymbol;
     }
 
     public List<Item> getItems(){
@@ -661,10 +764,23 @@ public class DungeonFloor {
             if (room != null && !room.isDiscovered()) { 
                 room.discover();
                 updateMapForRoom(room);
-                System.out.println("You have discovered a hidden room!");
+                
             }
         }
     }
+
+
+    public void revealMap(){
+        for(Room r: rooms){
+            r.discover();
+            updateMapForRoom(r);
+        }
+        for(Corridor c: corridors){
+            c.discover();
+            
+        }
+    }
+
     
     // This method updates the map when a room is revealed
     private void updateMapForRoom(Room room) {
@@ -686,6 +802,22 @@ public class DungeonFloor {
             }
         }
     }
+
+    public void discoverItemsInRoom(int x, int y){
+        Room room = getRoomAt(x, y);
+        if (room == null){
+            return;
+        }
+        for(Item i: items){
+            if(room.contains((int)i.getPosition().getX(), (int)i.getPosition().getY())){
+                i.discover();
+
+
+            }
+        }
+    }
+
+    
     
     public void discoverMonsterInRoom(int x, int y){
         Room room = getRoomAt(x, y);
@@ -697,17 +829,55 @@ public class DungeonFloor {
             if(room.contains(m.getX(), m.getY())){
                 m.discover();
                 
-                map[m.getY()][m.getX()] = m.getSymbol();
-                map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+                // map[m.getY()][m.getX()] = m.getSymbol();
+                // map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
             }
         }
     }
 
-    public void revealMonstersOnMap(){
-        for (Monster m: monsters){
-            map[m.getY()][m.getX()] = m.getSymbol();
-            map[m.getY()][m.getX()] = originalMap[m.getY()][m.getX()];
+    public void teleportMonsterAway(Monster monster) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
         }
+        
+        removeMonster(monster);
+        Point destination = validTiles.get(random.nextInt(validTiles.size()));
+        monster.setPosition(destination.x, destination.y);
+        monsters.add(monster);
+        map[destination.y][destination.x] = monster.getSymbol();
     }
+
+    
+    public void teleportMonsterTo(Monster monster, Point playerLocation) {
+        List<Point> validTiles = getValidRoomTiles();
+        
+        if (validTiles.isEmpty()) {
+            return;
+        }
+
+        Point spaceAbove = new Point(playerLocation.x, playerLocation.y - 1);
+        Point spaceBelow = new Point(playerLocation.x, playerLocation.y + 1);
+        Point spaceLeft = new Point(playerLocation.x - 1, playerLocation.y);
+        Point spaceRight = new Point(playerLocation.x + 1, playerLocation.y);
+
+        List<Point> validTilesByPlayer = new ArrayList<>();
+        for (Point p: validTiles){
+            if (p == spaceAbove ||
+             p == spaceBelow ||
+              p == spaceLeft ||
+               p == spaceRight){
+                validTilesByPlayer.add(p);
+            }
+        }
+
+        Point selectedTile = validTilesByPlayer.isEmpty() ? null : validTilesByPlayer.get(random.nextInt(validTilesByPlayer.size()));
+        removeMonster(monster);
+        monster.setPosition(selectedTile.x, selectedTile.y);
+        monsters.add(monster);
+        map[selectedTile.y][selectedTile.x] = monster.getSymbol();
+    }
+
     
 }

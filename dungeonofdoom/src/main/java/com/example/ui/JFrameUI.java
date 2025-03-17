@@ -1,14 +1,21 @@
 package com.example.ui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JFrame;
-
+import javax.swing.JPanel;
 
 import java.awt.event.MouseEvent;
 
+
 import com.example.managers.GameManager;
+import com.models.Player;
+import com.models.dungeonofdoom.enums.ItemOptions;
+
+import java.util.Optional;
 
 public class JFrameUI {
 
@@ -17,12 +24,21 @@ public class JFrameUI {
     private AbstractTextBars statArea;
     private GamePanel gamePanel;
     private GameManager gameManager;
+    private InventoryScreen inventoryScreen;
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
     public JFrameUI(){
         this.window = new JFrame();
         this.messageArea = new MessageArea(); 
         this.gameManager = new GameManager(this);
-        this.gamePanel = new GamePanel(gameManager);
+        this.gamePanel = new GamePanel(gameManager, this);
+        this.inventoryScreen = new InventoryScreen(this);
+
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+        mainPanel.add(gamePanel, "GAME_SCREEN");
+        mainPanel.add(inventoryScreen, "INVENTORY_SCREEN");
         
         /*
             ive come across an a truely goofy inconsistency that i dont understand why
@@ -46,11 +62,58 @@ public class JFrameUI {
         
     }
 
+    
+    public void processInventorySelection(int itemIndex) {
+        // Create a fake KeyEvent with the appropriate character
+        char itemChar = (char)('a' + itemIndex);
+        KeyEvent fakeEvent = new KeyEvent(
+            this.window,
+            KeyEvent.KEY_PRESSED,
+            System.currentTimeMillis(),
+            0,
+            KeyEvent.VK_UNDEFINED,
+            itemChar
+        );
+
+        // Set the processing context and send the key event
+        System.out.println("Processing inventory selection with item index: " + itemIndex + " and fakeEvent: " + fakeEvent);
+        gameManager.processInventorySelection(fakeEvent);
+    }
+
+    public void dropItemAtIndex(int itemIndex) {
+        gameManager.dropItem(itemIndex);
+    }
+
+    public void forwardKeyToGameManager(KeyEvent e) {
+        // Forward the keypress to GameManager
+        gameManager.processInput(e);
+    }
+
+    public void showGameScreen() {
+        cardLayout.show(mainPanel, "GAME_SCREEN");
+        gamePanel.requestFocusInWindow();
+    }
+
+    public void showInventoryScreen(Player p) { //To add an enum for what kind of items to show
+        inventoryScreen.updateInventory(p, Optional.empty()); // Update inventory display before showing
+        cardLayout.show(mainPanel, "INVENTORY_SCREEN");
+        inventoryScreen.requestFocusInWindow();
+    }
+
+    public void showInventoryScreen(Player p, ItemOptions option) { //To add an enum for what kind of items to show
+        inventoryScreen.updateInventory(p, Optional.of(option)); // Update inventory display before showing
+        cardLayout.show(mainPanel, "INVENTORY_SCREEN");
+        inventoryScreen.requestFocusInWindow();
+    }
+
+
+
     public void generateLayout() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Rogue: Dungeon of Doom");
     
+        window.setLayout(new BorderLayout());
         //Message Area at the top
         window.add(messageArea, BorderLayout.NORTH);
 
@@ -61,7 +124,7 @@ public class JFrameUI {
 
 
         // // Game play area in the center
-        window.add(gamePanel, BorderLayout.CENTER);
+        window.add(mainPanel, BorderLayout.CENTER);
     
         window.pack();
         window.setLocationRelativeTo(null);

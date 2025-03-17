@@ -1,10 +1,22 @@
 package com.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.awt.Point;
+import com.models.dungeonofdoom.Items.Item;
+import com.models.dungeonofdoom.Items.Pack;
+import com.models.dungeonofdoom.Items.Armor.Armor;
 
+import com.models.dungeonofdoom.Items.Ring.Ring;
 
-import com.player.uday.PlayerPackPlayground;
+import com.models.dungeonofdoom.Items.Stick.Stick;
+import com.models.dungeonofdoom.Items.Weapon.Weapon;
+import com.models.dungeonofdoom.enums.RingEnum;
+import com.models.dungeonofdoom.enums.StickEnum;
+import com.models.dungeonofdoom.Items.Stick.Striking;
+import java.util.Random;
+import java.util.Set;
 
 import lombok.Data;
 
@@ -26,17 +38,37 @@ public class Player {
     private int y; // Y position
     private int immobile;
     private int confused;
-    private PlayerPackPlayground pack;
-    private List<Integer> equippedItems; //placeHolder <Integer>
+    private Pack pack;
+    private List<Item> equippedItems;
     private int maxStrength;
     private int minStrength;
+    private boolean isCursed;
 
     //potion effects
     private int blindTimer;
     private int hasteTimer;
     private int faintTimer;
     private int revealTimer = 0;
+    private final Set<String> identified;
+    private Item leftRing;
+    private Item rightRing;
+    private Armor bodyArmor;
+    private Item equippedWeapon;
+    private Random random;
+ 
 
+
+ 
+
+
+ 
+
+    
+ 
+
+    
+
+    
     // Constructor
     public Player(String name) {
         this.name = name;
@@ -45,7 +77,7 @@ public class Player {
         this.currentHealth = this.maxHealth;
         this.gold = 0;
         this.experience = 1;
-        this.armor = 5;
+        this.armor = 10;
         this.maxStrength = 31;
         this.minStrength = 3;
         this.strength = this.minStrength; // Default minimum strength
@@ -53,14 +85,33 @@ public class Player {
         this.icon = '@'; //temporary should consider creating a ENUM to hold all character symbols that can be called.
         this.immobile = 0;
         this.confused = 0;
-        this.equippedItems = new ArrayList<Integer>();
+        this.equippedItems = new ArrayList<Item>();
 
         // potion
         
         this.blindTimer = 0;
+        this.isCursed = false;
         this.hasteTimer = 0;
         this.faintTimer = 0;
+        identified = new HashSet<>();
+    
+        this.pack = new Pack();
+        this.random = new Random();
     }
+
+    public boolean isIdentified(Item i) {
+        return identified.contains(i.getItemName());
+    }
+
+
+    public void addToIdentified(Item i) {
+        System.out.println("in players addTOIdentified");
+        System.out.println(i.getItemName());
+        this.identified.add(i.getItemName());
+    }
+
+    
+    
     
     // Core Utility Methods
     public boolean isAlive() {
@@ -103,6 +154,11 @@ public class Player {
         }
     }
 
+    public boolean hasRingOfSustain(){
+        return (leftRing != null && leftRing.getItemName().equals(RingEnum.SUSTAIN_STRENGTH.getName())) ||
+           (rightRing != null && rightRing.getItemName().equals(RingEnum.SUSTAIN_STRENGTH.getName()));
+    }
+
     public void die() {
         System.out.println(name + " has died."); // to be changed to output on screen
         int goldLost = (int) (gold * 0.9);
@@ -120,25 +176,49 @@ public class Player {
         
         // For now, we're using placeholder integers for items
         // This should be updated when proper item system is implemented
-        for (Integer item : equippedItems) {
-            baseDamage += item; // Base damage from weapon
-            bonusDamage += 0;   // Bonus damage from magical enhancements
-        }
+        
+            // Handle bonus damage based on item type
+        
+        if (equippedWeapon instanceof Stick && ((Stick) equippedWeapon).getStickType() == StickEnum.STRIKING) {
+            Striking strikingEffect = new Striking(random);
+            baseDamage += strikingEffect.rollStrikingHit();
+        } else if (equippedWeapon instanceof Weapon) {
+            System.out.println("calculating weapon");
+            Weapon weapon = (Weapon) equippedWeapon;
+            baseDamage += weapon.getDamageWielded();
+        } 
+        // Add more item types as needed
+        bonusDamage += 0;   // don't what to do here yet, setting up some basics
+    
         
         // If no weapon equipped, use minimum damage
         if (baseDamage == 0) {
             baseDamage = 1;
         }
-        
+
+        System.out.println("dealing: " +  baseDamage + bonusDamage);
         return baseDamage + bonusDamage;
     }
-
-    public PlayerPackPlayground getPack() {
+    public Pack getPack() {
         return pack;
     }
 
+    public void printPack() {
+        pack.listInventory();
+    }
+
+    //changing to return string name so 
+    public String addItem(Item i){
+        pack.addItem(i);
+        return i.getItemName();
+    }
     public int getHealth() {
         return currentHealth;
+    }
+
+    public Point getPosition(){
+        Point position = new Point(x, y);
+        return position;
     }
 
 
@@ -148,15 +228,15 @@ public class Player {
         }
     }
 
-    public void eatFood() {
-        if (pack.containsItem("Food")) {
-            pack.dropItem(pack.getItem("Food"));
-            hungerCounter = 1300;
-            System.out.println("You eat some food. You feel refreshed.");//tochange later.
-        } else {
-            System.out.println("You have no food to eat.");//tochange later.
-        }
-    }
+    // public void eatFood() {
+    //     if (pack.containsItem("Food")) {
+    //         pack.dropItem(pack.getItem("Food"));
+    //         hungerCounter = 1300;
+    //         System.out.println("You eat some food. You feel refreshed.");//tochange later.
+    //     } else {
+    //         System.out.println("You have no food to eat.");//tochange later.
+    //     }
+    // }
 
     public void updateHunger() {
         hungerCounter--;
@@ -189,6 +269,12 @@ public class Player {
         return confused > 0;
     }
 
+    public void curseSelf(){
+        this.isCursed = true;
+        System.out.println("Monsters are scared of you now, but you aren't long for this world.");
+        //TODO: add a timer that counts down to players death 
+    }
+
     public void immobileDecrease(){
         if (isImmobile()) immobile --;
     }
@@ -207,17 +293,32 @@ public class Player {
         this.armor += modification;
     }
 
+    public void setArmor(int armor){
+        this.armor = armor;
+    }
+
     //making this so minimum is always one
     public void adjustStrength(int modifier){
+        int oldStrength = this.strength;
+
         //changed to max minimum strength 3 max strength 31
-        this.strength = Math.min(getMaxStrength(), Math.max(getMinStrength(), this.strength + modifier));
+        this.strength = Math.min(getMaxStrength(), Math.max(getMinStrength(), this.strength + modifier)); //TO DO I dont think i did this correct for when substracting strength?
+        
+        System.out.println("Strength changed: " + oldStrength + " → " + this.strength + " (Modifier: " + modifier + ")");
+    
     }
     public void adjustMaxStrength(){
         //changed to max minimum strength 3 max strength 31
         this.maxStrength += 1;
     }
 
-    
+    public int getArmorClass(){
+        return bodyArmor != null ? bodyArmor.getArmorClass() : armor;
+    }
+
+    public List<Item> getEquippedItems() {
+        return equippedItems;
+    }
 
     public int calculateStrengthWithItems(){
         return 0;
@@ -286,5 +387,104 @@ public class Player {
         if(isRevealed()){
             this.revealTimer --;
         }
+    }
+
+    public Armor getEquippedArmor(){
+        return this.bodyArmor;
+    }
+    public String equipRing(Item ring) {
+        System.out.println("equipRing() called with: " + ring.getItemName());
+    
+        if (!(ring instanceof Ring)) {
+            System.out.println("Not a ring!"); 
+            return "You can only equip rings!";
+        }
+    
+        if (leftRing == null) {
+            leftRing = ring;
+            System.out.println("Ring equipped on left hand.");
+        } else if (rightRing == null) {
+            rightRing = ring;
+            System.out.println("Ring equipped on right hand.");
+        } else {
+            System.out.println("Both ring slots full!");
+            return "You are already wearing two rings.";
+        }
+    
+        ring.equip();
+        System.out.println("Final Equipped Status: " + ring.isEquipped());
+        return "You equipped " + ring.getItemName();
+    }
+
+    public String equipWeapon(Item w){
+        if ((w instanceof Weapon)) {
+            equippedWeapon = (Weapon) w;
+            w.equip();
+            return w.message(this);
+        } else if (w instanceof Stick) {
+            equippedWeapon = (Stick) w;
+            w.equip();
+            return w.message(this);
+        }
+        return "Fool! You've Doomed Us All!";
+    }
+    
+    public String equipArmor(Item w){
+        if (!(w instanceof Armor)) {
+            return "You can only equip Armors!";
+        }
+
+        if(this.bodyArmor != null) return "Must remove current armor first";
+    
+
+    
+        bodyArmor = (Armor) w;
+        w.equip();
+
+        return w.message(this);
+    }
+
+    public String unEquipArmor(){
+        String name = bodyArmor.getItemName();
+        if(bodyArmor.isCursed()) return "The armor is cursed cant remove!";
+        bodyArmor.unEquip();
+        this.bodyArmor = null;
+
+        return "Removed: " + name;
+    }
+
+
+    // equipped stack getters and setters
+ 
+    public Item getLeftRing() {
+        return leftRing;
+    }
+
+    public void setLeftRing(Item leftRing) {
+        this.leftRing = leftRing;
+    }
+
+    public Item getRightRing() {
+        return rightRing;
+    }
+
+    public void setRightRing(Item rightRing) {
+        this.rightRing = rightRing;
+    }
+
+    public Armor getBodyArmor() {
+        return bodyArmor;
+    }
+
+    public void setBodyArmor(Armor bodyArmor) {
+        this.bodyArmor = bodyArmor;
+    }
+
+    public Item getEquippedWeapon() {
+        return equippedWeapon;
+    }
+
+    public void setEquippedWeapon(Item equippedWeapon) {
+        this.equippedWeapon = equippedWeapon;
     }
 }

@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Potion.GainStrength;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 
 public class GainStrengthTest {
     
     private Player player;
+    private DungeonFloor df;
 
     @BeforeEach
     void setUp(){
@@ -20,7 +22,7 @@ public class GainStrengthTest {
     @Test
     void testGainStrengthNormal(){
         GainStrength gs = new GainStrength();
-        gs.applyToPlayer(player);
+        gs.applyToPlayer(player, df);
 
         assertEquals(4, player.getStrength());
     }
@@ -29,7 +31,7 @@ public class GainStrengthTest {
     void testGainStrengthCap(){
         GainStrength gs = new GainStrength();
         player.setStrength(31);
-        gs.applyToPlayer(player);
+        gs.applyToPlayer(player, df);
 
         assertEquals(32, player.getStrength());
     }

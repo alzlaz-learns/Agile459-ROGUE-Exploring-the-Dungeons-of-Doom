@@ -8,10 +8,9 @@ import java.util.Random;
 import com.example.ui.JFrameUI;
 import com.models.Player;
 import com.models.dungeonofdoom.Items.Item;
-import com.models.dungeonofdoom.Items.Potion.Potion;
 import com.models.dungeonofdoom.Traps.AbstractTrap;
 import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
-import com.models.dungeonofdoom.enums.PotionEnum;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 
@@ -21,9 +20,11 @@ public class GameManager {
     private List<DungeonFloor> dungeonFloors;
     private int currentFloor;
     private JFrameUI frame;
-
+    
     private MonsterManager monsterManager;
     
+    private boolean processing = false;
+    private ItemOptions currentProcessingOption = null;
 
     public GameManager(JFrameUI frame) {
         this.frame = frame;
@@ -40,6 +41,7 @@ public class GameManager {
         // Place player on the first floor
         dungeonFloors.get(currentFloor).placePlayer(player);
         dungeonFloors.get(currentFloor).discoverMonsterInRoom(player.getX(), player.getY());
+        dungeonFloors.get(currentFloor).discoverItemsInRoom(player.getX(), player.getY());
     }   
 
     //logic to handle player movement based off of JFramePlayGround
@@ -58,17 +60,25 @@ public class GameManager {
             return; 
         }
 
+        if (processing){
+            processInput(e);
+            return;
+        }
         
-
-       
-
+        
         DungeonFloor currentDungeonFloor = dungeonFloors.get(currentFloor);
         char[][] dungeon = currentDungeonFloor.getMap();
 
         if(player.isRevealed()){
             player.decrementReveal();
-            currentDungeonFloor.revealMonstersOnMap();
+            // currentDungeonFloor.revealMonstersOnMap();
         }
+
+        if(player.isBlind()){
+            player.decrementBlind();
+
+        }
+
 
         int newX = player.getX();
         int newY = player.getY();
@@ -94,19 +104,47 @@ public class GameManager {
             player.confusedDecrease(); // Reduce confusion counter
         } else{
             switch (keyCode) {
-                case KeyEvent.VK_W: 
+                case KeyEvent.VK_D:
+                    handleInput(ItemOptions.ALL);
+                    return;
+                case KeyEvent.VK_T:
+                    if(e.isShiftDown()) {
+                        String res = player.unEquipArmor();
+                        frame.updateMessage(res);
+                    }
+                    return; 
+                case KeyEvent.VK_W:
+                    if(e.isShiftDown()){
+                        handleInput(ItemOptions.WEARABLE);
+                    } else{
+                        handleInput(ItemOptions.WIELDABLE);
+                    }
+                    return;
+                case KeyEvent.VK_R:
+                    handleInput(ItemOptions.READABLE);                    
+                    return;
+                case KeyEvent.VK_I:
+                    frame.showInventoryScreen(player);
+                    return;
+                case KeyEvent.VK_Q:
+                    handleInput(ItemOptions.QUAFFABLE);
+                    return;
+                case KeyEvent.VK_P:
+                    handleInput(ItemOptions.PUTTABLE);
+                    return;
+                case KeyEvent.VK_K: 
                 case KeyEvent.VK_UP: 
                     if (newY > 0) newY -= moveMultiplier;
                     break;
-                case KeyEvent.VK_S:           
+                case KeyEvent.VK_J:           
                 case KeyEvent.VK_DOWN: 
                     if (newY < dungeon.length - 1) newY += moveMultiplier;
                     break;
-                case KeyEvent.VK_A: 
+                case KeyEvent.VK_H: 
                 case KeyEvent.VK_LEFT: 
                     if (newX > 0) newX -= moveMultiplier;
                     break;
-                case KeyEvent.VK_D: 
+                case KeyEvent.VK_L: 
                 case KeyEvent.VK_RIGHT:
                     if (newX < dungeon[0].length - 1) newX += moveMultiplier;
                     break;
@@ -157,13 +195,10 @@ public class GameManager {
                     }
                     break;
                 case KeyEvent.VK_1:
-                    //test case for MonsterDetection potion
-                    System.out.println("revealing monsters");
-                    Item MonsterDetection = new Potion(PotionEnum.MONSTER_DETECTION);
-                    MonsterDetection.effect(player);
-                    break;
+
                 default:
                     return;
+                    
             }
         }
         
@@ -173,15 +208,83 @@ public class GameManager {
         if (currentDungeonFloor.isInsideRoom(newX, newY)) {
             currentDungeonFloor.revealRoomAt(newX, newY);
             currentDungeonFloor.discoverMonsterInRoom(newX, newY);
+            currentDungeonFloor.discoverItemsInRoom(newX, newY);
         } else {
             currentDungeonFloor.revealCorridorAt(newX, newY);
         }
 
         
-
+        // System.out.println("X: " + player.getX()+ " Y: " +player.getY());
         handleMovement(newX, newY);
 
-        
+        frame.updateGameScreen();
+    }
+    
+    public void processInput(KeyEvent e) {
+        char input = e.getKeyChar();
+        int keyCode = e.getKeyCode();
+
+        //escapes the input loop
+        if(keyCode == KeyEvent.VK_ESCAPE){
+            processing = false;
+            currentProcessingOption = null; 
+            frame.updateMessage("N3v3r mind, where to now?");
+            return;
+        }
+
+        if(input == '*'){
+            if (currentProcessingOption != null){
+                frame.showInventoryScreen(player, currentProcessingOption);
+            } else {
+                frame.showInventoryScreen(player);
+            }
+            return;
+        }
+
+        List<Item> availableItems = player.getPack().getItemsByType(currentProcessingOption);
+        input = Character.toLowerCase(input);
+        int index = input - 'a';
+
+        if (index >= 0 && index < availableItems.size()) {
+            // Item selectedItem = availableItems.get(index);
+            String resultMessage = "";
+
+            if (currentProcessingOption == ItemOptions.IDENTIFIABLE) {
+                // Player is selecting an item to identify
+                resultMessage = player.getPack().identifyItem(index, player);
+                // frame.updateMessage();
+            // forgive me for this
+            // }else if (currentProcessingOption == ItemOptions.READABLE){
+
+            //     Pair<Item, String> selected = player.getPack().readItem(index, player);
+
+            //     Item i = selected.getA();
+            //     // If the player selects an Identify Scroll
+            //     if ( i instanceof Scroll && ((Scroll) i).getType() == ScrollEnum.IDENTIFY) {
+            //         frame.updateMessage(selected.getB());
+            //         processing = true;
+            //         currentProcessingOption = ItemOptions.IDENTIFIABLE; //maybe if i have time i will on showing only un identified items. 
+            //         return;
+            //     }
+            } else {
+                // Use unified method for everything else
+                resultMessage = player.getPack().useItem(index, player, dungeonFloors.get(currentFloor));
+            }
+            
+            if (!resultMessage.isEmpty()) {
+                frame.updateMessage(resultMessage);
+            }
+            
+            processing = false;
+            currentProcessingOption = null;
+        }
+    }
+
+    private void handleInput(ItemOptions option){
+        currentProcessingOption = option;
+        String result =  String.format("Which object do you want to %s? (* for list)", option.getName());
+        frame.updateMessage(result);
+        processing = true;
     }
 
     private void handleMovement(int newX, int newY) {
@@ -200,16 +303,18 @@ public class GameManager {
             CombatManager.combatOrdering(player, monster, currentDungeonFloor, frame);
             frame.updateGameScreen();
             // Reset healing counter after combat
-            HealingManager.resetNonCombatCounter();
+            TurnManager.resetNonCombatCounter();
         } else {
+
             // Move player only if the tile is walkable
             player.moveTo(newX, newY);
             checkTrap(newX, newY);
+            checkItem(newX, newY);
             // Process healing for non-combat turn
-            HealingManager.processHealing(player, false, frame);
+            TurnManager.processNonCombatTurn(player, frame);
         }
 
-        //check todo in Monstermanager.monsterAction()
+
         monsterManager.monsterAction(currentDungeonFloor, player);
         frame.updateStats(player.toString());
     }
@@ -222,6 +327,18 @@ public class GameManager {
         }
     }
 
+    //when a player walks over an item it  they pick it up it adds to the player pack and returns a string that is called by updateMessage and displays what was picked up
+    private void checkItem(int x, int y){
+        Item item = dungeonFloors.get(currentFloor).getItemAt(x, y);
+        if(item != null){
+            dungeonFloors.get(currentFloor).removeItem(item);
+            String res = player.addItem(item);
+            frame.updateMessage("you picked up a: " + res);
+        }
+        
+    }
+
+    
 
     //logic to handle trapLogic based off of JFramePlayGround
     //separated trap stuff from it
@@ -234,11 +351,13 @@ public class GameManager {
             switch (trap.getEffect()) {
                 case FALL -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                     //take player to lower floor
                     changeFloor(true); 
                 }
                 case HOLD -> {
                     frame.updateMessage(trapMessage);
+                    trap.trigger(player);
                 } 
                 case TELEPORT -> {
                     frame.updateMessage(trapMessage);
@@ -254,10 +373,12 @@ public class GameManager {
                 }
             }
             
+            frame.updateGameScreen();
             return;
         }
     }
 
+    
 
     public void changeFloor(boolean goingDown) {
         if (goingDown && currentFloor < dungeonFloors.size() - 1) {
@@ -298,5 +419,41 @@ public class GameManager {
 
     public DungeonFloor getCurrentFloor() {
         return dungeonFloors.get(currentFloor);
+    }
+
+    public void processInventorySelection(KeyEvent e) {
+        // Set the current processing option based on the inventory filter
+        char input = Character.toLowerCase(e.getKeyChar());
+        int index = input - 'a';
+
+        // Get all items from the player's pack (using the ALL filter for central inventory)
+        List<Item> availableItems = player.getPack().getItemsByType(ItemOptions.ALL);
+
+        if (index >= 0 && index < availableItems.size()) {
+            // Retrieve the selected item
+            Item selectedItem = availableItems.get(index);
+
+            // Call the item's performAction(), which internally uses its own getItemOption() to decide the behavior
+            String resultMessage = selectedItem.performAction(player, dungeonFloors.get(currentFloor));
+            frame.updateMessage(resultMessage);
+        } else {
+            frame.updateMessage("Invalid selection.");
+        }
+
+        // Reset processing state
+        processing = false;
+        currentProcessingOption = null;
+    }
+
+    public void dropItem(int index) {
+        // Decide if you want to drop from the "ALL" filter or a specific filter
+        List<Item> items = player.getPack().getItemsByType(ItemOptions.ALL);
+
+        if (index >= 0 && index < items.size()) {
+            player.getPack().dropObject(index, player, dungeonFloors.get(currentFloor));
+            frame.updateMessage("Dropped " + items.get(index).getItemName());
+        } else {
+            frame.updateMessage("Invalid selection.");
+        }
     }
 }

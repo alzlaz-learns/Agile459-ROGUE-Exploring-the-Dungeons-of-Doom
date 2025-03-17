@@ -3,9 +3,11 @@ package com.models.dungeonofdoom.Items.Potion;
 import java.util.Random;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class Haste implements PotionEffect{
+public class Haste implements ItemEffect{
     private final Random random;
 
     public Haste(Random random) {
@@ -17,7 +19,7 @@ public class Haste implements PotionEffect{
     }
 
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor d) {
         if(player.isHasted()){
             //player faints for  1d8
             player.applyFaint(randomDuration(8));
@@ -41,13 +43,19 @@ public class Haste implements PotionEffect{
     public String messageStringPlayer(Player player) {
         // TODO Auto-generated method stub
         //im considering another way of handling strings.
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringPlayer'");
+        if(player.isHasted()){
+            //player faints for  1d8
+            
+            return "You feel yourself moving much faster";
+        }
+
+        return "You faint from exhaustion";
     }
 
     @Override
     public String messageStringMonster(Monster monster) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'messageStringMonster'");
+        return "";
     }
 
     private int randomDuration(int i){

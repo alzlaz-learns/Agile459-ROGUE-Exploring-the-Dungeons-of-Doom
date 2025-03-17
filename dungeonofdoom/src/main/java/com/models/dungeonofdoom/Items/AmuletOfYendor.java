@@ -1,14 +1,16 @@
 package com.models.dungeonofdoom.Items;
 
 import com.models.Player;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
+import com.models.dungeonofdoom.enums.ItemOptions;
 import com.models.dungeonofdoom.monster.Monster;
 
 public class AmuletOfYendor extends Item{
 
     @Override
-    public void message(Player p) {
+    public String  message(Player p) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'message'");
+        return "";
     }
 
     @Override
@@ -18,7 +20,7 @@ public class AmuletOfYendor extends Item{
     }
 
     @Override
-    public void effect(Player p) {
+    public void effect(Player p, DungeonFloor df) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
@@ -28,5 +30,26 @@ public class AmuletOfYendor extends Item{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'effect'");
     }
+
+    @Override
+    public String getItemName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemName'");
+    }
+
+    @Override
+    public char getSymbol() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSymbol'");
+    }
+
+
+    @Override
+    public ItemOptions getItemOption() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getItemOption'");
+    }
+
     
+
 }

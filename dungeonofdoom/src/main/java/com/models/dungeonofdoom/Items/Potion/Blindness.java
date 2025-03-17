@@ -3,9 +3,11 @@ package com.models.dungeonofdoom.Items.Potion;
 import java.util.Random;
 
 import com.models.Player;
+import com.models.dungeonofdoom.Items.ItemEffect;
+import com.models.dungeonofdoom.dungeonfloor.DungeonFloor;
 import com.models.dungeonofdoom.monster.Monster;
 
-public class Blindness implements PotionEffect{
+public class Blindness implements ItemEffect{
     private final Random random;
 
     
@@ -17,8 +19,9 @@ public class Blindness implements PotionEffect{
         this.random = new Random();
     }
 
+    
     @Override
-    public void applyToPlayer(Player player) {
+    public void applyToPlayer(Player player, DungeonFloor d) {
         int duration = randomDuration();
         player.applyBlind(duration);
         // need to eventually apply blind status effect to player
